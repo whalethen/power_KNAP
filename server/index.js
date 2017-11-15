@@ -5,11 +5,10 @@ const port = 8080;
 
 
 app.use(express.static(__dirname + './../client/dist'));
+
 const server = app.listen(port, () => console.log(`listening on port ${port}`));
 
-socket.on('connect', (socket) => {
-  console.log('made connnection to the socket');
-});
+socket.on('connect', (socket) => console.log('made connnection to the socket'));
 
 socket.on('event', (data) => console.log('data'));
 
