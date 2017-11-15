@@ -1,13 +1,13 @@
-# Project Name
+# fam.ly
 
 > Pithy project description
 
-## Team
+## Power KNAP
 
-  - teamMember
-  - teamMember
-  - teamMember
-  - teamMember
+  - Kory Kilpatrick
+  - Phoebe Mei
+  - Nicholas Morrow
+  - Aric Alves
 
 ## Table of Contents
 
