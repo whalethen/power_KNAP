@@ -1,10 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
-let RoomListEntry = ({room}) => (
-	<div>
-		<p>{room}</p>
-	</div>
-)
+const RoomListEntry = ({ room }) => (
+  <div>
+    <p>{room}</p>
+  </div>
+);
 
-export default RoomListEntry = RoomListEntry;
+RoomListEntry.propTypes = {
+  room: PropTypes.string.isRequired,
+};
+
+export default RoomListEntry;

@@ -1,13 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import RoomListEntry from './RoomListEntry.jsx';
 
-let RoomList = ({rooms}) => (
-	<div>
-		{rooms.map(room => 
-			<RoomListEntry room={room} /> 
-		)}
-	</div>
-)
+const RoomList = ({ rooms }) => (
+  <div>
+    {rooms.map(room =>
+      <RoomListEntry room={room} key={room[4]} />)}
+  </div>
+);
 
-export default RoomList = RoomList;
+RoomList.propTypes = {
+  rooms: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+export default RoomList;
