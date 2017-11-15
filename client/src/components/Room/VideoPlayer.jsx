@@ -1,10 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
-let VideoPlayer = (props) => (
-	<div>
-		<p>VideoPlayer</p>
-	</div>
-)
+const VideoPlayer = ({ video }) => (
+  <div>
+    <p>{video}</p>
+  </div>
+);
 
-export default VideoPlayer = VideoPlayer;
+VideoPlayer.propTypes = {
+  video: PropTypes.string.isRequired,
+};
+
+export default VideoPlayer;

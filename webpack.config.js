@@ -4,7 +4,7 @@ const DIST_DIR = path.resolve(__dirname, './client/dist');
 const SRC_DIR = path.resolve(__dirname, './client/src');
 
 module.exports = {
-  entry: `${SRC_DIR}/components/index.jsx`,
+  entry: `${SRC_DIR}/components/Room/RoomView.jsx`,
   output: {
     path: DIST_DIR,
     filename: 'bundle.js',
