@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Search from './Search.jsx';
 import RoomList from './RoomList.jsx';
 import Sidebar from './Sidebar.jsx';
+import io from 'socket.io-client';
 
 class App extends React.Component {
   constructor(props) {
@@ -10,6 +11,10 @@ class App extends React.Component {
     this.state = {
       roomList: ['Room1', 'Room2', 'Room3'],
     };
+  }
+
+  componentDidMount() {
+    const socket = io('http://localhost'); // maybe need port?? TODO
   }
 
   render() {
