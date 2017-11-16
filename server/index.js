@@ -1,8 +1,17 @@
+const http = require('http');
 const express = require('express');
+
 const app = express();
 const port = 8080;
 
+const server = http.createServer(app);
 
-app.use(express.static(__dirname + './../client'));
+const io = require('socket.io').listen(server);
 
-const server = app.listen(port, () => console.log(`listening on port ${port}`));
+server.listen(port, () => console.log(`listening on port ${port}`));
+
+app.use(express.static(`${__dirname}./../client`));
+
+io.on('connection', () => {
+  console.log('connected to socket');
+});

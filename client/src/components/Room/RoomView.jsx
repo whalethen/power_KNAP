@@ -4,6 +4,7 @@ import VideoPlayer from './VideoPlayer.jsx';
 import Playlist from './Playlist.jsx';
 import Search from './Search.jsx';
 import VideoDescription from './VideoDescription.jsx';
+import io from 'socket.io-client';
 
 
 class RoomView extends React.Component {
@@ -15,7 +16,7 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
-    
+    const socket = io('http://localhost:8080');
   }
 
   render() {
