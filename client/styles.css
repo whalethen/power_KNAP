@@ -1,0 +1,54 @@
+* {
+  box-sizing: border-box;
+  background: #1f2d2d;
+  color: white;
+}
+
+.container.room {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 25% 75%;
+  grid-template-rows: 5% 75% 20%;
+  grid-template-areas: 
+  "navbar navbar"
+  "playlist videoplayer"
+  "playlist search";
+}
+
+.container {
+  margin: 10px;
+  padding: 10px;
+  border: 0.3px dotted white;
+}
+
+.navbar {
+  grid-area: navbar;
+  text-align: center;
+}
+
+.playlist {
+  grid-area: playlist;
+}
+
+.videoplayer {
+  grid-area: videoplayer;
+  height: 50vh;
+  text-align: center;
+}
+
+.search {
+  grid-area: search;
+}
+
+.songTitle {
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.videoFrame {
+  width: 75%;
+  height: 90%;
+  display: block;
+  margin: 0 auto;
+}
+

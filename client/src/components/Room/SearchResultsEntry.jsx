@@ -6,6 +6,7 @@ const SearchResultsEntry = ({ searchResult }) => (
     <img alt="" src={searchResult.snippet.thumbnails.default.url} />
     <div>{searchResult.snippet.title}</div>
     <div>{searchResult.snippet.description}</div>
+    <button id="plus">+</button>
   </div>
 );
 
