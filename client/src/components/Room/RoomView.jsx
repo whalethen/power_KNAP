@@ -49,7 +49,7 @@ class RoomView extends React.Component {
     return (
       <div className="container room">
         <div className="container navbar"><h1>fam.ly</h1></div>
-        <VideoPlayer video={this.state.currentVideo} />
+        <VideoPlayer currentVideo={this.state.currentVideo} />
         <Playlist playlist={this.state.playlist} />
         <div className="container search">
           <SearchResults searchResults={this.state.searchResults} />
