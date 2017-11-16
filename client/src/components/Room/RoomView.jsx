@@ -5,12 +5,17 @@ import Playlist from './Playlist.jsx';
 import Search from './Search.jsx';
 import VideoDescription from './VideoDescription.jsx';
 
+
 class RoomView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       video: 'insert current video',
     };
+  }
+
+  componentDidMount() {
+    
   }
 
   render() {
