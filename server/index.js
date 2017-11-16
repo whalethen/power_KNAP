@@ -12,6 +12,10 @@ server.listen(port, () => console.log(`listening on port ${port}`));
 
 app.use(express.static(`${__dirname}./../client`));
 
-io.on('connection', () => {
+io.on('connection', (socket) => {
   console.log('connected to socket');
+  // socket.on('chat', (data) => {
+  //   console.log('incoming msg', data);
+  // });
 });
+
