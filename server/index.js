@@ -3,9 +3,7 @@ const express = require('express');
 
 const app = express();
 const port = 8080;
-
 const server = http.createServer(app);
-
 const io = require('socket.io').listen(server);
 
 server.listen(port, () => console.log(`listening on port ${port}`));
