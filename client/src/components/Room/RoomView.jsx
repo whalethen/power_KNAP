@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
-import VideoDescription from './VideoDescription';
 import SearchResults from './SearchResults';
 import sampleVideoData from '../../../../db/sampleVideoData';
 import io from 'socket.io-client';
@@ -15,10 +14,13 @@ class RoomView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      video: props.searchResults[0],
+      currentVideo: props.searchResults[0],
       searchResults: props.searchResults,
       query: '',
+      playlist: sampleVideoData.slice(1),
     };
+    this.updateQuery = this.updateQuery.bind(this);
+    this.search = this.search.bind(this);
   }
 
   search() {
@@ -40,12 +42,10 @@ class RoomView extends React.Component {
     return (
       <div>
         <h3>Room</h3>
-        {this.state.query}
-        <VideoPlayer video={this.state.video} />
-        <VideoDescription />
-        <Playlist />
-        <Search updateQuery={this.updateQuery.bind(this)} search={this.search.bind(this)} />
-        <SearchResults searchResults={this.state.searchResults}/>
+        <VideoPlayer video={this.state.currentVideo} />
+        <Playlist playlist={this.state.playlist} />
+        <Search updateQuery={this.updateQuery} search={this.search} />
+        <SearchResults searchResults={this.state.searchResults} />
       </div>
     );
   }
