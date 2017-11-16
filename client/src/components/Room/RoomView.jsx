@@ -24,12 +24,19 @@ class RoomView extends React.Component {
   }
 
   search() {
-    // Make API call to youtube
-    // .then(videos => {
-    // this.setState({
-    //   searchResults: videos
-    //   query: ''
-    // })})
+    // send query to server via socket connection
+    socket.emit('youtubeSearch', this.state.query);
+    // listen for server's response to search
+    socket.on('searchResults', ({ items }) => {
+      this.setState({
+        searchResults: items,
+        query: '',
+      });
+    });
+    // handle errors.. kinda
+    socket.on('error', (err) => {
+      console.error(err);
+    });
   }
 
   updateQuery(event) {
