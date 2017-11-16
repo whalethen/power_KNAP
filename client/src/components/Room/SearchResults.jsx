@@ -1,11 +1,16 @@
 import React from 'react';
-import SearchResultsEntry from './SearchResultsEntry.jsx';
+import PropTypes from 'prop-types';
+import SearchResultsEntry from './SearchResultsEntry';
 
-const SearchResults = () => (
+const SearchResults = ({ searchResults }) => (
   <div>
-    <p>SearchResults</p>
-    <SearchResultsEntry />
+    {searchResults.map(searchResult =>
+      <SearchResultsEntry searchResult={searchResult} />)};
   </div>
 );
+
+SearchResults.propTypes = {
+  searchResults: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default SearchResults;

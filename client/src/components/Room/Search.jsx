@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SearchResults from './SearchResults.jsx';
 
-const Search = () => (
+
+const Search = ({ updateQuery, search }) => (
   <div>
-    <p>Search</p>
-    <SearchResults />
+    <input onChange={updateQuery} />
+    <button onClick={search}>Search</button>
   </div>
 );
 
 Search.propTypes = {
+  updateQuery: PropTypes.func.isRequired,
+  search: PropTypes.func.isRequired,
 };
 
 export default Search;

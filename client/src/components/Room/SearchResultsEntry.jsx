@@ -1,9 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const SearchResultsEntry = () => (
+const SearchResultsEntry = ({ searchResult }) => (
   <div>
-    <p>SearchResultsEntry</p>
+    <img alt="" src={searchResult.snippet.thumbnails.default.url} />
+    <div>{searchResult.snippet.title}</div>
+    <div>{searchResult.snippet.description}</div>
   </div>
 );
+
+SearchResultsEntry.propTypes = {
+  searchResult: PropTypes.node.isRequired,
+};
 
 export default SearchResultsEntry;
