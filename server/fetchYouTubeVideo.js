@@ -15,10 +15,8 @@ exports.youtubeVideos = (query) => {
   };
   return rp(options)
     .then(videos => videos)
-    .catch(err => (`Could have retrieve YouTube search results. ${err}`));
+    .catch(err => (`Could not retrieve YouTube search results. ${err}`));
 };
-
-// youtubeVideo('cats');
 
 exports.videoLength = (videoId) => {
   const options = {
@@ -32,7 +30,5 @@ exports.videoLength = (videoId) => {
   };
   rp(options)
     .then(results => console.log(`success, video is ${isoConvert(results.items[0].contentDetails.duration)} seconds`))
-    .catch(err => console.error(`Could not retrieve YouTube search results:`, err));
+    .catch(err => console.error(`Could not retrieve YouTube Video Data. Error: ${err}`));
 };
-
-// videoLength('7lCDEYXw3mM');
