@@ -2,7 +2,7 @@ const rp = require('request-promise');
 const config = require('../config.js');
 const isoConvert = require('convert-iso8601-duration');
 
-const fetchYoutubeVideo = (query) => {
+exports.youtubeVideos = (query) => {
   const options = {
     url: 'https://www.googleapis.com/youtube/v3/search',
     qs: {
@@ -13,14 +13,14 @@ const fetchYoutubeVideo = (query) => {
     },
     json: true,
   };
-  rp(options)
-    .then(results => console.log('success: ', results))
-    .catch(err => console.error('Could have retrieve Youtube search results: ', err));
+  return rp(options)
+    .then(videos => videos)
+    .catch(err => (`Could have retrieve YouTube search results. ${err}`));
 };
 
-// fetchYoutubeVideo('cats');
+// youtubeVideo('cats');
 
-const fetchVideoLength = (videoId) => {
+exports.videoLength = (videoId) => {
   const options = {
     url: 'https://www.googleapis.com/youtube/v3/videos',
     qs: {
@@ -31,8 +31,8 @@ const fetchVideoLength = (videoId) => {
     json: true,
   };
   rp(options)
-    .then(results => console.log('success: ', isoConvert(results.items[0].contentDetails.duration)))
-    .catch(err => console.error('Could have retrieve Youtube search results: ', err));
+    .then(results => console.log(`success, video is ${isoConvert(results.items[0].contentDetails.duration)} seconds`))
+    .catch(err => console.error(`Could not retrieve YouTube search results:`, err));
 };
 
-// fetchVideoLength('7lCDEYXw3mM');
+// videoLength('7lCDEYXw3mM');
