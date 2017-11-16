@@ -5,7 +5,7 @@ import SearchResultsEntry from './SearchResultsEntry';
 const SearchResults = ({ searchResults }) => (
   <div>
     {searchResults.map(searchResult =>
-      <SearchResultsEntry searchResult={searchResult} />)};
+      <SearchResultsEntry searchResult={searchResult} key={searchResult.etag} />)}
   </div>
 );
 
