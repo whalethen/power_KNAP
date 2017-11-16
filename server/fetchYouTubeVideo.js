@@ -1,11 +1,20 @@
 const rp = require('request-promise');
+const config = require('../config');
 
-const options = {
-  url: 'https://www.googleapis.com/youtube/v3/search',
-  part: 'snippet',
-  q: 'cats',
+const fetchYoutubeVideo = (query) => {
+  let params = {
+    url: 'https://www.googleapis.com/youtube/v3/search',
+    method: 'GET',
+    qs: {
+      key: config.YT_API_KEY,
+      q: query,
+      type: 'video',
+      part: 'snippet',
+    },
+  };
+  rp(params)
+    .then(results => console.log('success: ', results))
+    .catch(err => console.error('Could have retrieve Youtube search results: ', err));
 };
 
-rp(options)
-  .then(() => console.log('success'))
-  .catch(err => console.log(err));
+fetchYoutubeVideo('cats');
