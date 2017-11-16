@@ -19,6 +19,8 @@ class RoomView extends React.Component {
       query: '',
       playlist: sampleVideoData.slice(1),
     };
+    this.updateQuery = this.updateQuery.bind(this);
+    this.search = this.search.bind(this);
   }
 
   search() {
@@ -40,11 +42,9 @@ class RoomView extends React.Component {
     return (
       <div>
         <h3>Room</h3>
-
-        {this.state.query}
         <VideoPlayer video={this.state.currentVideo} />
         <Playlist playlist={this.state.playlist} />
-        <Search updateQuery={this.updateQuery.bind(this)} search={this.search.bind(this)} />
+        <Search updateQuery={this.updateQuery} search={this.search} />
         <SearchResults searchResults={this.state.searchResults} />
       </div>
     );
