@@ -4,8 +4,8 @@ import PlaylistEntry from './PlayListEntry';
 
 const Playlist = ({ playlist }) => (
 
-  <div>
-    <p>Playlist</p>
+  <div className="container playlist">
+    <h3>Playlist</h3>
     {playlist.map(song =>
       <PlaylistEntry song={song} key={song.etag} />)}
   </div>

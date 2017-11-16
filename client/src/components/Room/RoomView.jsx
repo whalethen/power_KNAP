@@ -47,12 +47,14 @@ class RoomView extends React.Component {
 
   render() {
     return (
-      <div>
-        <h3>Room</h3>
+      <div className="container room">
+        <div className="container navbar"><h1>fam.ly</h1></div>
         <VideoPlayer video={this.state.currentVideo} />
         <Playlist playlist={this.state.playlist} />
-        <Search updateQuery={this.updateQuery} search={this.search} />
-        <SearchResults searchResults={this.state.searchResults} />
+        <div className="container search">
+          <SearchResults searchResults={this.state.searchResults} />
+          <Search updateQuery={this.updateQuery} search={this.search} />
+        </div>
       </div>
     );
   }

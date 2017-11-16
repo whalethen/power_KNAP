@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const VideoPlayer = ({ video }) => (
-  <div>
+  <div className="container videoplayer">
+    <div className="songTitle"> {video.snippet.title} </div>
     <iframe
       title="videoPlaying"
       className="videoFrame"
@@ -10,8 +11,7 @@ const VideoPlayer = ({ video }) => (
       allowFullScreen
     />
     <div className="currentSongDetails">
-      <span className="songTitle"> {video.snippet.title} </span>
-      <span className="songDescription"> {video.snippet.description} </span>
+      <div className="songDescription"> {video.snippet.description} </div>
     </div>
   </div>
 );
