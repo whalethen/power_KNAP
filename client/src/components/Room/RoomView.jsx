@@ -41,17 +41,11 @@ class RoomView extends React.Component {
   }
 
   updateQuery(event) {
-    const flush = event.key === 'Enter';
+    const pressedEnter = event.key === 'Enter';
     Promise.resolve(this.setState({
       query: event.target.value,
     }))
-      .then(() => {
-        if (flush) {
-          this.search.flush();
-          return;
-        }
-        this.search();
-      })
+      .then(() => pressedEnter ? this.search.flush() : this.search())
       .catch(err => console.log(err));
   }
 
@@ -63,10 +57,7 @@ class RoomView extends React.Component {
         <Playlist playlist={this.state.playlist} />
         <div className="container search">
           <SearchResults searchResults={this.state.searchResults} />
-          <Search // sorry for the spaghetti
-            updateQuery={this.updateQuery}
-            search={this.search}
-          />
+          <Search updateQuery={this.updateQuery} search={this.search} />
         </div>
       </div>
     );
