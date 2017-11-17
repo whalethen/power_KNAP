@@ -11,7 +11,7 @@ const SearchResultsEntry = ({ searchResult, saveToPlaylist }) => (
 );
 
 SearchResultsEntry.propTypes = {
-  searchResult: PropTypes.node.isRequired,
+  searchResult: PropTypes.object.isRequired,
   saveToPlaylist: PropTypes.func.isRequired,
 };
 
