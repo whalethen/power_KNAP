@@ -2,7 +2,7 @@ const rp = require('request-promise');
 const config = require('../config.js');
 const isoConvert = require('convert-iso8601-duration');
 
-exports.youtubeVideos = (query) => {
+exports.fetchYoutubeVideos = (query) => {
   const options = {
     url: 'https://www.googleapis.com/youtube/v3/search',
     qs: {
@@ -16,7 +16,7 @@ exports.youtubeVideos = (query) => {
   return rp(options);
 };
 
-exports.videoLength = (videoId) => {
+exports.fetchVideoLength = (videoId) => {
   const options = {
     url: 'https://www.googleapis.com/youtube/v3/videos',
     qs: {
@@ -26,7 +26,6 @@ exports.videoLength = (videoId) => {
     },
     json: true,
   };
-  rp(options)
-    .then(results => console.log(`success, video is ${isoConvert(results.items[0].contentDetails.duration)} seconds`))
-    .catch(err => console.error(`Could not retrieve YouTube Video Data. Error: ${err}`));
+  return rp(options)
+    .then(results => isoConvert(results.items[0].contentDetails.duration));
 };
