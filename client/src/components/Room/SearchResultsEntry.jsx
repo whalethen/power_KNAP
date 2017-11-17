@@ -11,7 +11,7 @@ const SearchResultsEntry = ({ searchResult }) => (
 );
 
 SearchResultsEntry.propTypes = {
-  searchResult: PropTypes.node.isRequired,
+  searchResult: PropTypes.object.isRequired,
 };
 
 export default SearchResultsEntry;

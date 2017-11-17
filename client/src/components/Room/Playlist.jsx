@@ -12,7 +12,7 @@ const Playlist = ({ playlist }) => (
 );
 
 Playlist.propTypes = {
-  playlist: PropTypes.node.isRequired,
+  playlist: PropTypes.array.isRequired,
 };
 
 export default Playlist;

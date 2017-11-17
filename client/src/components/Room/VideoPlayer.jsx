@@ -17,7 +17,7 @@ const VideoPlayer = ({ currentVideo }) => (
 );
 
 VideoPlayer.propTypes = {
-  currentVideo: PropTypes.node.isRequired,
+  currentVideo: PropTypes.object.isRequired,
 };
 
 export default VideoPlayer;

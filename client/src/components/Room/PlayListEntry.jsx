@@ -8,7 +8,7 @@ const PlaylistEntry = ({ song }) => (
 );
 
 PlaylistEntry.propTypes = {
-  song: PropTypes.node.isRequired,
+  song: PropTypes.object.isRequired,
 };
 
 export default PlaylistEntry;
