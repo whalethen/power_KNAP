@@ -16,6 +16,7 @@
     "convert-iso8601-duration": "^1.0.1",
     "express": "^4.16.2",
     "live-server": "^1.2.0",
+    "lodash": "^4.17.4",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
