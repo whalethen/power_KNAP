@@ -31,9 +31,10 @@ io.on('connection', (socket) => {
           url: `https://www.youtube.com/embed/${video.id.videoId}?autoplay=1`,
           duration: videoDuration,
         };
-        return db.storeVideoInDatabase(videoData);
+        db.storeVideoInDatabase(videoData);
       })
-      .then(result => console.log(result))
-      .catch(err => console.error('Could not retrieve YT data: ', err));
+      .then(() => db.Video.findAll())
+      .then(videos => io.emit('savedVideos', videos))
+      .catch(err => io.emit('Could not save YT data: ', err));
   });
 });
