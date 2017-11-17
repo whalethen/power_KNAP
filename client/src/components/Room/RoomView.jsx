@@ -22,7 +22,6 @@ class RoomView extends React.Component {
     };
     this.updateQuery = this.updateQuery.bind(this);
     this.search = _.debounce(this.search.bind(this), 500);
-    this.searchOnEnter = this.searchOnEnter.bind(this);
   }
 
   search() {
@@ -41,18 +40,18 @@ class RoomView extends React.Component {
     });
   }
 
-  searchOnEnter(e) {
-    if (e.key === 'Enter') {
-      // immediately invoke search
-      this.search.flush();
-    }
-  }
-
   updateQuery(event) {
+    const flush = event.key === 'Enter';
     Promise.resolve(this.setState({
       query: event.target.value,
     }))
-      .then(() => { this.search(); })
+      .then(() => {
+        if (flush) {
+          this.search.flush();
+          return;
+        }
+        this.search();
+      })
       .catch(err => console.log(err));
   }
 
@@ -67,7 +66,6 @@ class RoomView extends React.Component {
           <Search // sorry for the spaghetti
             updateQuery={this.updateQuery}
             search={this.search}
-            searchOnEnter={this.searchOnEnter}
           />
         </div>
       </div>
