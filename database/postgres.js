@@ -12,14 +12,14 @@ sequelize.authenticate()
     console.error('Unable to connect to database:', err);
   });
 
-const Video = sequelize.define('video', {
+exports.Video = sequelize.define('video', {
   videoName: Sequelize.STRING,
   creator: Sequelize.STRING,
   url: Sequelize.STRING,
   duration: Sequelize.STRING,
 });
 
-const Playlist = sequelize.define('playlist', {
+exports.Playlist = sequelize.define('playlist', {
   playlistName: Sequelize.STRING,
 });
 
@@ -30,13 +30,5 @@ exports.storeVideoInDatabase = (videoData) => {
     url: videoData.url,
     duration: videoData.duration,
   };
-  return Video.create(videoEntry); // returns a promise when called
+  return exports.Video.create(videoEntry); // returns a promise when called
 };
-
-Video.findAll().then((videos) => {
-  console.log(videos);
-});
-
-Playlist.findAll().then((playlists) => {
-  console.log(playlists);
-});
