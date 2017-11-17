@@ -50,5 +50,9 @@
   height: 90%;
   display: block;
   margin: 0 auto;
+  pointer-events: none;
 }
 
+.search.bar {
+  width: 100%;
+}

@@ -13,9 +13,7 @@ exports.youtubeVideos = (query) => {
     },
     json: true,
   };
-  return rp(options)
-    .then(videos => videos)
-    .catch(err => (`Could not retrieve YouTube search results. ${err}`));
+  return rp(options);
 };
 
 exports.videoLength = (videoId) => {

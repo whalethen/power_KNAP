@@ -1,17 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
-const Search = ({ updateQuery, search }) => (
-  <div>
-    <input onChange={updateQuery} />
-    <button onClick={search}>Search</button>
+const Search = ({ updateQuery }) => (
+  <div className="search bar container" >
+    <input className="search bar" onKeyUp={updateQuery} />
   </div>
 );
 
 Search.propTypes = {
   updateQuery: PropTypes.func.isRequired,
-  search: PropTypes.func.isRequired,
 };
 
 export default Search;

@@ -7,7 +7,7 @@ const VideoPlayer = ({ currentVideo }) => (
     <iframe
       title="videoPlaying"
       className="videoFrame"
-      src={`https://www.youtube.com/embed/${currentVideo.id.videoId}?autoplay=1`}
+      src={`https://www.youtube.com/embed/${currentVideo.id.videoId}?autoplay=0`} // TODO turn autoplay back on for deployment 
       allowFullScreen
     />
     <div className="currentSongDetails">
