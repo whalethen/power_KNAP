@@ -33,6 +33,13 @@ class RoomView extends React.Component {
         query: '',
       });
     });
+
+    socket.on('savedVideos', (savedVideos) => {
+      this.setState({
+        playlist: savedVideos,
+      });
+      console.log(savedVideos);
+    })
     // handle errors.. kinda
     socket.on('error', (err) => {
       console.error(err);
@@ -54,7 +61,7 @@ class RoomView extends React.Component {
   }
 
   saveToPlaylist(video) {
-    socket.emit('saveToPlaylist', video);
+    socket.emit('saveVideoToPlaylist', video);
   }
 
   render() {
