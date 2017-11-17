@@ -22,6 +22,7 @@ class RoomView extends React.Component {
     };
     this.updateQuery = this.updateQuery.bind(this);
     this.search = _.debounce(this.search.bind(this), 500);
+    this.saveToPlaylist = this.saveToPlaylist.bind(this);
   }
 
   componentDidMount() {
@@ -52,6 +53,10 @@ class RoomView extends React.Component {
       .catch(err => console.error(err));
   }
 
+  saveToPlaylist(video) {
+    socket.emit('saveToPlaylist', video);
+  }
+
   render() {
     return (
       <div className="container room">
@@ -59,7 +64,7 @@ class RoomView extends React.Component {
         <VideoPlayer currentVideo={this.state.currentVideo} />
         <Playlist playlist={this.state.playlist} />
         <div className="container search">
-          <SearchResults searchResults={this.state.searchResults} />
+          <SearchResults searchResults={this.state.searchResults} saveToPlaylist={this.saveToPlaylist} />
           <Search updateQuery={this.updateQuery} search={this.search} />
         </div>
       </div>
