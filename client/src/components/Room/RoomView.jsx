@@ -24,9 +24,7 @@ class RoomView extends React.Component {
     this.search = _.debounce(this.search.bind(this), 500);
   }
 
-  search() {
-    // send query to server via socket connection
-    socket.emit('youtubeSearch', this.state.query);
+  componentDidMount() {
     // listen for server's response to search
     socket.on('searchResults', ({ items }) => {
       this.setState({
@@ -40,13 +38,18 @@ class RoomView extends React.Component {
     });
   }
 
+  search() {
+    // send query to server via socket connection
+    socket.emit('youtubeSearch', this.state.query);
+  }
+
   updateQuery(event) {
     const pressedEnter = event.key === 'Enter';
     Promise.resolve(this.setState({
       query: event.target.value,
     }))
       .then(() => pressedEnter ? this.search.flush() : this.search())
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   }
 
   render() {
