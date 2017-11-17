@@ -17,11 +17,14 @@
     "express": "^4.16.2",
     "live-server": "^1.2.0",
     "lodash": "^4.17.4",
+    "pg": "^7.4.0",
     "prop-types": "^15.6.0",
+    "psql": "0.0.1",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
+    "sequelize": "^4.22.7",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
