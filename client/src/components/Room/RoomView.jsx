@@ -26,6 +26,8 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
+    this.renderPlaylist();
+
     // listen for server's response to search
     socket.on('searchResults', ({ items }) => {
       this.setState({
@@ -34,21 +36,8 @@ class RoomView extends React.Component {
       });
     });
 
-    socket.on('savedVideos', (savedVideos) => {
-      this.setState({
-        playlist: savedVideos,
-      });
-      console.log(savedVideos);
-    })
-    // handle errors.. kinda
-    socket.on('error', (err) => {
-      console.error(err);
-    });
-  }
-
-  search() {
-    // send query to server via socket connection
-    socket.emit('youtubeSearch', this.state.query);
+    socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
+    socket.on('error', err => console.error(err));
   }
 
   updateQuery(event) {
@@ -60,9 +49,10 @@ class RoomView extends React.Component {
       .catch(err => console.error(err));
   }
 
-  saveToPlaylist(video) {
-    socket.emit('saveVideoToPlaylist', video);
-  }
+  // send query to server via socket connection
+  search() { socket.emit('youtubeSearch', this.state.query); }
+  saveToPlaylist(video) { socket.emit('saveToPlaylist', video); }
+  renderPlaylist() { socket.emit('updatePlaylist'); }
 
   render() {
     return (
