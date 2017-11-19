@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "convert-iso8601-duration": "^1.0.1",
     "express": "^4.16.2",
@@ -25,7 +26,8 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.22.7",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
