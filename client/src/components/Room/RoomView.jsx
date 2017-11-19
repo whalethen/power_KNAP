@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import io from 'socket.io-client';
+import axios from 'axios';
 import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
@@ -26,22 +27,15 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
-    // listen for server's response to search
+    this.renderPlaylist();
+    socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
+    socket.on('error', err => console.error(err));
     socket.on('searchResults', ({ items }) => {
       this.setState({
         searchResults: items,
         query: '',
       });
     });
-    // handle errors.. kinda
-    socket.on('error', (err) => {
-      console.error(err);
-    });
-  }
-
-  search() {
-    // send query to server via socket connection
-    socket.emit('youtubeSearch', this.state.query);
   }
 
   updateQuery(event) {
@@ -50,11 +44,16 @@ class RoomView extends React.Component {
       query: event.target.value,
     }))
       .then(() => pressedEnter ? this.search.flush() : this.search())
-      .catch(err => console.error(err));
+      .catch(err => console.error('Failed to search for query: ', err));
   }
 
-  saveToPlaylist(video) {
-    socket.emit('saveToPlaylist', video);
+  // send query to server via socket connection
+  search() { socket.emit('youtubeSearch', this.state.query); }
+  saveToPlaylist(video) { socket.emit('saveToPlaylist', video); }
+  renderPlaylist() {
+    return axios.get('/renderPlaylist')
+      .then(response => this.setState({ playlist: response.data }))
+      .catch(err => console.error('Could not retreive playlist: ', err));
   }
 
   render() {
