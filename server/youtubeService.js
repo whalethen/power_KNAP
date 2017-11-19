@@ -28,5 +28,5 @@ exports.grabVideoLength = (videoId) => {
   };
   return rp(options)
     .then(results => isoConvert(results.items[0].contentDetails.duration))
-    .catch(err => console.error('Could not retrieve video length: ', err));
+    .catch(err => err);
 };
