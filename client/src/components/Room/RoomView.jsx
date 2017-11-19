@@ -52,7 +52,8 @@ class RoomView extends React.Component {
   saveToPlaylist(video) { socket.emit('saveToPlaylist', video); }
   renderPlaylist() {
     return axios.get('/renderPlaylist')
-      .then(response => this.setState({ playlist: response.data }));
+      .then(response => this.setState({ playlist: response.data }))
+      .catch(err => console.err('Could not retreive playlist: ', err));
   }
 
   render() {
