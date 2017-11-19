@@ -12,6 +12,11 @@ server.listen(port, () => console.log(`listening on port ${port}`));
 
 app.use(express.static(`${__dirname}./../client`));
 
+app.get('/renderPlaylist', (req, res) => {
+  return db.findVideos()
+    .then(videos => res.json(videos));
+});
+
 io.on('connection', (socket) => {
   console.log('connected to client');
 
@@ -41,6 +46,4 @@ io.on('connection', (socket) => {
       })
       .then(() => sendPlaylist())
   });
-
-  socket.on('updatePlaylist', () => sendPlaylist());
 });
