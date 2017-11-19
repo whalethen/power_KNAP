@@ -4,7 +4,7 @@ const youtubeApi = require('./youtubeService');
 const db = require('../database/postgres');
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 
