@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import io from 'socket.io-client';
+import axios from 'axios';
 import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
@@ -27,17 +28,14 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     this.renderPlaylist();
-
-    // listen for server's response to search
+    socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
+    socket.on('error', err => console.error(err));
     socket.on('searchResults', ({ items }) => {
       this.setState({
         searchResults: items,
         query: '',
       });
     });
-
-    socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
-    socket.on('error', err => console.error(err));
   }
 
   updateQuery(event) {
@@ -52,7 +50,10 @@ class RoomView extends React.Component {
   // send query to server via socket connection
   search() { socket.emit('youtubeSearch', this.state.query); }
   saveToPlaylist(video) { socket.emit('saveToPlaylist', video); }
-  renderPlaylist() { socket.emit('updatePlaylist'); }
+  renderPlaylist() {
+    return axios.get('/renderPlaylist')
+      .then(response => this.setState({ playlist: response.data }));
+  }
 
   render() {
     return (
