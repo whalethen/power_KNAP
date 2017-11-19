@@ -9,6 +9,9 @@
     "test-client": "mocha client/test",
     "test-server": "mocha server/test"
   },
+  "engines": {
+    "node": "^6.11.3"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
