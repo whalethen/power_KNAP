@@ -27,5 +27,6 @@ exports.grabVideoLength = (videoId) => {
     json: true,
   };
   return rp(options)
-    .then(results => isoConvert(results.items[0].contentDetails.duration));
+    .then(results => isoConvert(results.items[0].contentDetails.duration))
+    .catch(err => console.error('Could not retrieve video length: ', err));
 };
