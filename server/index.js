@@ -1,6 +1,6 @@
 const http = require('http');
 const express = require('express');
-const youtubeApi = require('./fetchYouTubeVideo');
+const youtubeApi = require('./youtubeService');
 const db = require('../database/postgres');
 
 const app = express();
@@ -15,26 +15,32 @@ app.use(express.static(`${__dirname}./../client`));
 io.on('connection', (socket) => {
   console.log('connected to client');
 
+  const sendPlaylist = () => {
+    return db.findVideos()
+      .then(videos => io.emit('retrievePlaylist', videos))
+      .catch(err => io.emit('Could not save YT data: ', err));
+  };
+
   // listen for incoming youtube searches
   socket.on('youtubeSearch', (query) => {
-    youtubeApi.fetchYoutubeVideos(query)
+    youtubeApi.grabVideos(query)
       .then(videos => io.emit('searchResults', videos))
       .catch(err => io.emit('error', err));
   });
 
-  socket.on('saveVideoToPlaylist', (video) => {
-    return youtubeApi.fetchVideoLength(video.id.videoId)
+  socket.on('saveToPlaylist', (video) => {
+    return youtubeApi.grabVideoLength(video.id.videoId)
       .then((videoDuration) => {
         const videoData = {
           title: video.snippet.title,
           creator: video.snippet.channelTitle,
-          url: `https://www.youtube.com/embed/${video.id.videoId}?autoplay=1`,
+          url: video.id.videoId,
           duration: videoDuration,
         };
-        db.storeVideoInDatabase(videoData);
+        return db.storeVideoInDatabase(videoData);
       })
-      .then(() => db.Video.findAll())
-      .then(videos => io.emit('savedVideos', videos))
-      .catch(err => io.emit('Could not save YT data: ', err));
+      .then(() => sendPlaylist())
   });
+
+  socket.on('updatePlaylist', () => sendPlaylist());
 });
