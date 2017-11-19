@@ -44,7 +44,7 @@ class RoomView extends React.Component {
       query: event.target.value,
     }))
       .then(() => pressedEnter ? this.search.flush() : this.search())
-      .catch(err => console.error(err));
+      .catch(err => console.error('Failed to search for query: ', err));
   }
 
   // send query to server via socket connection
@@ -53,7 +53,7 @@ class RoomView extends React.Component {
   renderPlaylist() {
     return axios.get('/renderPlaylist')
       .then(response => this.setState({ playlist: response.data }))
-      .catch(err => console.err('Could not retreive playlist: ', err));
+      .catch(err => console.error('Could not retreive playlist: ', err));
   }
 
   render() {
