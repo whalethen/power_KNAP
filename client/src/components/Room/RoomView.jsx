@@ -19,7 +19,7 @@ class RoomView extends React.Component {
       currentVideo: props.searchResults[0],
       searchResults: props.searchResults,
       query: '',
-      playlist: sampleVideoData.slice(1),
+      playlist: [],
     };
     this.updateQuery = this.updateQuery.bind(this);
     this.search = _.debounce(this.search.bind(this), 500);
