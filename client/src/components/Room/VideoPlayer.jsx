@@ -7,7 +7,7 @@ const VideoPlayer = ({ currentVideo }) => (
       width="560" height="315"
       title="videoPlaying"
       className="videoFrame"
-      frameborder="0"
+      frameBorder="0"
       src={`https://www.youtube.com/embed/${currentVideo.id.videoId}?autoplay=0`} // TODO turn autoplay back on for deployment
       allowFullScreen
     />
