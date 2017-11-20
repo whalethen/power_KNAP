@@ -68,12 +68,12 @@ body {
 
 .songTitle {
   font-weight: bold;
+  white-space: nowrap;
   margin: 10px 0;
 }
 
 .songTitle:hover {
   position: absolute;
-  white-space: nowrap;
   transform: translateX(100%);
   animation: marquee 5s linear infinite;
 }
