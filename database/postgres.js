@@ -1,15 +1,13 @@
 require('dotenv').config();
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, { dialect: 'postgres', protocol: 'postgres', dialectOptions: { ssl: false } });
+let params = {};
+if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', dialectOptions: { ssl: true } }; }
+const sequelize = new Sequelize(process.env.DATABASE_URL, params);
 
 sequelize.authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully')
-  })
-  .catch((err) => {
-    console.error('Unable to connect to database:', err);
-  });
+  .then(() => console.log('Connection has been established successfully'))
+  .catch(err => console.error('Unable to connect to database:', err));
 
 const Video = sequelize.define('video', {
   videoName: Sequelize.STRING,
@@ -30,7 +28,6 @@ Video.sync({ force: true }).then(() => {
     duration: '1231',
   });
 });
-
 
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {
