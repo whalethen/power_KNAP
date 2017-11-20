@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const SearchResultsEntry = ({ searchResult, saveToPlaylist }) => (
-  <div>
-    <img alt="" src={searchResult.snippet.thumbnails.default.url} />
-    <div>{searchResult.snippet.title}</div>
-    <div>{searchResult.snippet.description}</div>
+  <div className="searchEntry">
+    <img alt={searchResult.snippet.title} src={searchResult.snippet.thumbnails.default.url} onClick={() => saveToPlaylist(searchResult)}/>
+    <div className="entryDetails">
+      <div className="resultTitle" onClick={() => saveToPlaylist(searchResult)}>{searchResult.snippet.title}</div>
+      <div className="resultDescription">{searchResult.snippet.description}</div>
+    </div>
     <button id="plus" onClick={() => saveToPlaylist(searchResult)}>+</button>
   </div>
 );
