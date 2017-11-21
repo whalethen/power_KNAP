@@ -10,7 +10,8 @@ import Search from './Search';
 import SearchResults from './SearchResults';
 import sampleVideoData from '../../../../db/sampleVideoData';
 
-const socket = io.connect(window.location.hostname || 'localhost:8080');
+// const socket = io.connect(window.location.hostname);
+const socket = io.connect('localhost:8080');
 
 class RoomView extends React.Component {
   constructor(props) {
@@ -30,12 +31,12 @@ class RoomView extends React.Component {
     this.renderPlaylist();
     socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
     socket.on('error', err => console.error(err));
-    socket.on('searchResults', ({ items }) => {
-      this.setState({
-        searchResults: items,
-        query: '',
-      });
-    });
+    // socket.on('searchResults', ({ items }) => {
+    //   this.setState({
+    //     searchResults: items,
+    //     query: '',
+    //   });
+    // });
   }
 
   updateQuery(event) {
@@ -48,8 +49,14 @@ class RoomView extends React.Component {
   }
 
   // send query to server via socket connection
-  search() { socket.emit('youtubeSearch', this.state.query); }
+  search() { 
+    axios.get(`/search?query=${this.state.query}`)
+      .then(videos => this.state.searchResults = videos.data.items)
+      .catch(err => console.error('Failed to get videos: ', err));
+  }
+
   saveToPlaylist(video) { socket.emit('saveToPlaylist', video); }
+
   renderPlaylist() {
     return axios.get('/renderPlaylist')
       .then(response => this.setState({ playlist: response.data }))

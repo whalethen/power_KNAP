@@ -17,6 +17,12 @@ app.get('/renderPlaylist', (req, res) => {
     .then(videos => res.json(videos));
 });
 
+app.get('/search', (req, res) => {
+  youtubeApi.grabVideos(req.query.query)
+    .then(searchResults => res.json(searchResults))
+    .catch(err => res.sendStatus(404));
+});
+
 io.on('connection', (socket) => {
   console.log('connected to client');
 
@@ -27,11 +33,11 @@ io.on('connection', (socket) => {
   };
 
   // listen for incoming youtube searches
-  socket.on('youtubeSearch', (query) => {
-    youtubeApi.grabVideos(query)
-      .then(videos => io.emit('searchResults', videos))
-      .catch(err => io.emit('error', err));
-  });
+  // socket.on('youtubeSearch', (query) => {
+  //   youtubeApi.grabVideos(query)
+  //     .then(videos => io.emit('searchResults', videos))
+  //     .catch(err => io.emit('error', err));
+  // });
 
   socket.on('saveToPlaylist', (video) => {
     const videoData = {
