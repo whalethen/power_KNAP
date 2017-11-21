@@ -13,7 +13,7 @@ const sequelize = new Sequelize(match[5], match[1], match[2], {
     logging: false,
     dialectOptions: {
         ssl: true
-    };
+    }
 });
 
 sequelize.authenticate()
