@@ -2,7 +2,7 @@ require('dotenv').config();
 const Sequelize = require('sequelize');
 
 let params = {};
-if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', dialectOptions: { ssl: true } }; }
+if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', logging: false, dialectOptions: { ssl: true } }; }
 const sequelize = new Sequelize(process.env.DATABASE_URL, params);
 
 sequelize.authenticate()
@@ -20,14 +20,14 @@ const Playlist = sequelize.define('playlist', {
   playlistName: Sequelize.STRING,
 });
 
-Video.sync({ force: true }).then(() => {
-  return Video.create({
-    videoName: 'sample video name',
-    creator: 'sample video creator',
-    url: 'sample url',
-    duration: '1231',
-  });
-});
+// Video.sync({ force: true }).then(() => {
+//   return Video.create({
+//     videoName: 'sample video name',
+//     creator: 'sample video creator',
+//     url: 'sample url',
+//     duration: '1231',
+//   });
+// });
 
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {
