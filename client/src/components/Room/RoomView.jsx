@@ -12,11 +12,7 @@ import sampleSearchResults from '../../../../db/sampleVideoData';
 import samplePlaylist from '../../../../database/sampleData';
 
 // const socket = io.connect(window.location.hostname);
-<<<<<<< HEAD
-const socket = io.connect('localhost:8080');
-=======
 const socket = io.connect(window.location.host);
->>>>>>> Refactor video player to handle saved videos
 
 class RoomView extends React.Component {
   constructor(props) {
@@ -52,8 +48,9 @@ class RoomView extends React.Component {
 
   onPlayerStateChange(e) {
     if (e.data === 0) {
+      nextVideoIndex += 1;
       this.setState({
-        currentVideo: this.props.samplePlaylist[1],
+        currentVideo: this.props.samplePlaylist[nextVideoIndex],
       });
       // set state: currentVideo = next video in playlist
     }
