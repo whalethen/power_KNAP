@@ -19,7 +19,7 @@ class RoomView extends React.Component {
       currentVideo: props.searchResults[0],
       searchResults: props.searchResults,
       query: '',
-      playlist: sampleVideoData.slice(1),
+      playlist: [],
     };
     this.updateQuery = this.updateQuery.bind(this);
     this.search = _.debounce(this.search.bind(this), 500);
@@ -58,10 +58,10 @@ class RoomView extends React.Component {
 
   render() {
     return (
-      <div className="container room">
-        <div className="container navbar"><h1>fam.ly</h1></div>
-        <VideoPlayer currentVideo={this.state.currentVideo} />
+      <div className="room">
+        <div className="container navbar">fam.ly</div>
         <Playlist playlist={this.state.playlist} />
+        <VideoPlayer currentVideo={this.state.currentVideo} />
         <div className="container search">
           <SearchResults searchResults={this.state.searchResults} saveToPlaylist={this.saveToPlaylist} />
           <Search updateQuery={this.updateQuery} search={this.search} />

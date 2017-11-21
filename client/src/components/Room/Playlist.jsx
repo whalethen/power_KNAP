@@ -6,8 +6,10 @@ const Playlist = ({ playlist }) => (
 
   <div className="container playlist">
     <h3>Playlist</h3>
-    {playlist.map(song =>
-      <PlaylistEntry song={song} key={song.id} />)}
+    <div className="scroll">
+      {playlist.map((song, index) =>
+        <PlaylistEntry song={song} key={index} index={index + 1} />)}
+    </div>
   </div>
 );
 

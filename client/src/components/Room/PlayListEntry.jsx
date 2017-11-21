@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const PlaylistEntry = ({ song }) => (
-  <div>
-    <div className="songTitle"> {song.videoName} </div>
+const PlaylistEntry = ({ song, index }) => (
+  <div className="playlistEntry">
+    <div className="songTitle">{index}. {song.videoName} </div>
   </div>
 );
 
