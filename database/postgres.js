@@ -20,14 +20,14 @@ const Playlist = sequelize.define('playlist', {
   playlistName: Sequelize.STRING,
 });
 
-Video.sync({ force: true }).then(() => {
-  return Video.create({
-    videoName: 'sample video name',
-    creator: 'sample video creator',
-    url: 'sample url',
-    duration: '1231',
-  });
-});
+// Video.sync({ force: true }).then(() => {
+//   return Video.create({
+//     videoName: 'sample video name',
+//     creator: 'sample video creator',
+//     url: 'sample url',
+//     duration: '1231',
+//   });
+// });
 
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {
