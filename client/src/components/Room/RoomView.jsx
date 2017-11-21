@@ -31,7 +31,7 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     this.renderPlaylist();
-    socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
+    // socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
     socket.on('error', err => console.error(err));
     // socket.on('searchResults', ({ items }) => {
     //   this.setState({
@@ -46,10 +46,10 @@ class RoomView extends React.Component {
   }
 
   onPlayerStateChange(e) {
-    if (e.data === 0) { // event code 0 is video ended
-      console.log('next video should play');
+    if (e.data === 0) {
+      console.log(this.state.playlist);
       this.setState({
-        currentVideo: this.state.searchResults[3],
+        currentVideo: this.state.playlist[1],
       });
       // set state: currentVideo = next video in playlist
     }

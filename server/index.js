@@ -13,7 +13,7 @@ server.listen(port, () => console.log(`listening on port ${port}`));
 app.use(express.static(`${__dirname}./../client`));
 
 app.get('/renderPlaylist', (req, res) => {
-  return db.findVideos()
+  db.findVideos()
     .then(videos => res.json(videos));
 });
 

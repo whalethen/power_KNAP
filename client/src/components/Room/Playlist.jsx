@@ -8,13 +8,13 @@ const Playlist = ({ playlist }) => (
     <h3>Playlist</h3>
     <div className="scroll">
       {playlist.map((song, index) =>
-        <PlaylistEntry song={song} key={index} index={index + 1} />)}
+        <PlaylistEntry song={song} key={song.id} index={index + 1} />)}
     </div>
   </div>
 );
 
 Playlist.propTypes = {
-  playlist: PropTypes.array.isRequired,
+  playlist: PropTypes.instanceOf(Array).isRequired,
 };
 
 export default Playlist;
