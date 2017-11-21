@@ -10,7 +10,7 @@ import Search from './Search';
 import SearchResults from './SearchResults';
 import sampleVideoData from '../../../../db/sampleVideoData';
 
-const socket = io('http://localhost:8080');
+const socket = io.connect(window.location.hostname);
 
 class RoomView extends React.Component {
   constructor(props) {
