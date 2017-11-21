@@ -13,11 +13,16 @@ const Video = sequelize.define('video', {
   videoName: Sequelize.STRING,
   creator: Sequelize.STRING,
   url: Sequelize.STRING,
-  duration: Sequelize.STRING,
+  description: Sequelize.STRING,
 });
 
 const Playlist = sequelize.define('playlist', {
   playlistName: Sequelize.STRING,
+});
+
+const Room = sequelize.define('room', {
+  indexKey: Sequelize.INTEGER,
+  startTime: Sequelize.DATE,
 });
 
 // Video.sync({ force: true }).then(() => {
@@ -29,12 +34,16 @@ const Playlist = sequelize.define('playlist', {
 //   });
 // });
 
+const incrementIndex = () => Room.increment('indexKey');
+
+const setStartTime = () => Room.update({ startTime: Date.now() });
+
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {
     videoName: videoData.title,
     creator: videoData.creator,
     url: videoData.url,
-    duration: videoData.duration,
+    description: videoData.description,
   };
   return Video.create(videoEntry); // returns a promise when called
 };

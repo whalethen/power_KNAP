@@ -34,16 +34,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('saveToPlaylist', (video) => {
-    return youtubeApi.grabVideoLength(video.id.videoId)
-      .then((videoDuration) => {
-        const videoData = {
-          title: video.snippet.title,
-          creator: video.snippet.channelTitle,
-          url: video.id.videoId,
-          duration: videoDuration,
-        };
-        return db.storeVideoInDatabase(videoData);
-      })
-      .then(() => sendPlaylist())
+    const videoData = {
+      title: video.snippet.title,
+      creator: video.snippet.channelTitle,
+      url: video.id.videoId,
+      description: video.snippet.description,
+    };
+    return db.storeVideoInDatabase(videoData)
+      .then(() => sendPlaylist());
   });
 });
