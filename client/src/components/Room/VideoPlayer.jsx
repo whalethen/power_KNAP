@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 const VideoPlayer = ({ currentVideo }) => (
   <div className="container videoplayer">
     <iframe
-      width="560" height="315"
+      width="560"
+      height="315"
       title="videoPlaying"
       className="videoFrame"
       frameBorder="0"
@@ -15,7 +16,7 @@ const VideoPlayer = ({ currentVideo }) => (
       <div className="videoTitle"> {currentVideo.snippet.title} </div>
       <div className="songDescription"> {currentVideo.snippet.description} </div>
     </div>
-    <div className="line"></div>
+    <div className="line" />
   </div>
 );
 
