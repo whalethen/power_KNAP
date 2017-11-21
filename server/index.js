@@ -34,7 +34,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('saveToPlaylist', (video) => {
-    console.log('GOT IN HERE WITH ', video)
     return youtubeApi.grabVideoLength(video.id.videoId)
       .then((videoDuration) => {
         const videoData = {
