@@ -13,7 +13,7 @@ const Video = sequelize.define('video', {
   videoName: Sequelize.STRING,
   creator: Sequelize.STRING,
   url: Sequelize.STRING,
-  description: 'description',
+  description: Sequelize.STRING,
 });
 
 const Playlist = sequelize.define('playlist', {
