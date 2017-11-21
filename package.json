@@ -28,6 +28,7 @@
     "psql": "0.0.1",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
+    "react-youtube": "^7.5.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.22.7",

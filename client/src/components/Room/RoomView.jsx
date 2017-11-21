@@ -25,6 +25,8 @@ class RoomView extends React.Component {
     this.updateQuery = this.updateQuery.bind(this);
     this.search = _.debounce(this.search.bind(this), 500);
     this.saveToPlaylist = this.saveToPlaylist.bind(this);
+    this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
+    this.onPlayerReady = this.onPlayerReady.bind(this);
   }
 
   componentDidMount() {
@@ -39,6 +41,23 @@ class RoomView extends React.Component {
     // });
   }
 
+  onPlayerReady(e) {
+    e.target.playVideo();
+  }
+
+  onPlayerStateChange(e) {
+    if (e.data === 0) { // event code 0 is video ended
+      console.log('next video should play');
+      this.setState({
+        currentVideo: this.state.searchResults[3],
+      });
+      // set state: currentVideo = next video in playlist
+    }
+    if (e.data === -1) {
+      e.target.playVideo();
+    }
+  }
+
   updateQuery(event) {
     const pressedEnter = event.key === 'Enter';
     Promise.resolve(this.setState({
@@ -47,7 +66,6 @@ class RoomView extends React.Component {
       .then(() => pressedEnter ? this.search.flush() : this.search())
       .catch(err => console.error('Failed to search for query: ', err));
   }
-
   // send query to server via socket connection
   search() { 
     axios.get(`/search?query=${this.state.query}`)
@@ -68,7 +86,12 @@ class RoomView extends React.Component {
       <div className="room">
         <div className="container navbar">__DEVELOPMENT</div>
         <Playlist playlist={this.state.playlist} />
-        <VideoPlayer currentVideo={this.state.currentVideo} />
+        <VideoPlayer
+          loadPlayer={this.loadPlayer}
+          currentVideo={this.state.currentVideo}
+          onReady={this.onPlayerReady}
+          onStateChange={this.onPlayerStateChange}
+        />
         <div className="container search">
           <SearchResults searchResults={this.state.searchResults} saveToPlaylist={this.saveToPlaylist} />
           <Search updateQuery={this.updateQuery} search={this.search} />
