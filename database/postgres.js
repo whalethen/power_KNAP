@@ -2,7 +2,7 @@ require('dotenv').config();
 const Sequelize = require('sequelize');
 
 let params = {};
-if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', dialectOptions: { ssl: true } }; }
+if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', logging: false, dialectOptions: { ssl: true } }; }
 const sequelize = new Sequelize(process.env.DATABASE_URL, params);
 
 sequelize.authenticate()
@@ -25,14 +25,14 @@ const Room = sequelize.define('room', {
   startTime: Sequelize.DATE,
 });
 
-Video.sync({ force: true }).then(() => {
-  return Video.create({
-    videoName: 'sample video name',
-    creator: 'sample video creator',
-    url: 'sample url',
-    description: 'description',
-  });
-});
+// Video.sync({ force: true }).then(() => {
+//   return Video.create({
+//     videoName: 'sample video name',
+//     creator: 'sample video creator',
+//     url: 'sample url',
+//     duration: '1231',
+//   });
+// });
 
 const incrementIndex = () => Room.increment('indexKey');
 
