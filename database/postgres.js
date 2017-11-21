@@ -34,13 +34,9 @@ Video.sync({ force: true }).then(() => {
   });
 });
 
-const incrementIndex = () => {
-  Room.increment('indexKey');
-};
+const incrementIndex = () => Room.increment('indexKey');
 
-const setStartTime = () => {
-  Room.update({ startTime: Date.now() });
-};
+const setStartTime = () => Room.update({ startTime: Date.now() });
 
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {
