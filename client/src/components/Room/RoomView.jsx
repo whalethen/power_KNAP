@@ -52,7 +52,6 @@ class RoomView extends React.Component {
       this.setState({
         currentVideo: this.props.samplePlaylist[nextVideoIndex],
       });
-      // set state: currentVideo = next video in playlist
     }
     if (e.data === -1) {
       e.target.playVideo();
