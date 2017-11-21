@@ -8,16 +8,21 @@ import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
 import SearchResults from './SearchResults';
-import sampleVideoData from '../../../../db/sampleVideoData';
+import sampleSearchResults from '../../../../db/sampleVideoData';
+import samplePlaylist from '../../../../database/sampleData';
 
 // const socket = io.connect(window.location.hostname);
+<<<<<<< HEAD
 const socket = io.connect('localhost:8080');
+=======
+const socket = io.connect(window.location.host);
+>>>>>>> Refactor video player to handle saved videos
 
 class RoomView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentVideo: props.searchResults[0],
+      currentVideo: props.samplePlaylist[0],
       searchResults: props.searchResults,
       query: '',
       playlist: [],
@@ -47,9 +52,8 @@ class RoomView extends React.Component {
 
   onPlayerStateChange(e) {
     if (e.data === 0) {
-      console.log(this.state.playlist);
       this.setState({
-        currentVideo: this.state.playlist[1],
+        currentVideo: this.props.samplePlaylist[1],
       });
       // set state: currentVideo = next video in playlist
     }
@@ -93,7 +97,10 @@ class RoomView extends React.Component {
           onStateChange={this.onPlayerStateChange}
         />
         <div className="container search">
-          <SearchResults searchResults={this.state.searchResults} saveToPlaylist={this.saveToPlaylist} />
+          <SearchResults
+            searchResults={this.state.searchResults}
+            saveToPlaylist={this.saveToPlaylist}
+          />
           <Search updateQuery={this.updateQuery} search={this.search} />
         </div>
       </div>
@@ -103,6 +110,7 @@ class RoomView extends React.Component {
 
 RoomView.propTypes = {
   searchResults: PropTypes.arrayOf(PropTypes.object).isRequired,
+  samplePlaylist: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-ReactDOM.render(<RoomView searchResults={sampleVideoData} />, document.getElementById('room'));
+ReactDOM.render(<RoomView searchResults={sampleSearchResults} samplePlaylist={samplePlaylist.samplePlaylist} />, document.getElementById('room'));

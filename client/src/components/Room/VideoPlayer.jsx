@@ -7,13 +7,13 @@ const VideoPlayer = props =>
     <div className="container videoplayer">
       <YouTube
         // className="videoFrame"
-        videoId={props.currentVideo.id.videoId}
+        videoId={props.currentVideo.url}
         onReady={props.onReady}
         onStateChange={props.onStateChange}
       />
       <div className="currentSongDetails">
-        <div className="videoTitle"> {props.currentVideo.snippet.title} </div>
-        <div className="songDescription"> {props.currentVideo.snippet.description} </div>
+        <div className="videoTitle"> {props.currentVideo.videoName} </div>
+        <div className="songDescription"> {props.currentVideo.description} </div>
       </div>
       <div className="line" />
     </div>
