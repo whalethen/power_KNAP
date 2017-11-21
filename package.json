@@ -8,7 +8,7 @@
     "start": "node index.js",
     "test-client": "mocha client/test",
     "test-server": "mocha server/test",
-    "locaroku": "heroku local web -e client/.env"
+    "locaroku": "heroku local web -e .env"
   },
   "engines": {
     "node": "^6.11.3"

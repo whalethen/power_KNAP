@@ -1,20 +1,9 @@
 require('dotenv').config();
 const Sequelize = require('sequelize');
-var match = process.env.DATABASE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/)
 
-
-// let params = {};
-// if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', logging: false, dialectOptions: { ssl: true } }; }
-const sequelize = new Sequelize(match[5], match[1], match[2], {
-    dialect:  'postgres',
-    protocol: 'postgres',
-    port:     match[4],
-    host:     match[3],
-    logging: false,
-    dialectOptions: {
-        ssl: true
-    }
-});
+let params = {};
+if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', logging: false, dialectOptions: { ssl: true } }; }
+const sequelize = new Sequelize(process.env.DATABASE_URL, params);
 
 sequelize.authenticate()
   .then(() => console.log('Connection has been established successfully'))
