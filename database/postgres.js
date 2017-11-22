@@ -20,6 +20,7 @@ const Playlist = sequelize.define('playlist', {
   playlistName: Sequelize.STRING,
 });
 
+// TODO we will need to refer to the Room ID when there are multiple room instances
 const Room = sequelize.define('room', {
   indexKey: Sequelize.INTEGER,
   startTime: Sequelize.DATE,
@@ -29,14 +30,25 @@ const Room = sequelize.define('room', {
 //   return Video.create({
 //     videoName: 'sample video name',
 //     creator: 'sample video creator',
-//     url: 'sample url',
-//     description: '1231',
+//     url: 'jhFDyDgMVUI',
+//     description: 'description',
 //   });
 // });
 
-const incrementIndex = () => Room.increment('indexKey');
+// Room.sync({force:true}).then(() => {
+//   return Room.create({
+//     indexKey: 0,
+//     startTime: Date.now()
+//   });
+// });
 
-const setStartTime = () => Room.update({ startTime: Date.now() });
+exports.getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
+
+exports.resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
+
+exports.incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
+
+exports.setStartTime = () => Room.update({ startTime: Date.now() });
 
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {

@@ -1,26 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import YouTube from 'react-youtube';
 
-const VideoPlayer = ({ currentVideo }) => (
+const VideoPlayer = ({ currentVideo, onReady, onStateChange }) => (
   <div className="container videoplayer">
-    <iframe
-      width="560" height="315"
-      title="videoPlaying"
-      className="videoFrame"
-      frameBorder="0"
-      src={`https://www.youtube.com/embed/${currentVideo.id.videoId}?autoplay=0`} // TODO turn autoplay back on for deployment
-      allowFullScreen
+    <YouTube
+      // className="videoFrame" // TODO uncomment to restrict player controls
+      videoId={currentVideo.url}
+      onReady={onReady}
+      onStateChange={onStateChange}
     />
     <div className="currentSongDetails">
-      <div className="videoTitle"> {currentVideo.snippet.title} </div>
-      <div className="songDescription"> {currentVideo.snippet.description} </div>
+      <div className="videoTitle"> {currentVideo.videoName} </div>
+      <div className="songDescription"> {currentVideo.description} </div>
     </div>
-    <div className="line"></div>
+    <div className="line" />
   </div>
 );
 
 VideoPlayer.propTypes = {
-  currentVideo: PropTypes.object.isRequired,
+  currentVideo: PropTypes.instanceOf(Object).isRequired,
+  onStateChange: PropTypes.func.isRequired,
+  onReady: PropTypes.func.isRequired,
 };
 
 export default VideoPlayer;

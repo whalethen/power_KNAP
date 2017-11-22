@@ -14,7 +14,7 @@ const Playlist = ({ playlist }) => (
 );
 
 Playlist.propTypes = {
-  playlist: PropTypes.array.isRequired,
+  playlist: PropTypes.instanceOf(Array).isRequired,
 };
 
 export default Playlist;

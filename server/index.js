@@ -13,14 +13,36 @@ server.listen(port, () => console.log(`listening on port ${port}`));
 app.use(express.static(`${__dirname}./../client`));
 
 app.get('/renderPlaylist', (req, res) => {
-  return db.findVideos()
+  db.findVideos()
     .then(videos => res.json(videos));
 });
 
 app.get('/search', (req, res) => {
   youtubeApi.grabVideos(req.query.query)
     .then(searchResults => res.json(searchResults))
-    .catch(err => res.sendStatus(404));
+    .catch(() => res.sendStatus(404));
+});
+
+const sendToRoom = ({ indexKey }) => {
+  io.emit('playNext', indexKey);
+};
+
+app.patch('/playNext/:length', (req, res) => {
+  const roomPlaylistLength = Number(req.params.length);
+  db.getIndex()
+    .then((currentSongIndex) => {
+      if (roomPlaylistLength === currentSongIndex) {
+        db.resetRoomIndex()
+          .then(room => sendToRoom(room.dataValues))
+          .then(() => res.end())
+          .catch(err => res.send(err));
+      } else {
+        db.incrementIndex()
+          .then(room => sendToRoom(room.dataValues))
+          .then(() => res.end())
+          .catch(err => res.send(err));
+      }
+    });
 });
 
 io.on('connection', (socket) => {
@@ -31,13 +53,6 @@ io.on('connection', (socket) => {
       .then(videos => io.emit('retrievePlaylist', videos))
       .catch(err => io.emit('Could not save YT data: ', err));
   };
-
-  // listen for incoming youtube searches
-  // socket.on('youtubeSearch', (query) => {
-  //   youtubeApi.grabVideos(query)
-  //     .then(videos => io.emit('searchResults', videos))
-  //     .catch(err => io.emit('error', err));
-  // });
 
   socket.on('saveToPlaylist', (video) => {
     const videoData = {
