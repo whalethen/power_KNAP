@@ -36,14 +36,14 @@ Room.sync({ force: true }).then(() => {
   });
 });
 
-Video.sync({ force: true }).then(() => {
-  return Video.create({
-    videoName: 'sample video name',
-    creator: 'sample video creator',
-    url: 'jhFDyDgMVUI',
-    description: 'description',
-  });
-});
+// Video.sync({ force: true }).then(() => {
+//   return Video.create({
+//     videoName: 'sample video name',
+//     creator: 'sample video creator',
+//     url: 'jhFDyDgMVUI',
+//     description: 'description',
+//   });
+// });
 
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {
