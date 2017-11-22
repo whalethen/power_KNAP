@@ -6,7 +6,7 @@ const VideoPlayer = props =>
   (
     <div className="container videoplayer">
       <YouTube
-        // className="videoFrame"
+        // className="videoFrame" // TODO uncomment to restrict player controls
         videoId={props.currentVideo.url}
         onReady={props.onReady}
         onStateChange={props.onStateChange}

@@ -9,7 +9,6 @@ import Playlist from './Playlist';
 import Search from './Search';
 import SearchResults from './SearchResults';
 import sampleSearchResults from '../../../../db/sampleVideoData';
-import samplePlaylist from '../../../../database/sampleData';
 
 // const socket = io.connect(window.location.hostname);
 const socket = io.connect(window.location.host);
@@ -18,7 +17,7 @@ class RoomView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentVideo: props.samplePlaylist[0],
+      currentVideo: props.searchResults[4],
       searchResults: props.searchResults,
       query: '',
       playlist: [],
@@ -32,19 +31,12 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     this.renderPlaylist();
-    // socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
-    socket.on('error', err => console.error(err));
-    // socket.on('searchResults', ({ items }) => {
-    //   this.setState({
-    //     searchResults: items,
-    //     query: '',
-    //   });
-    // });
-    socket.on('nextSong', (index) => {
+    socket.on('nextSong', (next) => {
       this.setState({
-        currentVideo: this.state.playlist[index],
+        currentVideo: this.state.playlist[next],
       });
     });
+    socket.on('error', err => console.error(err));
   }
 
   onPlayerReady(e) {
@@ -53,15 +45,7 @@ class RoomView extends React.Component {
 
   onPlayerStateChange(e) {
     if (e.data === 0) {
-      // increment the Rooms index and start time
-      axios.patch(`/playNextSong/${this.state.playlist.length - 1}`)
-        .then(res => res.data.indexKey)
-        .then((index) => {
-          console.log('index:', index);
-          // this.setState({
-          //   currentVideo: this.state.playlist[index],
-          // });
-        });
+      axios.patch(`/playNextSong/${this.state.playlist.length - 1}`);
     }
     if (e.data === -1) {
       e.target.playVideo();
@@ -119,7 +103,6 @@ class RoomView extends React.Component {
 
 RoomView.propTypes = {
   searchResults: PropTypes.arrayOf(PropTypes.object).isRequired,
-  samplePlaylist: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-ReactDOM.render(<RoomView searchResults={sampleSearchResults} samplePlaylist={samplePlaylist.samplePlaylist} />, document.getElementById('room'));
+ReactDOM.render(<RoomView searchResults={sampleSearchResults} />, document.getElementById('room'));

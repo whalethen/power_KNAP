@@ -54,13 +54,6 @@ io.on('connection', (socket) => {
       .catch(err => io.emit('Could not save YT data: ', err));
   };
 
-  // listen for incoming youtube searches
-  // socket.on('youtubeSearch', (query) => {
-  //   youtubeApi.grabVideos(query)
-  //     .then(videos => io.emit('searchResults', videos))
-  //     .catch(err => io.emit('error', err));
-  // });
-
   socket.on('saveToPlaylist', (video) => {
     const videoData = {
       title: video.snippet.title,
