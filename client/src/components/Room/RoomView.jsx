@@ -31,6 +31,7 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     this.renderPlaylist();
+    socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
     socket.on('playNext', (next) => {
       this.setState({
         currentVideo: this.state.playlist[next],
@@ -61,9 +62,9 @@ class RoomView extends React.Component {
       .catch(err => console.error('Failed to search for query: ', err));
   }
   // send query to server via socket connection
-  search() { 
+  search() {
     axios.get(`/search?query=${this.state.query}`)
-      .then(videos => this.state.searchResults = videos.data.items)
+      .then(videos => this.setState({ searchResults: videos.data.items }))
       .catch(err => console.error('Failed to get videos: ', err));
   }
 
