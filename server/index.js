@@ -58,7 +58,7 @@ rooomSpace.on('connection', (socket) => {
       .catch(err => rooomSpace.emit('Could not save YT data: ', err));
   };
 
-  socket.on('saveToPlaylist', (video) => {
+  rooomSpace.on('saveToPlaylist', (video) => {
     const videoData = {
       title: video.snippet.title,
       creator: video.snippet.channelTitle,
