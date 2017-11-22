@@ -40,19 +40,6 @@ class RoomView extends React.Component {
     socket.on('error', err => console.error(err));
   }
 
-  addToPlaylist(videos) {
-    if (videos.length === 1) {
-      this.setState({
-        playlist: videos,
-        currentVideo: videos[0],
-      });
-    } else {
-      this.setState({
-        playlist: videos,
-      });
-    }
-  }
-
   onPlayerReady(e) {
     e.target.playVideo();
   }
@@ -63,6 +50,14 @@ class RoomView extends React.Component {
     }
     if (e.data === -1) {
       e.target.playVideo();
+    }
+  }
+
+  addToPlaylist(videos) {
+    if (videos.length === 1) {
+      this.setState({ playlist: videos, currentVideo: videos[0] });
+    } else {
+      this.setState({ playlist: videos });
     }
   }
 
