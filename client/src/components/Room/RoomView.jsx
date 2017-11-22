@@ -84,7 +84,6 @@ class RoomView extends React.Component {
         <div className="container navbar">fam.ly</div>
         <Playlist playlist={this.state.playlist} />
         <VideoPlayer
-          loadPlayer={this.loadPlayer}
           currentVideo={this.state.currentVideo}
           onReady={this.onPlayerReady}
           onStateChange={this.onPlayerStateChange}

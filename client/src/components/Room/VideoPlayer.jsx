@@ -2,22 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import YouTube from 'react-youtube';
 
-const VideoPlayer = props =>
-  (
-    <div className="container videoplayer">
-      <YouTube
-        // className="videoFrame" // TODO uncomment to restrict player controls
-        videoId={props.currentVideo.url}
-        onReady={props.onReady}
-        onStateChange={props.onStateChange}
-      />
-      <div className="currentSongDetails">
-        <div className="videoTitle"> {props.currentVideo.videoName} </div>
-        <div className="songDescription"> {props.currentVideo.description} </div>
-      </div>
-      <div className="line" />
+const VideoPlayer = ({ currentVideo, onReady, onStateChange }) => (
+  <div className="container videoplayer">
+    <YouTube
+      // className="videoFrame" // TODO uncomment to restrict player controls
+      videoId={currentVideo.url}
+      onReady={onReady}
+      onStateChange={onStateChange}
+    />
+    <div className="currentSongDetails">
+      <div className="videoTitle"> {currentVideo.videoName} </div>
+      <div className="songDescription"> {currentVideo.description} </div>
     </div>
-  );
+    <div className="line" />
+  </div>
+);
 
 VideoPlayer.propTypes = {
   currentVideo: PropTypes.instanceOf(Object).isRequired,
