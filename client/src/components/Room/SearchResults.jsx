@@ -5,8 +5,12 @@ import SearchResultsEntry from './SearchResultsEntry';
 const SearchResults = ({ searchResults, saveToPlaylist }) => (
   <div className="container searchResults">
     <div className="scroll">
-      {searchResults.map(searchResult =>
-        <SearchResultsEntry searchResult={searchResult} key={searchResult.etag} saveToPlaylist={saveToPlaylist} />)}
+      {searchResults.map(searchResult => (
+        <SearchResultsEntry
+          searchResult={searchResult}
+          key={searchResult.etag}
+          saveToPlaylist={saveToPlaylist}
+        />))}
     </div>
   </div>
 );

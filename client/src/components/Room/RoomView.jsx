@@ -8,17 +8,16 @@ import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
 import SearchResults from './SearchResults';
-import sampleSearchResults from '../../../../db/sampleVideoData';
 
 // const socket = io.connect(window.location.hostname);
 const socket = io();
 
 class RoomView extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      currentVideo: props.searchResults[4],
-      searchResults: props.searchResults,
+      currentVideo: undefined,
+      searchResults: [],
       query: '',
       playlist: [],
     };
@@ -27,11 +26,12 @@ class RoomView extends React.Component {
     this.saveToPlaylist = this.saveToPlaylist.bind(this);
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
+    this.addToPlaylist = this.addToPlaylist.bind(this);
   }
 
   componentDidMount() {
     this.renderPlaylist();
-    socket.on('retrievePlaylist', videos => this.setState({ playlist: videos }));
+    socket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
     socket.on('playNext', (next) => {
       this.setState({
         currentVideo: this.state.playlist[next],
@@ -50,6 +50,14 @@ class RoomView extends React.Component {
     }
     if (e.data === -1) {
       e.target.playVideo();
+    }
+  }
+
+  addToPlaylist(videos) {
+    if (videos.length === 1) {
+      this.setState({ playlist: videos, currentVideo: videos[0] });
+    } else {
+      this.setState({ playlist: videos });
     }
   }
 
@@ -74,7 +82,7 @@ class RoomView extends React.Component {
     return axios.get('/renderPlaylist')
       .then(response => this.setState({
         playlist: response.data,
-        currentVideo: response.data[0],
+        currentVideo: response.data[0], // need to change this to current idx in room db
       }))
       .catch(err => console.error('Could not retreive playlist: ', err));
   }
@@ -101,8 +109,4 @@ class RoomView extends React.Component {
   }
 }
 
-RoomView.propTypes = {
-  searchResults: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
-
-ReactDOM.render(<RoomView searchResults={sampleSearchResults} />, document.getElementById('room'));
+ReactDOM.render(<RoomView />, document.getElementById('room'));
