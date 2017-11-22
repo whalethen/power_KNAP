@@ -10,7 +10,7 @@ import Search from './Search';
 import SearchResults from './SearchResults';
 
 // const socket = io.connect(window.location.hostname);
-const socket = io('/room');
+const roomSocket = io('/room');
 
 class RoomView extends React.Component {
   constructor() {
@@ -31,13 +31,13 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     this.renderPlaylist();
-    socket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
-    socket.on('playNext', (next) => {
+    roomSocket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
+    roomSocket.on('playNext', (next) => {
       this.setState({
         currentVideo: this.state.playlist[next],
       });
     });
-    socket.on('error', err => console.error(err));
+    roomSocket.on('error', err => console.error(err));
   }
 
   onPlayerReady(e) {
@@ -69,14 +69,14 @@ class RoomView extends React.Component {
       .then(() => pressedEnter ? this.search.flush() : this.search())
       .catch(err => console.error('Failed to search for query: ', err));
   }
-  // send query to server via socket connection
+  // send query to server via roomSocket connection
   search() {
     axios.get(`/search?query=${this.state.query}`)
       .then(videos => this.setState({ searchResults: videos.data.items }))
       .catch(err => console.error('Failed to get videos: ', err));
   }
 
-  saveToPlaylist(video) { socket.emit('saveToPlaylist', video); }
+  saveToPlaylist(video) { roomSocket.emit('saveToPlaylist', video); }
 
   renderPlaylist() {
     return axios.get('/renderPlaylist')

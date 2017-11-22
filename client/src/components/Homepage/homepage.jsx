@@ -4,6 +4,8 @@ import Search from './Search.jsx';
 import RoomList from './RoomList.jsx';
 import Sidebar from './Sidebar.jsx';
 
+const lobby = io('/lobby');
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +15,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-
   }
 
   render() {
