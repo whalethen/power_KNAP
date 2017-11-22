@@ -57,9 +57,8 @@ app.patch('/playNext/:length', (req, res) => {
     .catch(err => res.send(err));
 });
 
-
 roomSpace.on('connection', (socket) => {
-  console.log('connected to client');
+  console.log('connected to client',Object.keys(socket.nsp.sockets));
 
   const sendPlaylist = () => {
     return db.findVideos()
