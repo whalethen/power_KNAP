@@ -11,7 +11,7 @@ import SearchResults from './SearchResults';
 import sampleSearchResults from '../../../../db/sampleVideoData';
 
 // const socket = io.connect(window.location.hostname);
-const socket = io.connect(window.location.host);
+const socket = io();
 
 class RoomView extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     this.renderPlaylist();
-    socket.on('nextSong', (next) => {
+    socket.on('playNext', (next) => {
       this.setState({
         currentVideo: this.state.playlist[next],
       });
@@ -45,7 +45,7 @@ class RoomView extends React.Component {
 
   onPlayerStateChange(e) {
     if (e.data === 0) {
-      axios.patch(`/playNextSong/${this.state.playlist.length - 1}`);
+      axios.patch(`/playNext/${this.state.playlist.length - 1}`);
     }
     if (e.data === -1) {
       e.target.playVideo();
@@ -81,7 +81,7 @@ class RoomView extends React.Component {
   render() {
     return (
       <div className="room">
-        <div className="container navbar">__DEVELOPMENT</div>
+        <div className="container navbar">fam.ly</div>
         <Playlist playlist={this.state.playlist} />
         <VideoPlayer
           loadPlayer={this.loadPlayer}

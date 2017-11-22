@@ -24,10 +24,10 @@ app.get('/search', (req, res) => {
 });
 
 const sendToRoom = ({ indexKey }) => {
-  io.emit('nextSong', indexKey);
+  io.emit('playNext', indexKey);
 };
 
-app.patch('/playNextSong/:length', (req, res) => {
+app.patch('/playNext/:length', (req, res) => {
   const roomPlaylistLength = Number(req.params.length);
   db.getIndex()
     .then((currentSongIndex) => {
