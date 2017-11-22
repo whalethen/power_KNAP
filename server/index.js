@@ -23,6 +23,22 @@ app.get('/search', (req, res) => {
     .catch(err => res.sendStatus(404));
 });
 
+app.patch('/playNextSong/:length', (req, res) => {
+  const roomPlaylistLength = Number(req.url.slice(14));
+  db.getIndex()
+    .then((currentSongIndex) => {
+      if (roomPlaylistLength === currentSongIndex) {
+        db.resetRoomIndex()
+          .then(room => res.send(room.dataValues))
+          .catch(err => res.send(err));
+      } else {
+        db.incrementIndex()
+          .then(room => res.send(room.dataValues))
+          .catch(err => res.send(err));
+      }
+    });
+});
+
 io.on('connection', (socket) => {
   console.log('connected to client');
 

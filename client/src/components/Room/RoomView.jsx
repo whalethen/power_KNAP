@@ -48,10 +48,15 @@ class RoomView extends React.Component {
 
   onPlayerStateChange(e) {
     if (e.data === 0) {
-      nextVideoIndex += 1;
-      this.setState({
-        currentVideo: this.props.samplePlaylist[nextVideoIndex],
-      });
+      // increment the Rooms index and start time
+      axios.patch(`/playNextSong/${this.state.playlist.length}`)
+        .then(res => res.data.indexKey)
+        .then((index) => {
+          console.log(index)
+          this.setState({
+            currentVideo: this.props.samplePlaylist[index],
+          });
+        });
     }
     if (e.data === -1) {
       e.target.playVideo();
