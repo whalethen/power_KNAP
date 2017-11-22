@@ -30,7 +30,7 @@ const Room = sequelize.define('room', {
 //     videoName: 'sample video name',
 //     creator: 'sample video creator',
 //     url: 'sample url',
-//     duration: '1231',
+//     description: '1231',
 //   });
 // });
 
