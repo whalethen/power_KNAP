@@ -10,7 +10,7 @@ import Search from './Search';
 import SearchResults from './SearchResults';
 
 // const socket = io.connect(window.location.hostname);
-const socket = io();
+const socket = io('/room');
 
 class RoomView extends React.Component {
   constructor() {

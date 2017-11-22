@@ -45,7 +45,9 @@ app.patch('/playNext/:length', (req, res) => {
     });
 });
 
-io.on('connection', (socket) => {
+const rooomSpace = io.of('/room');
+
+rooomSpace.on('connection', (socket) => {
   console.log('connected to client');
 
   const sendPlaylist = () => {
