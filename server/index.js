@@ -20,20 +20,26 @@ app.get('/renderPlaylist', (req, res) => {
 app.get('/search', (req, res) => {
   youtubeApi.grabVideos(req.query.query)
     .then(searchResults => res.json(searchResults))
-    .catch(err => res.sendStatus(404));
+    .catch(() => res.sendStatus(404));
 });
 
+const sendToRoom = ({ indexKey }) => {
+  io.emit('nextSong', indexKey);
+};
+
 app.patch('/playNextSong/:length', (req, res) => {
-  const roomPlaylistLength = Number(req.url.slice(14));
+  const roomPlaylistLength = Number(req.params.length);
   db.getIndex()
     .then((currentSongIndex) => {
       if (roomPlaylistLength === currentSongIndex) {
         db.resetRoomIndex()
-          .then(room => res.send(room.dataValues))
+          .then(room => sendToRoom(room.dataValues))
+          .then(() => res.end())
           .catch(err => res.send(err));
       } else {
         db.incrementIndex()
-          .then(room => res.send(room.dataValues))
+          .then(room => sendToRoom(room.dataValues))
+          .then(() => res.end())
           .catch(err => res.send(err));
       }
     });

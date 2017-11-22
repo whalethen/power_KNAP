@@ -40,6 +40,11 @@ class RoomView extends React.Component {
     //     query: '',
     //   });
     // });
+    socket.on('nextSong', (index) => {
+      this.setState({
+        currentVideo: this.state.playlist[index],
+      });
+    });
   }
 
   onPlayerReady(e) {
@@ -49,13 +54,13 @@ class RoomView extends React.Component {
   onPlayerStateChange(e) {
     if (e.data === 0) {
       // increment the Rooms index and start time
-      axios.patch(`/playNextSong/${this.state.playlist.length}`)
+      axios.patch(`/playNextSong/${this.state.playlist.length - 1}`)
         .then(res => res.data.indexKey)
         .then((index) => {
-          console.log(index)
-          this.setState({
-            currentVideo: this.props.samplePlaylist[index],
-          });
+          console.log('index:', index);
+          // this.setState({
+          //   currentVideo: this.state.playlist[index],
+          // });
         });
     }
     if (e.data === -1) {
@@ -82,7 +87,10 @@ class RoomView extends React.Component {
 
   renderPlaylist() {
     return axios.get('/renderPlaylist')
-      .then(response => this.setState({ playlist: response.data }))
+      .then(response => this.setState({
+        playlist: response.data,
+        currentVideo: response.data[0],
+      }))
       .catch(err => console.error('Could not retreive playlist: ', err));
   }
 
