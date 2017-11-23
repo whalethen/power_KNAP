@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer';
@@ -24,9 +23,10 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
-    this.renderPlaylist();
+    this.renderRoom();
     roomSocket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
     roomSocket.on('playNext', (next) => {
+      console.log(next);
       this.setState({
         currentVideo: this.state.playlist[next],
       });
@@ -59,12 +59,13 @@ class RoomView extends React.Component {
     roomSocket.emit('saveToPlaylist', video);
   }
 
-  renderPlaylist() {
-    return axios.get('/renderPlaylist')
-      .then(response => this.setState({
-        playlist: response.data,
-        currentVideo: response.data[0], // need to change this to current idx in room db
-      }))
+  renderRoom() {
+    return axios.get('/renderRoom')
+      .then(({ data }) =>
+        this.setState({
+          playlist: data.videos,
+          currentVideo: data.videos[data.index]
+        }))
       .catch(err => console.error('Could not retrieve playlist: ', err));
   }
 
