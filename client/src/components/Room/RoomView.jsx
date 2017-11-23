@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import io from 'socket.io-client';
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
-import SearchResults from './SearchResults';
 
 // const socket = io.connect(window.location.hostname);
 const roomSocket = io('/room');
@@ -17,16 +15,12 @@ class RoomView extends React.Component {
     super();
     this.state = {
       currentVideo: undefined,
-      searchResults: [],
-      query: '',
       playlist: [],
     };
-    this.updateQuery = this.updateQuery.bind(this);
-    this.search = _.debounce(this.search.bind(this), 500);
-    this.saveToPlaylist = this.saveToPlaylist.bind(this);
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
     this.addToPlaylist = this.addToPlaylist.bind(this);
+    this.saveToPlaylist = this.saveToPlaylist.bind(this);
   }
 
   componentDidMount() {
@@ -61,22 +55,9 @@ class RoomView extends React.Component {
     }
   }
 
-  updateQuery(event) {
-    const pressedEnter = event.key === 'Enter';
-    Promise.resolve(this.setState({
-      query: event.target.value,
-    }))
-      .then(() => pressedEnter ? this.search.flush() : this.search())
-      .catch(err => console.error('Failed to search for query: ', err));
+  saveToPlaylist(video) {
+    roomSocket.emit('saveToPlaylist', video);
   }
-  // send query to server via roomSocket connection
-  search() {
-    axios.get(`/search?query=${this.state.query}`)
-      .then(videos => this.setState({ searchResults: videos.data.items }))
-      .catch(err => console.error('Failed to get videos: ', err));
-  }
-
-  saveToPlaylist(video) { roomSocket.emit('saveToPlaylist', video); }
 
   renderPlaylist() {
     return axios.get('/renderPlaylist')
@@ -84,7 +65,7 @@ class RoomView extends React.Component {
         playlist: response.data,
         currentVideo: response.data[0], // need to change this to current idx in room db
       }))
-      .catch(err => console.error('Could not retreive playlist: ', err));
+      .catch(err => console.error('Could not retrieve playlist: ', err));
   }
 
   render() {
@@ -97,13 +78,7 @@ class RoomView extends React.Component {
           onReady={this.onPlayerReady}
           onStateChange={this.onPlayerStateChange}
         />
-        <div className="container search">
-          <SearchResults
-            searchResults={this.state.searchResults}
-            saveToPlaylist={this.saveToPlaylist}
-          />
-          <Search updateQuery={this.updateQuery} search={this.search} />
-        </div>
+        <Search saveToPlaylist={this.saveToPlaylist} />
       </div>
     );
   }
