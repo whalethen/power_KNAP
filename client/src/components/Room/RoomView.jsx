@@ -56,7 +56,7 @@ class RoomView extends React.Component {
   }
 
   saveToPlaylist(video) {
-    io('/room').emit('saveToPlaylist', video);
+    roomSocket.emit('saveToPlaylist', video);
   }
 
   renderPlaylist() {
