@@ -8,9 +8,7 @@ const SearchResultsEntry = ({ searchResult, saveToPlaylist }) => (
   <div className="searchEntry">
     <img alt={searchResult.snippet.title} src={searchResult.snippet.thumbnails.default.url} onClick={() => saveToPlaylist(searchResult)}/>
     <div className="entryDetails">
-      <div className="resultTitle" onClick={() => {
-        saveToPlaylist(searchResult)
-      }}>{searchResult.snippet.title}</div>
+      <div className="resultTitle" onClick={() => { saveToPlaylist(searchResult); }}>{searchResult.snippet.title}</div>
       <div className="resultDescription">{searchResult.snippet.description}</div>
     </div>
     <button id="plus" onClick={() => saveToPlaylist(searchResult)}>+</button>
