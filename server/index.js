@@ -16,9 +16,15 @@ server.listen(port, () => console.log(`listening on port ${port}`));
 
 app.use(express.static(`${__dirname}./../client`));
 
-app.get('/renderPlaylist', (req, res) => {
+app.get('/renderRoom', (req, res) => {
+  const roomProperties = {};
+
   db.findVideos()
-    .then(videos => res.json(videos));
+    .then((videos) => { roomProperties.videos = videos; })
+    .then(() => db.getIndex())
+    .then((currentSongIndex) => { roomProperties.index = currentSongIndex; })
+    .then(() => res.json(roomProperties))
+    .catch(() => res.sendStatus(404));
 });
 
 app.get('/search', (req, res) => {
