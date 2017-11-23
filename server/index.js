@@ -10,6 +10,7 @@ const io = require('socket.io').listen(server);
 
 const roomSpace = io.of('/room');
 const lobbySpace = io.of('/lobby');
+let roomHost;
 
 
 server.listen(port, () => console.log(`listening on port ${port}`));
@@ -58,18 +59,26 @@ app.patch('/playNext/:length', (req, res) => {
 });
 
 roomSpace.on('connection', (socket) => {
-  console.log('connected to client',Object.keys(socket.nsp.sockets));
+  console.log(`connected to ${Object.keys(socket.nsp.sockets).length} socket(s)`);
 
-  const sendPlaylist = () => {
-    return db.findVideos()
+
+  if (Object.keys(socket.nsp.sockets).length === 1) {
+    roomHost = socket.id;
+  } else {
+    const hosted = () => roomSpace.to(roomHost).emit('host', 'You are now the host');
+    hosted();
+  }
+
+  const sendPlaylist = () => (
+   db.findVideos()
       .then((videos) => {
         if (videos.length === 1) {
           db.setStartTime();
         }
         roomSpace.emit('retrievePlaylist', videos);
       })
-      .catch(err => roomSpace.emit('Could not save YT data: ', err));
-  };
+      .catch(err => roomSpace.emit('Could not save YT data: ', err))
+    );
 
   socket.on('saveToPlaylist', (video) => {
     const videoData = {

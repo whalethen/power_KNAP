@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import _ from 'lodash';
 import io from 'socket.io-client';
 import moment from 'moment';
 import axios from 'axios';
@@ -17,6 +18,7 @@ class RoomView extends React.Component {
       currentVideo: undefined,
       playlist: [],
       startOptions: null,
+      isHost: false,
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -26,6 +28,7 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     this.renderRoom();
+    roomSocket.on('host', () => this.setState({ isHost: true }));
     roomSocket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
     roomSocket.on('playNext', (next) => {
       this.setState({
