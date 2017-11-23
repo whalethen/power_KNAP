@@ -7,7 +7,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = require('socket.io').listen(server);
-const rooomSpace = io.of('/room');
+
+const roomSpace = io.of('/room');
 const lobbySpace = io.of('/lobby');
 
 
@@ -26,8 +27,8 @@ app.get('/search', (req, res) => {
     .catch(() => res.sendStatus(404));
 });
 
-const sendToRoom = ({ indexKey }) => {
-  rooomSpace.emit('playNext', indexKey);
+const sendIndex = ({ indexKey }) => {
+  roomSpace.emit('playNext', indexKey);
 };
 
 app.patch('/playNext/:length', (req, res) => {
@@ -36,12 +37,12 @@ app.patch('/playNext/:length', (req, res) => {
     .then((currentSongIndex) => {
       if (roomPlaylistLength === currentSongIndex) {
         db.resetRoomIndex()
-          .then(room => sendToRoom(room.dataValues))
+          .then(room => sendIndex(room.dataValues))
           .then(() => res.end())
           .catch(err => res.send(err));
       } else {
         db.incrementIndex()
-          .then(room => sendToRoom(room.dataValues))
+          .then(room => sendIndex(room.dataValues))
           .then(() => res.end())
           .catch(err => res.send(err));
       }
@@ -49,16 +50,16 @@ app.patch('/playNext/:length', (req, res) => {
 });
 
 
-rooomSpace.on('connection', (socket) => {
+roomSpace.on('connection', (socket) => {
   console.log('connected to client');
 
   const sendPlaylist = () => {
     return db.findVideos()
-      .then(videos => rooomSpace.emit('retrievePlaylist', videos))
-      .catch(err => rooomSpace.emit('Could not save YT data: ', err));
+      .then(videos => roomSpace.emit('retrievePlaylist', videos))
+      .catch(err => roomSpace.emit('Could not save YT data: ', err));
   };
 
-  rooomSpace.on('saveToPlaylist', (video) => {
+  socket.on('saveToPlaylist', (video) => {
     const videoData = {
       title: video.snippet.title,
       creator: video.snippet.channelTitle,
