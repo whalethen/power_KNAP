@@ -1,6 +1,5 @@
 require('dotenv').config();
 const Sequelize = require('sequelize');
-const moment = require('moment');
 
 let params = {};
 if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', logging: false, dialectOptions: { ssl: true } }; }
