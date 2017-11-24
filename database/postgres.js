@@ -26,6 +26,7 @@ const Room = sequelize.define('room', {
   startTime: Sequelize.DATE,
 });
 
+
 Video.sync({ force: true })
 
 Room.sync({ force: true }).then(() => {
@@ -34,6 +35,15 @@ Room.sync({ force: true }).then(() => {
     startTime: Date.now(),
   });
 });
+
+// Video.sync({ force: true }).then(() => {
+//   return Video.create({
+//     videoName: 'sample video name',
+//     creator: 'sample video creator',
+//     url: 'jhFDyDgMVUI',
+//     description: 'description',
+//   });
+// });
 
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {
