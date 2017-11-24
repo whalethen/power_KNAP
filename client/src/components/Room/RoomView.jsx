@@ -7,7 +7,6 @@ import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
 
-// const socket = io.connect(window.location.hostname);
 const roomSocket = io('/room');
 
 class RoomView extends React.Component {
