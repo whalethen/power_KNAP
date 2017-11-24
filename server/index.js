@@ -26,8 +26,6 @@ app.get('/renderRoom', (req, res) => {
       roomProperties.index = indexKey;
       roomProperties.start = startTime;
     })
-    // .then(() => db.getIndex())
-    // .then((currentSongIndex) => { roomProperties.index = currentSongIndex; })
     .then(() => res.json(roomProperties))
     .catch(() => res.sendStatus(404));
 });
