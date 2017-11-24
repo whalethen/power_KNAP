@@ -40,9 +40,16 @@ class RoomView extends React.Component {
   }
 
   onPlayerStateChange(e) {
+    // when video has ended
     if (e.data === 0) {
       axios.patch(`/playNext/${this.state.playlist.length - 1}`);
+      this.setState({
+        startOptions: {
+          playerVars: { start: 0 },
+        },
+      });
     }
+    // when video is unstarted
     if (e.data === -1) {
       e.target.playVideo();
     }

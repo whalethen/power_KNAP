@@ -47,15 +47,19 @@ app.patch('/playNext/:length', (req, res) => {
       if (roomPlaylistLength === currentSongIndex) {
         db.resetRoomIndex()
           .then(room => sendIndex(room.dataValues))
-          .then(() => res.end())
-          .catch(err => res.send(err));
+          // .then(() => res.end())
+          // .catch(err => res.send(err));
       } else {
         db.incrementIndex()
           .then(room => sendIndex(room.dataValues))
-          .then(() => res.end())
-          .catch(err => res.send(err));
+          // .then(() => res.end())
+          // .catch(err => res.send(err));
       }
-    });
+    })
+    .then(() => db.setStartTime())
+    .then(() => res.end())
+    .catch(err => res.send(err));
+    // .catch(err => console.error('Could not retrieve next song', err));
 });
 
 

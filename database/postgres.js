@@ -30,7 +30,7 @@ Video.sync({ force: true }).then(() => {
   return Video.create({
     videoName: 'sample video name',
     creator: 'sample video creator',
-    url: 'BsUteJGAuRk',
+    url: 'a1Y73sPHKxw',
     description: 'description',
   });
 });
@@ -57,7 +57,7 @@ const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
 const getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
 const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
 const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
-const setStartTime = () => Room.update({ startTime: Date.now() });
+const setStartTime = () => Room.findById(1).then(room => room.update({ startTime: Date.now() }));
 
 exports.Video = Video;
 exports.Playlist = Playlist;
