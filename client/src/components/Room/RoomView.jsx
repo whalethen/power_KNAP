@@ -44,9 +44,7 @@ class RoomView extends React.Component {
     if (e.data === 0) {
       axios.patch(`/playNext/${this.state.playlist.length - 1}`);
       this.setState({
-        startOptions: {
-          playerVars: { start: 0 },
-        },
+        startOptions: { playerVars: { start: 0 } },
       });
     }
     // when video is unstarted
@@ -57,7 +55,11 @@ class RoomView extends React.Component {
 
   addToPlaylist(videos) {
     if (videos.length === 1) {
-      this.setState({ playlist: videos, currentVideo: videos[0] });
+      this.setState({
+        playlist: videos,
+        currentVideo: videos[0],
+        startOptions: { playerVars: { start: 0 } },
+      });
     } else {
       this.setState({ playlist: videos });
     }

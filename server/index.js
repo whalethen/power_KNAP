@@ -46,20 +46,15 @@ app.patch('/playNext/:length', (req, res) => {
     .then((currentSongIndex) => {
       if (roomPlaylistLength === currentSongIndex) {
         db.resetRoomIndex()
-          .then(room => sendIndex(room.dataValues))
-          // .then(() => res.end())
-          // .catch(err => res.send(err));
+          .then(room => sendIndex(room.dataValues));
       } else {
         db.incrementIndex()
-          .then(room => sendIndex(room.dataValues))
-          // .then(() => res.end())
-          // .catch(err => res.send(err));
+          .then(room => sendIndex(room.dataValues));
       }
     })
     .then(() => db.setStartTime())
     .then(() => res.end())
     .catch(err => res.send(err));
-    // .catch(err => console.error('Could not retrieve next song', err));
 });
 
 
@@ -68,7 +63,12 @@ roomSpace.on('connection', (socket) => {
 
   const sendPlaylist = () => {
     return db.findVideos()
-      .then(videos => roomSpace.emit('retrievePlaylist', videos))
+      .then((videos) => {
+        if (videos.length === 1) {
+          db.setStartTime();
+        }
+        roomSpace.emit('retrievePlaylist', videos);
+      })
       .catch(err => roomSpace.emit('Could not save YT data: ', err));
   };
 
