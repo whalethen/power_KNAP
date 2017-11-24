@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import YouTube from 'react-youtube';
 
-const VideoPlayer = ({ currentVideo, onReady, onStateChange }) => {
+const VideoPlayer = ({ currentVideo, opts, onReady, onStateChange }) => {
   if (currentVideo !== undefined) {
     return (
       <div className="container videoplayer">
@@ -10,6 +10,7 @@ const VideoPlayer = ({ currentVideo, onReady, onStateChange }) => {
           // className="videoFrame" // TODO uncomment to restrict player controls
           videoId={currentVideo.url}
           onReady={onReady}
+          opts={opts}
           onStateChange={onStateChange}
         />
         <div className="currentSongDetails">

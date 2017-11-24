@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import io from 'socket.io-client';
+import moment from 'moment';
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
@@ -16,6 +16,7 @@ class RoomView extends React.Component {
     this.state = {
       currentVideo: undefined,
       playlist: [],
+      startOptions: null,
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -24,7 +25,7 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
-    this.renderPlaylist();
+    this.renderRoom();
     roomSocket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
     roomSocket.on('playNext', (next) => {
       this.setState({
@@ -39,9 +40,14 @@ class RoomView extends React.Component {
   }
 
   onPlayerStateChange(e) {
+    // when video has ended
     if (e.data === 0) {
       axios.patch(`/playNext/${this.state.playlist.length - 1}`);
+      this.setState({
+        startOptions: { playerVars: { start: 0 } },
+      });
     }
+    // when video is unstarted
     if (e.data === -1) {
       e.target.playVideo();
     }
@@ -49,7 +55,11 @@ class RoomView extends React.Component {
 
   addToPlaylist(videos) {
     if (videos.length === 1) {
-      this.setState({ playlist: videos, currentVideo: videos[0] });
+      this.setState({
+        playlist: videos,
+        currentVideo: videos[0],
+        startOptions: { playerVars: { start: 0 } },
+      });
     } else {
       this.setState({ playlist: videos });
     }
@@ -59,12 +69,19 @@ class RoomView extends React.Component {
     roomSocket.emit('saveToPlaylist', video);
   }
 
-  renderPlaylist() {
-    return axios.get('/renderPlaylist')
-      .then(response => this.setState({
-        playlist: response.data,
-        currentVideo: response.data[0], // need to change this to current idx in room db
-      }))
+  renderRoom() {
+    return axios.get('/renderRoom')
+      .then(({ data }) => {
+        const currentTime = Date.now();
+        const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
+        this.setState({
+          playlist: data.videos,
+          currentVideo: data.videos[data.index],
+          startOptions: {
+            playerVars: { start: Math.ceil(timeLapsed) },
+          },
+        });
+      })
       .catch(err => console.error('Could not retrieve playlist: ', err));
   }
 
@@ -75,6 +92,7 @@ class RoomView extends React.Component {
         <Playlist playlist={this.state.playlist} />
         <VideoPlayer
           currentVideo={this.state.currentVideo}
+          opts={this.state.startOptions}
           onReady={this.onPlayerReady}
           onStateChange={this.onPlayerStateChange}
         />

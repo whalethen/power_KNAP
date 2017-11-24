@@ -26,29 +26,14 @@ const Room = sequelize.define('room', {
   startTime: Sequelize.DATE,
 });
 
-// Video.sync({ force: true }).then(() => {
-//   return Video.create({
-//     videoName: 'sample video name',
-//     creator: 'sample video creator',
-//     url: 'jhFDyDgMVUI',
-//     description: 'description',
-//   });
-// });
+Video.sync({ force: true })
 
-// Room.sync({force:true}).then(() => {
-//   return Room.create({
-//     indexKey: 0,
-//     startTime: Date.now()
-//   });
-// });
-
-exports.getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
-
-exports.resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
-
-exports.incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
-
-exports.setStartTime = () => Room.update({ startTime: Date.now() });
+Room.sync({ force: true }).then(() => {
+  return Room.create({
+    indexKey: 0,
+    startTime: Date.now(),
+  });
+});
 
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {
@@ -61,8 +46,18 @@ const storeVideoInDatabase = (videoData) => {
 };
 
 const findVideos = () => Video.findAll();
+const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
+const getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
+const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
+const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
+const setStartTime = () => Room.findById(1).then(room => room.update({ startTime: Date.now() }));
 
 exports.Video = Video;
 exports.Playlist = Playlist;
 exports.storeVideoInDatabase = storeVideoInDatabase;
 exports.findVideos = findVideos;
+exports.getIndex = getIndex;
+exports.resetRoomIndex = resetRoomIndex;
+exports.incrementIndex = incrementIndex;
+exports.setStartTime = setStartTime;
+exports.getRoomProperties = getRoomProperties;
