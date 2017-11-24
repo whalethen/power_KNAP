@@ -60,7 +60,6 @@ class RoomView extends React.Component {
     roomSocket.emit('saveToPlaylist', video);
   }
 
-
   renderRoom() {
     return axios.get('/renderRoom')
       .then(({ data }) => {
