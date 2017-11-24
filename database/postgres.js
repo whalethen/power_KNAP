@@ -1,5 +1,6 @@
 require('dotenv').config();
 const Sequelize = require('sequelize');
+const moment = require('moment');
 
 let params = {};
 if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', logging: false, dialectOptions: { ssl: true } }; }
@@ -30,7 +31,7 @@ Video.sync({ force: true }).then(() => {
   return Video.create({
     videoName: 'sample video name',
     creator: 'sample video creator',
-    url: 'jhFDyDgMVUI',
+    url: 'BsUteJGAuRk',
     description: 'description',
   });
 });
@@ -38,7 +39,7 @@ Video.sync({ force: true }).then(() => {
 Room.sync({ force: true }).then(() => {
   return Room.create({
     indexKey: 0,
-    startTime: Date.now()
+    startTime: Date.now(),
   });
 });
 
@@ -53,6 +54,7 @@ const storeVideoInDatabase = (videoData) => {
 };
 
 const findVideos = () => Video.findAll();
+const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
 const getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
 const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
 const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
@@ -66,3 +68,4 @@ exports.getIndex = getIndex;
 exports.resetRoomIndex = resetRoomIndex;
 exports.incrementIndex = incrementIndex;
 exports.setStartTime = setStartTime;
+exports.getRoomProperties = getRoomProperties;

@@ -21,8 +21,13 @@ app.get('/renderRoom', (req, res) => {
 
   db.findVideos()
     .then((videos) => { roomProperties.videos = videos; })
-    .then(() => db.getIndex())
-    .then((currentSongIndex) => { roomProperties.index = currentSongIndex; })
+    .then(() => db.getRoomProperties())
+    .then(({ indexKey, startTime }) => {
+      roomProperties.index = indexKey;
+      roomProperties.start = startTime;
+    })
+    // .then(() => db.getIndex())
+    // .then((currentSongIndex) => { roomProperties.index = currentSongIndex; })
     .then(() => res.json(roomProperties))
     .catch(() => res.sendStatus(404));
 });

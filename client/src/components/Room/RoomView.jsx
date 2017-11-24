@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
+import moment from 'moment';
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
@@ -15,6 +16,7 @@ class RoomView extends React.Component {
     this.state = {
       currentVideo: undefined,
       playlist: [],
+      startOptions: null,
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -26,7 +28,6 @@ class RoomView extends React.Component {
     this.renderRoom();
     roomSocket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
     roomSocket.on('playNext', (next) => {
-      console.log(next);
       this.setState({
         currentVideo: this.state.playlist[next],
       });
@@ -59,13 +60,20 @@ class RoomView extends React.Component {
     roomSocket.emit('saveToPlaylist', video);
   }
 
+
   renderRoom() {
     return axios.get('/renderRoom')
-      .then(({ data }) =>
+      .then(({ data }) => {
+        const currentTime = Date.now();
+        const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
         this.setState({
           playlist: data.videos,
-          currentVideo: data.videos[data.index]
-        }))
+          currentVideo: data.videos[data.index],
+          startOptions: {
+            playerVars: { start: Math.ceil(timeLapsed) },
+          },
+        });
+      })
       .catch(err => console.error('Could not retrieve playlist: ', err));
   }
 
@@ -76,6 +84,7 @@ class RoomView extends React.Component {
         <Playlist playlist={this.state.playlist} />
         <VideoPlayer
           currentVideo={this.state.currentVideo}
+          opts={this.state.startOptions}
           onReady={this.onPlayerReady}
           onStateChange={this.onPlayerStateChange}
         />
