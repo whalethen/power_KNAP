@@ -107,5 +107,10 @@ roomSpace.on('connection', (socket) => {
       return (newHost === roomHost) ? null : giveHostStatus(newHost);
     }
     console.log(`${roomSpace.name} is now empty`);
+  }
+
+  socket.on('emitMessage', (message) => {
+    console.log(message.body, 'this is my message text')
+    roomSpace.emit('pushingMessage', message.body);
   });
 });
