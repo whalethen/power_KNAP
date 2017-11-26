@@ -26,14 +26,14 @@ const Room = sequelize.define('room', {
   startTime: Sequelize.DATE,
 });
 
-Video.sync({ force: true })
+// Video.sync({ force: true })
 
-Room.sync({ force: true }).then(() => {
-  return Room.create({
-    indexKey: 0,
-    startTime: Date.now(),
-  });
-});
+// Room.sync({ force: true }).then(() => {
+//   return Room.create({
+//     indexKey: 0,
+//     startTime: Date.now(),
+//   });
+// });
 
 const storeVideoInDatabase = (videoData) => {
   const videoEntry = {
@@ -46,10 +46,11 @@ const storeVideoInDatabase = (videoData) => {
 };
 
 const findVideos = () => Video.findAll();
-const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
 const getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
-const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
+const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
 const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
+const removeFromPlaylist = title => Video.find({ where: { videoName: title } }).then(video => video.destroy());
+const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
 const setStartTime = () => Room.findById(1).then(room => room.update({ startTime: Date.now() }));
 
 exports.Video = Video;
@@ -57,7 +58,8 @@ exports.Playlist = Playlist;
 exports.storeVideoInDatabase = storeVideoInDatabase;
 exports.findVideos = findVideos;
 exports.getIndex = getIndex;
-exports.resetRoomIndex = resetRoomIndex;
-exports.incrementIndex = incrementIndex;
-exports.setStartTime = setStartTime;
 exports.getRoomProperties = getRoomProperties;
+exports.incrementIndex = incrementIndex;
+exports.removeFromPlaylist = removeFromPlaylist;
+exports.resetRoomIndex = resetRoomIndex;
+exports.setStartTime = setStartTime;

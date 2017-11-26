@@ -45,9 +45,8 @@ class RoomView extends React.Component {
     e.target.playVideo();
   }
 
-  handleDelete(video) {
-    // roomSocket.emit('removeFromPlaylist', video);
-    console.log(video)
+  handleDelete(videoName) {
+    roomSocket.emit('removeFromPlaylist', videoName);
   }
 
   onPlayerStateChange(e) {

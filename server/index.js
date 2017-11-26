@@ -93,8 +93,10 @@ roomSpace.on('connection', (socket) => {
       .then(() => sendPlaylist());
   });
 
-  socket.on('removeFromPlaylist', (video) => {
-    console.log(video);
+  socket.on('removeFromPlaylist', (videoName) => {
+    db.removeFromPlaylist(videoName)
+      .then(() => sendPlaylist())
+      .catch(err => console.log(err));
   });
 
   socket.on('disconnect', () => {
