@@ -75,12 +75,8 @@ roomSpace.on('connection', (socket) => {
     db.findVideos()
       .then((videos) => {
         roomSpace.emit('retrievePlaylist', videos);
-        if (videos.length === 0) {
-          throw videos;
-        }
-        if (videos.length === 1) {
-          db.setStartTime();
-        }
+        if (videos.length === 0) throw videos;
+        if (videos.length === 1) db.setStartTime();
       })
       .catch((emptyPlaylist) => {
         if (Array.isArray(emptyPlaylist)) {
@@ -106,14 +102,13 @@ roomSpace.on('connection', (socket) => {
   socket.on('removeFromPlaylist', (videoName) => {
     db.removeFromPlaylist(videoName)
       .then(() => sendPlaylist())
-      .catch(err => console.log(err));
+      .catch(err => roomSpace.emit('error', err));
   });
 
   socket.on('disconnect', () => {
     if (Object.keys(socket.nsp.sockets).length > 1) {
       const newHost = Object.keys(socket.nsp.sockets)[1];
-      const socketIdandRoom = socket.id.split('#'); // [roomName, socketId];
-      console.log(`A user has disconnected from ${socketIdandRoom[0]}`);
+      console.log(`A user has disconnected from ${roomSpace.name}`);
       return (newHost === roomHost) ? null : giveHostStatus(newHost);
     } else {
       console.log(`${roomSpace.name} is now empty`);
