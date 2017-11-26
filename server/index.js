@@ -41,10 +41,15 @@ const sendIndex = ({ indexKey }) => {
   roomSpace.emit('playNext', indexKey);
 };
 
+const queueNextVideo = (playlistLength, currentIndex) => {
+  if (playlistLength === currentIndex) return db.resetRoomIndex();
+  return db.incrementIndex();
+};
+
 app.patch('/playNext/:length', (req, res) => {
   const roomPlaylistLength = Number(req.params.length);
   db.getIndex()
-    .then(currentSongIndex => (roomPlaylistLength === currentSongIndex) ? db.resetRoomIndex() : db.incrementIndex())
+    .then(currentSongIndex => queueNextVideo(roomPlaylistLength, currentSongIndex))
     .then(room => sendIndex(room.dataValues))
     .then(() => db.setStartTime())
     .then(() => res.end())
