@@ -13,7 +13,6 @@ const lobbySpace = io.of('/lobby');
 
 let roomHost;
 
-
 server.listen(port, () => console.log(`listening on port ${port}`));
 
 app.use(express.static(`${__dirname}./../client`));
@@ -45,15 +44,8 @@ const sendIndex = ({ indexKey }) => {
 app.patch('/playNext/:length', (req, res) => {
   const roomPlaylistLength = Number(req.params.length);
   db.getIndex()
-    .then((currentSongIndex) => {
-      if (roomPlaylistLength === currentSongIndex) {
-        db.resetRoomIndex()
-          .then(room => sendIndex(room.dataValues));
-      } else {
-        db.incrementIndex()
-          .then(room => sendIndex(room.dataValues));
-      }
-    })
+    .then(currentSongIndex => (roomPlaylistLength === currentSongIndex) ? db.resetRoomIndex() : db.incrementIndex())
+    .then(room => sendIndex(room.dataValues))
     .then(() => db.setStartTime())
     .then(() => res.end())
     .catch(err => res.send(err));
@@ -62,10 +54,9 @@ app.patch('/playNext/:length', (req, res) => {
 const giveHostStatus = host => roomSpace.to(host).emit('host');
 
 roomSpace.on('connection', (socket) => {
-  const clientCount = Object.keys(socket.nsp.sockets).length;
-  console.log(`connected to ${clientCount} socket(s)`);
+  console.log(`connected to ${Object.keys(socket.nsp.sockets).length} socket(s)`);
 
-  if (clientCount === 2) {
+  if (Object.keys(socket.nsp.sockets).length === 2) {
     roomHost = socket.id;
     giveHostStatus(roomHost);
   }
@@ -105,7 +96,7 @@ roomSpace.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    if (clientCount > 1) {
+    if (Object.keys(socket.nsp.sockets).length > 1) {
       const newHost = Object.keys(socket.nsp.sockets)[1];
       console.log(`A user has disconnected from ${roomSpace.name}`);
       return (newHost === roomHost) ? null : giveHostStatus(newHost);
