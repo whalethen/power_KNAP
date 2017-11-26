@@ -10,6 +10,7 @@ const io = require('socket.io').listen(server);
 
 const roomSpace = io.of('/room');
 const lobbySpace = io.of('/lobby');
+let roomHost;
 
 
 server.listen(port, () => console.log(`listening on port ${port}`));
@@ -57,20 +58,35 @@ app.patch('/playNext/:length', (req, res) => {
     .catch(err => res.send(err));
 });
 
+const giveHostStatus = (host) => {
+  roomSpace.to(host).emit('host');
+};
 
 roomSpace.on('connection', (socket) => {
-  console.log('connected to client');
+  console.log(`connected to ${Object.keys(socket.nsp.sockets).length} socket(s)`);
 
-  const sendPlaylist = () => {
-    return db.findVideos()
+
+  if (Object.keys(socket.nsp.sockets).length === 2) {
+    roomHost = socket.id;
+    giveHostStatus(roomHost);
+  }
+
+  const sendPlaylist = () => (
+    db.findVideos()
       .then((videos) => {
-        if (videos.length === 1) {
-          db.setStartTime();
-        }
         roomSpace.emit('retrievePlaylist', videos);
+        if (videos.length === 0) throw videos;
+        if (videos.length === 1) db.setStartTime();
       })
-      .catch(err => roomSpace.emit('Could not save YT data: ', err));
-  };
+      .catch((emptyPlaylist) => {
+        if (Array.isArray(emptyPlaylist)) {
+          roomSpace.emit('default');
+        } else {
+          throw emptyPlaylist;
+        }
+      })
+      .catch(err => roomSpace.emit('error', err))
+  );
 
   socket.on('saveToPlaylist', (video) => {
     const videoData = {
@@ -81,5 +97,21 @@ roomSpace.on('connection', (socket) => {
     };
     return db.storeVideoInDatabase(videoData)
       .then(() => sendPlaylist());
+  });
+
+  socket.on('removeFromPlaylist', (videoName) => {
+    db.removeFromPlaylist(videoName)
+      .then(() => sendPlaylist())
+      .catch(err => roomSpace.emit('error', err));
+  });
+
+  socket.on('disconnect', () => {
+    if (Object.keys(socket.nsp.sockets).length > 1) {
+      const newHost = Object.keys(socket.nsp.sockets)[1];
+      console.log(`A user has disconnected from ${roomSpace.name}`);
+      return (newHost === roomHost) ? null : giveHostStatus(newHost);
+    } else {
+      console.log(`${roomSpace.name} is now empty`);
+    }
   });
 });
