@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import _ from 'lodash';
 import io from 'socket.io-client';
 import moment from 'moment';
 import axios from 'axios';
@@ -36,6 +35,10 @@ class RoomView extends React.Component {
       });
     });
     roomSocket.on('error', err => console.error(err));
+  }
+
+  componentWillUnmount() {
+    roomSocket.disconnect();
   }
 
   onPlayerReady(e) {

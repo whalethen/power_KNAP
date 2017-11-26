@@ -58,19 +58,21 @@ app.patch('/playNext/:length', (req, res) => {
     .catch(err => res.send(err));
 });
 
+const giveHostStatus = (host) => {
+  roomSpace.to(host).emit('host');
+};
+
 roomSpace.on('connection', (socket) => {
   console.log(`connected to ${Object.keys(socket.nsp.sockets).length} socket(s)`);
 
 
-  if (Object.keys(socket.nsp.sockets).length === 1) {
+  if (Object.keys(socket.nsp.sockets).length === 2) {
     roomHost = socket.id;
-  } else {
-    const hosted = () => roomSpace.to(roomHost).emit('host', 'You are now the host');
-    hosted();
+    giveHostStatus(roomHost);
   }
 
   const sendPlaylist = () => (
-   db.findVideos()
+    db.findVideos()
       .then((videos) => {
         if (videos.length === 1) {
           db.setStartTime();
@@ -78,7 +80,7 @@ roomSpace.on('connection', (socket) => {
         roomSpace.emit('retrievePlaylist', videos);
       })
       .catch(err => roomSpace.emit('Could not save YT data: ', err))
-    );
+  );
 
   socket.on('saveToPlaylist', (video) => {
     const videoData = {
@@ -89,5 +91,17 @@ roomSpace.on('connection', (socket) => {
     };
     return db.storeVideoInDatabase(videoData)
       .then(() => sendPlaylist());
+  });
+
+  socket.on('disconnect', () => {
+    if (Object.keys(socket.nsp.sockets).length > 1) {
+      const currentUsers = Object.keys(socket.nsp.sockets);
+      const newHost = currentUsers[1];
+      giveHostStatus(newHost);
+      const socketIdandRoom = socket.id.split('#'); // [roomName, socketId];
+      console.log(`A user has disconnected from ${socketIdandRoom[0]}`);
+    } else {
+      console.log(`${roomSpace.name} is now empty`);
+    }
   });
 });
