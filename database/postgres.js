@@ -53,8 +53,6 @@ const removeFromPlaylist = title => Video.find({ where: { videoName: title } }).
 const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
 const setStartTime = () => Room.findById(1).then(room => room.update({ startTime: Date.now() }));
 
-exports.Video = Video;
-exports.Playlist = Playlist;
 exports.storeVideoInDatabase = storeVideoInDatabase;
 exports.findVideos = findVideos;
 exports.getIndex = getIndex;

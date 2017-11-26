@@ -74,12 +74,22 @@ roomSpace.on('connection', (socket) => {
   const sendPlaylist = () => (
     db.findVideos()
       .then((videos) => {
+        roomSpace.emit('retrievePlaylist', videos);
+        if (videos.length === 0) {
+          throw videos;
+        }
         if (videos.length === 1) {
           db.setStartTime();
         }
-        roomSpace.emit('retrievePlaylist', videos);
       })
-      .catch(err => roomSpace.emit('Could not save YT data: ', err))
+      .catch((emptyPlaylist) => {
+        if (Array.isArray(emptyPlaylist)) {
+          roomSpace.emit('default');
+        } else {
+          throw emptyPlaylist;
+        }
+      })
+      .catch(err => roomSpace.emit('error', err))
   );
 
   socket.on('saveToPlaylist', (video) => {

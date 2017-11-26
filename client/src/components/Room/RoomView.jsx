@@ -27,6 +27,7 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     this.renderRoom();
+    roomSocket.on('default', () => this.setState({ currentVideo: undefined }));
     roomSocket.on('host', () => this.setState({ isHost: true }));
     roomSocket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
     roomSocket.on('playNext', (next) => {
@@ -45,10 +46,6 @@ class RoomView extends React.Component {
     e.target.playVideo();
   }
 
-  handleDelete(videoName) {
-    roomSocket.emit('removeFromPlaylist', videoName);
-  }
-
   onPlayerStateChange(e) {
     // when video has ended
     if (this.state.isHost) {
@@ -63,6 +60,10 @@ class RoomView extends React.Component {
     if (e.data === -1) {
       e.target.playVideo();
     }
+  }
+
+  handleDelete(videoName) {
+    roomSocket.emit('removeFromPlaylist', videoName);
   }
 
   addToPlaylist(videos) {
