@@ -95,11 +95,10 @@ roomSpace.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     if (Object.keys(socket.nsp.sockets).length > 1) {
-      const currentUsers = Object.keys(socket.nsp.sockets);
-      const newHost = currentUsers[1];
-      giveHostStatus(newHost);
+      const newHost = Object.keys(socket.nsp.sockets)[1];
       const socketIdandRoom = socket.id.split('#'); // [roomName, socketId];
       console.log(`A user has disconnected from ${socketIdandRoom[0]}`);
+      return (newHost === roomHost) ? null : giveHostStatus(newHost);
     } else {
       console.log(`${roomSpace.name} is now empty`);
     }
