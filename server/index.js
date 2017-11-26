@@ -110,7 +110,14 @@ roomSpace.on('connection', (socket) => {
   }
 
   socket.on('emitMessage', (message) => {
-    console.log(message.body, 'this is my message text')
     roomSpace.emit('pushingMessage', message.body);
+    let sum = 0;
+    for (let i = 0; i < 3; i ++) {
+      sum += message.userName.charCodeAt(i);
+    }
+    let colors = ['#ffb3ba', '#ffd2b3', '#fff8b3', '#baffb3', '#bae1ff', '#e8baff'];
+    let userColor = colors[(sum % colors.length)];
+    message.userColor = userColor;
+    roomSpace.emit('pushingMessage', message);
   });
 });
