@@ -107,7 +107,8 @@ roomSpace.on('connection', (socket) => {
       return (newHost === roomHost) ? null : giveHostStatus(newHost);
     }
     console.log(`${roomSpace.name} is now empty`);
-  }
+  });
+
 
   socket.on('emitMessage', (message) => {
     roomSpace.emit('pushingMessage', message.body);
@@ -115,8 +116,8 @@ roomSpace.on('connection', (socket) => {
     for (let i = 0; i < 3; i ++) {
       sum += message.userName.charCodeAt(i);
     }
-    let colors = ['#ffb3ba', '#ffd2b3', '#fff8b3', '#baffb3', '#bae1ff', '#e8baff'];
-    let userColor = colors[(sum % colors.length)];
+    const colors = ['#ffb3ba', '#ffd2b3', '#fff8b3', '#baffb3', '#bae1ff', '#e8baff'];
+    const userColor = colors[(sum % colors.length)];
     message.userColor = userColor;
     roomSpace.emit('pushingMessage', message);
   });
