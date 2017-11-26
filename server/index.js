@@ -10,6 +10,7 @@ const io = require('socket.io').listen(server);
 
 const roomSpace = io.of('/room');
 const lobbySpace = io.of('/lobby');
+
 let roomHost;
 
 
@@ -58,15 +59,13 @@ app.patch('/playNext/:length', (req, res) => {
     .catch(err => res.send(err));
 });
 
-const giveHostStatus = (host) => {
-  roomSpace.to(host).emit('host');
-};
+const giveHostStatus = host => roomSpace.to(host).emit('host');
 
 roomSpace.on('connection', (socket) => {
-  console.log(`connected to ${Object.keys(socket.nsp.sockets).length} socket(s)`);
+  const clientCount = Object.keys(socket.nsp.sockets).length;
+  console.log(`connected to ${clientCount} socket(s)`);
 
-
-  if (Object.keys(socket.nsp.sockets).length === 2) {
+  if (clientCount === 2) {
     roomHost = socket.id;
     giveHostStatus(roomHost);
   }
@@ -106,12 +105,11 @@ roomSpace.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    if (Object.keys(socket.nsp.sockets).length > 1) {
+    if (clientCount > 1) {
       const newHost = Object.keys(socket.nsp.sockets)[1];
       console.log(`A user has disconnected from ${roomSpace.name}`);
       return (newHost === roomHost) ? null : giveHostStatus(newHost);
-    } else {
-      console.log(`${roomSpace.name} is now empty`);
     }
+    console.log(`${roomSpace.name} is now empty`);
   });
 });
