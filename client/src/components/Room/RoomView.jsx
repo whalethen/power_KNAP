@@ -45,6 +45,11 @@ class RoomView extends React.Component {
     e.target.playVideo();
   }
 
+  handleDelete(video) {
+    // roomSocket.emit('removeFromPlaylist', video);
+    console.log(video)
+  }
+
   onPlayerStateChange(e) {
     // when video has ended
     if (this.state.isHost) {
@@ -94,10 +99,17 @@ class RoomView extends React.Component {
   }
 
   render() {
+    const playlistComponent = (this.state.isHost) ?
+      (<Playlist
+        playlist={this.state.playlist}
+        removeSelected={this.handleDelete}
+        isHost={this.state.isHost}
+      />) :
+      <Playlist playlist={this.state.playlist} />;
     return (
       <div className="room">
         <div className="container navbar">fam.ly</div>
-        <Playlist playlist={this.state.playlist} />
+        {playlistComponent}
         <VideoPlayer
           currentVideo={this.state.currentVideo}
           opts={this.state.startOptions}

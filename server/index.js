@@ -93,6 +93,10 @@ roomSpace.on('connection', (socket) => {
       .then(() => sendPlaylist());
   });
 
+  socket.on('removeFromPlaylist', (video) => {
+    console.log(video);
+  });
+
   socket.on('disconnect', () => {
     if (Object.keys(socket.nsp.sockets).length > 1) {
       const newHost = Object.keys(socket.nsp.sockets)[1];
