@@ -117,8 +117,7 @@ roomSpace.on('connection', (socket) => {
       const newHost = Object.keys(socket.nsp.sockets)[0];
       console.log(`A user has disconnected from ${roomSpace.name}`);
       return (newHost === roomHost) ? null : giveHostStatus(newHost);
-    } else {
-      console.log(`${roomSpace.name} is now empty`);
     }
+    console.log(`${roomSpace.name} is now empty`);
   });
 });
