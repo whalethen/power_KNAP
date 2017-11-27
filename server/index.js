@@ -8,18 +8,14 @@ const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 
-const roomSpace = io.of('/room');
-// const lobbySpace = io.of('/lobby');
-
-let roomHost;
-
 server.listen(port, () => console.log(`listening on port ${port}`));
-
 app.use(express.static(`${__dirname}./../client`));
+const lobbySpace = io.of('/lobby');
+const roomSpace = io.of('/room');
 
+// Room HTTP requests
 app.get('/renderRoom', (req, res) => {
   const roomProperties = {};
-
   db.findVideos()
     .then((videos) => { roomProperties.videos = videos; })
     .then(() => db.getRoomProperties())
@@ -37,17 +33,19 @@ app.get('/search', (req, res) => {
     .catch(() => res.sendStatus(404));
 });
 
-const sendIndex = ({ indexKey }) => {
-  roomSpace.emit('playNext', indexKey);
-};
-
-const queueNextVideo = (playlistLength, currentIndex) => {
-  if (playlistLength === currentIndex) return db.resetRoomIndex();
-  return db.incrementIndex();
-};
 
 app.patch('/playNext/:length', (req, res) => {
+  const sendIndex = ({ indexKey }) => {
+    roomSpace.emit('playNext', indexKey);
+  };
+
+  const queueNextVideo = (playlistLength, currentIndex) => {
+    if (playlistLength === currentIndex) return db.resetRoomIndex();
+    return db.incrementIndex();
+  };
+
   const roomPlaylistLength = Number(req.params.length);
+
   db.getIndex()
     .then(currentSongIndex => queueNextVideo(roomPlaylistLength, currentSongIndex))
     .then(room => sendIndex(room.dataValues))
@@ -56,6 +54,8 @@ app.patch('/playNext/:length', (req, res) => {
     .catch(err => res.send(err));
 });
 
+// Room socket events
+let roomHost;
 const giveHostStatus = host => roomSpace.to(host).emit('host');
 
 roomSpace.on('connection', (socket) => {
@@ -66,7 +66,7 @@ roomSpace.on('connection', (socket) => {
     giveHostStatus(roomHost);
   }
 
-  const sendPlaylist = () => (
+  const sendPlaylist = () => {
     db.findVideos()
       .then((videos) => {
         roomSpace.emit('retrievePlaylist', videos);
@@ -80,8 +80,8 @@ roomSpace.on('connection', (socket) => {
           throw emptyPlaylist;
         }
       })
-      .catch(err => roomSpace.emit('error', err))
-  );
+      .catch(err => roomSpace.emit('error', err));
+  };
 
   socket.on('saveToPlaylist', (video) => {
     const videoData = {
@@ -107,5 +107,22 @@ roomSpace.on('connection', (socket) => {
       return (newHost === roomHost) ? null : giveHostStatus(newHost);
     }
     console.log(`${roomSpace.name} is now empty`);
+  });
+});
+
+// Lobby HTTP Requests
+app.get('/fetchRooms', (req, res) => {
+  db.findRooms()
+    .then(rooms => res.json(rooms))
+    .catch(() => res.sendStatus(404));
+});
+
+lobbySpace.on('connection', (socket) => {
+  console.log('connected to lobby');
+
+  socket.on('createRoom', (roomName) => {
+    db.createRoomEntry(roomName)
+      .then(() => db.findRooms())
+      .then(rooms => lobbySpace.emit('retrieveRooms', rooms));
   });
 });
