@@ -4,7 +4,7 @@ const youtubeApi = require('./youtubeService');
 const db = require('../database/postgres');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 
@@ -60,7 +60,7 @@ const giveHostStatus = host => roomSpace.to(host).emit('host');
 
 roomSpace.on('connection', (socket) => {
   console.log(`connected to ${Object.keys(socket.nsp.sockets).length} socket(s)`);
-
+  roomSpace.to(socket.id).emit('id', socket.id);
   if (Object.keys(socket.nsp.sockets).length === 1) {
     roomHost = socket.id;
     giveHostStatus(roomHost);
@@ -98,6 +98,18 @@ roomSpace.on('connection', (socket) => {
     db.removeFromPlaylist(videoName)
       .then(() => sendPlaylist())
       .catch(err => roomSpace.emit('error', err));
+  });
+
+  socket.on('emitMessage', (message) => {
+    message.userName = message.userName.split('#')[1].substring(0, 8);
+    let sum = 0;
+    for (let i = 0; i < 3; i++) {
+      sum += message.userName.charCodeAt(i);
+    }
+    const colors = ['#ffb3ba', '#ffd2b3', '#fff8b3', '#baffb3', '#bae1ff', '#e8baff'];
+    const userColor = colors[(sum % colors.length)];
+    message.userColor = userColor;
+    roomSpace.emit('pushingMessage', message);
   });
 
   socket.on('disconnect', () => {
