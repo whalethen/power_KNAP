@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import io from 'socket.io-client';
 
 const SearchResultsEntry = ({ searchResult, saveToPlaylist }) => (
   <div className="searchEntry">

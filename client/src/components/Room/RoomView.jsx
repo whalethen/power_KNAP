@@ -48,12 +48,12 @@ class RoomView extends React.Component {
   onPlayerStateChange(e) {
     // when video has ended
     if (e.data === 0) {
-      if (this.state.isHost) {
-        axios.patch(`/playNext/${this.state.playlist.length - 1}`);
-      }
       this.setState({
         startOptions: { playerVars: { start: 0 } },
       });
+      if (this.state.isHost) {
+        axios.patch(`/playNext/${this.state.playlist.length - 1}`);
+      }
     }
     // when video is unstarted
     if (e.data === -1) {
@@ -61,9 +61,9 @@ class RoomView extends React.Component {
     }
   }
 
-  handleDelete(videoName) {
-    roomSocket.emit('removeFromPlaylist', videoName);
-  }
+  // handleDelete(videoName) {
+  //   roomSocket.emit('removeFromPlaylist', videoName);
+  // }
 
   addToPlaylist(videos) {
     if (videos.length === 1) {
@@ -82,7 +82,7 @@ class RoomView extends React.Component {
   }
 
   renderRoom() {
-    return axios.get('/renderRoom')
+    return axios.get('/room')
       .then(({ data }) => {
         const currentTime = Date.now();
         const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
@@ -98,17 +98,16 @@ class RoomView extends React.Component {
   }
 
   render() {
-    const playlistComponent = (this.state.isHost) ?
-      (<Playlist
-        playlist={this.state.playlist}
-        removeSelected={this.handleDelete}
-        isHost={this.state.isHost}
-      />) :
-      <Playlist playlist={this.state.playlist} />;
+    // const playlistComponent = (this.state.isHost) ?
+    //   (<Playlist
+    //     playlist={this.state.playlist}
+    //     removeSelected={this.handleDelete}
+    //     isHost={this.state.isHost}
+    //   />) :
     return (
       <div className="room">
         <div className="container navbar">fam.ly</div>
-        {playlistComponent}
+        <Playlist playlist={this.state.playlist} />
         <VideoPlayer
           currentVideo={this.state.currentVideo}
           opts={this.state.startOptions}
@@ -121,4 +120,5 @@ class RoomView extends React.Component {
   }
 }
 
-ReactDOM.render(<RoomView />, document.getElementById('room'));
+export default RoomView;
+// ReactDOM.render(<RoomView />, document.getElementById('room'));

@@ -6,6 +6,10 @@ body {
   font-size: 11px;
 }
 
+.lobby {
+  background: black;
+}
+
 .room {
   display: grid;
   width: 100%;
@@ -19,7 +23,7 @@ body {
 }
 
 .container {
-  box-sizing: border-box;
+  box-sizing: border-box;[]
   /*border: 0.3px dotted white;*/
 }
 

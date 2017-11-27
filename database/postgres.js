@@ -27,8 +27,8 @@ const Room = sequelize.define('room', {
   name: Sequelize.STRING,
 });
 
-Video.sync({ force: true });
-Room.sync({ force: true });
+// Video.sync({ force: true });
+// Room.sync({ force: true });
 
 const createVideoEntry = (videoData) => {
   const videoEntry = {
@@ -51,15 +51,15 @@ const createRoomEntry = (roomName) => {
 
 // Room queries
 const findRooms = () => Room.findAll();
-const getRoomProperties = roomId => Room.findById(roomId).then(room => room.dataValues);
-const setStartTime = roomId => Room.findById(roomId).then(room => room.update({ startTime: Date.now() }));
-const getIndex = roomId => Room.findById(roomId).then(room => room.dataValues.indexKey);
-const resetRoomIndex = roomId => Room.findById(roomId).then(room => room.update({ indexKey: 0 }));
-const incrementIndex = roomId => Room.findById(roomId).then(room => room.increment('indexKey'));
-const removeFromPlaylist = title => Video.find({ where: { videoName: title } }).then(video => video.destroy());
+const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
+const setStartTime = () => Room.findById(1).then(room => room.update({ startTime: Date.now() }));
+const getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
+const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
+const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
 
 // Video queries
 const findVideos = () => Video.findAll();
+const removeFromPlaylist = title => Video.find({ where: { videoName: title } }).then(video => video.destroy());
 
 exports.createRoomEntry = createRoomEntry;
 exports.createVideoEntry = createVideoEntry;

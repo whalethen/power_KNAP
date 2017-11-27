@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Switch, Route, Link, IndexRoute } from 'react-router-dom';
 import io from 'socket.io-client';
 import axios from 'axios';
 import RoomList from './RoomList';
@@ -8,7 +9,7 @@ import SearchBar from './SearchBar';
 
 const lobby = io('/lobby');
 
-class App extends React.Component {
+class Home extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -58,4 +59,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('homepage'));
+export default Home;

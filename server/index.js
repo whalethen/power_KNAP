@@ -14,7 +14,7 @@ const lobbySpace = io.of('/lobby');
 const roomSpace = io.of('/room');
 
 // Room HTTP requests
-app.get('/renderRoom', (req, res) => {
+app.get('/room', (req, res) => {
   const roomProperties = {};
   db.findVideos()
     .then((videos) => { roomProperties.videos = videos; })
@@ -33,8 +33,9 @@ app.get('/search', (req, res) => {
     .catch(() => res.sendStatus(404));
 });
 
-
 app.patch('/playNext/:length', (req, res) => {
+  const roomPlaylistLength = Number(req.params.length);
+
   const sendIndex = ({ indexKey }) => {
     roomSpace.emit('playNext', indexKey);
   };
@@ -43,8 +44,6 @@ app.patch('/playNext/:length', (req, res) => {
     if (playlistLength === currentIndex) return db.resetRoomIndex();
     return db.incrementIndex();
   };
-
-  const roomPlaylistLength = Number(req.params.length);
 
   db.getIndex()
     .then(currentSongIndex => queueNextVideo(roomPlaylistLength, currentSongIndex))
@@ -55,16 +54,16 @@ app.patch('/playNext/:length', (req, res) => {
 });
 
 // Room socket events
-let roomHost;
-const giveHostStatus = host => roomSpace.to(host).emit('host');
+// let roomHost;
+// const giveHostStatus = host => roomSpace.to(host).emit('host');
 
 roomSpace.on('connection', (socket) => {
   console.log(`connected to ${Object.keys(socket.nsp.sockets).length} socket(s)`);
 
-  if (Object.keys(socket.nsp.sockets).length === 1) {
-    roomHost = socket.id;
-    giveHostStatus(roomHost);
-  }
+  // if (Object.keys(socket.nsp.sockets).length === 1) {
+  //   roomHost = socket.id;
+  //   giveHostStatus(roomHost);
+  // }
 
   const sendPlaylist = () => {
     db.findVideos()
@@ -90,21 +89,21 @@ roomSpace.on('connection', (socket) => {
       url: video.id.videoId,
       description: video.snippet.description,
     };
-    return db.storeVideoInDatabase(videoData)
+    return db.createVideoEntry(videoData)
       .then(() => sendPlaylist());
   });
 
-  socket.on('removeFromPlaylist', (videoName) => {
-    db.removeFromPlaylist(videoName)
-      .then(() => sendPlaylist())
-      .catch(err => roomSpace.emit('error', err));
-  });
+  // socket.on('removeFromPlaylist', (videoName) => {
+  //   db.removeFromPlaylist(videoName)
+  //     .then(() => sendPlaylist())
+  //     .catch(err => roomSpace.emit('error', err));
+  // });
 
   socket.on('disconnect', () => {
     if (Object.keys(socket.nsp.sockets).length > 0) {
-      const newHost = Object.keys(socket.nsp.sockets)[0];
+      // const newHost = Object.keys(socket.nsp.sockets)[0];
       console.log(`A user has disconnected from ${roomSpace.name}`);
-      return (newHost === roomHost) ? null : giveHostStatus(newHost);
+      // return (newHost === roomHost) ? null : giveHostStatus(newHost);
     }
     console.log(`${roomSpace.name} is now empty`);
   });
