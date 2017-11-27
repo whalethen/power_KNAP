@@ -4,7 +4,7 @@ const youtubeApi = require('./youtubeService');
 const db = require('../database/postgres');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 
@@ -54,16 +54,16 @@ app.patch('/playNext/:length', (req, res) => {
 });
 
 // Room socket events
-// let roomHost;
-// const giveHostStatus = host => roomSpace.to(host).emit('host');
+let roomHost;
+const giveHostStatus = host => roomSpace.to(host).emit('host');
 
 roomSpace.on('connection', (socket) => {
   console.log(`connected to ${Object.keys(socket.nsp.sockets).length} socket(s)`);
-
-  // if (Object.keys(socket.nsp.sockets).length === 1) {
-  //   roomHost = socket.id;
-  //   giveHostStatus(roomHost);
-  // }
+  roomSpace.to(socket.id).emit('id', socket.id);
+  if (Object.keys(socket.nsp.sockets).length === 1) {
+    roomHost = socket.id;
+    giveHostStatus(roomHost);
+  }
 
   const sendPlaylist = () => {
     db.findVideos()
@@ -93,11 +93,23 @@ roomSpace.on('connection', (socket) => {
       .then(() => sendPlaylist());
   });
 
-  // socket.on('removeFromPlaylist', (videoName) => {
-  //   db.removeFromPlaylist(videoName)
-  //     .then(() => sendPlaylist())
-  //     .catch(err => roomSpace.emit('error', err));
-  // });
+  socket.on('removeFromPlaylist', (videoName) => {
+    db.removeFromPlaylist(videoName)
+      .then(() => sendPlaylist())
+      .catch(err => roomSpace.emit('error', err));
+  });
+
+  socket.on('emitMessage', (message) => {
+    message.userName = message.userName.split('#')[1].substring(0, 8);
+    let sum = 0;
+    for (let i = 0; i < 3; i++) {
+      sum += message.userName.charCodeAt(i);
+    }
+    const colors = ['#ffb3ba', '#ffd2b3', '#fff8b3', '#baffb3', '#bae1ff', '#e8baff'];
+    const userColor = colors[(sum % colors.length)];
+    message.userColor = userColor;
+    roomSpace.emit('pushingMessage', message);
+  });
 
   socket.on('disconnect', () => {
     if (Object.keys(socket.nsp.sockets).length > 0) {
