@@ -20,20 +20,20 @@ class ChatView extends React.Component {
           username: nextProps.message.userName,
           date: nextProps.message.dateTime,
           color: nextProps.message.userColor,
-        })
+        }),
       });
     }
   }
-  sendMessage(time, name, message) {
-    this.props.emitMessage(time, name, message);
+  sendMessage(time, message) {
+    this.props.emitMessage(time, message);
   }
 
   render() {
     return (
       <div className="userChat">
-        <h3>User Chat</h3>
+        <h3>Chat Box</h3>
         <div className="messageContainer"> <Messages messages={this.state.messages} /></div>
-        <div className="messageInput"><MessageInput socketID={this.props.socketID} sendMessage={this.sendMessage} /></div>
+        <div className="messageInput"><MessageInput sendMessage={this.sendMessage} /></div>
       </div>
     );
   }

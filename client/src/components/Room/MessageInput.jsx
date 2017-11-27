@@ -16,8 +16,7 @@ class MessageInput extends React.Component {
     if (pressedEnter) {
       let time = new Date();
       time = time.toLocaleTimeString();
-      const userName = this.props.socketID.substring(0, 8);
-      this.props.sendMessage(time, userName, this.state.message);
+      this.props.sendMessage(time, this.state.message);
       this.clear();
     }
   }
@@ -35,14 +34,20 @@ class MessageInput extends React.Component {
   }
   render() {
     return (
-      <input type="text" className="messageText" placeholder="Enter message"onKeyUp={this.setMessage} onChange={this.enterMessage} value={this.state.message} />
+      <input
+        type="text"
+        className="messageText"
+        placeholder="Enter message"
+        onKeyUp={this.setMessage}
+        onChange={this.enterMessage}
+        value={this.state.message}
+      />
     );
   }
 }
 
 MessageInput.propTypes = {
   sendMessage: PropTypes.func.isRequired,
-  socketID: PropTypes.string.isRequired,
 };
 
 export default MessageInput;

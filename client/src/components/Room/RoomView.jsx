@@ -8,7 +8,7 @@ import Playlist from './Playlist';
 import Search from './Search';
 import ChatView from './ChatView';
 
-// const socket = io.connect(window.location.hostname);
+//const socket = io.connect('localhost:5000');
 const roomSocket = io('/room');
 
 class RoomView extends React.Component {
@@ -46,6 +46,7 @@ class RoomView extends React.Component {
         message: message,
       });
     });
+    roomSocket.on('id', id => this.setState({ username: id }));
   }
 
   componentWillUnmount() {
@@ -92,10 +93,10 @@ class RoomView extends React.Component {
     roomSocket.emit('saveToPlaylist', video);
   }
 
-  emitMessage(time, name, message) {
+  emitMessage(time, message) {
     roomSocket.emit('emitMessage', {
       body: message,
-      userName: name,
+      userName: this.state.username,
       dateTime: time,
     });
   }
@@ -134,7 +135,6 @@ class RoomView extends React.Component {
             date={this.state.dateTime}
             username={this.state.username}
             emitMessage={this.emitMessage}
-            socketID={roomSocket.io.engine.id}
           />
         </div>
         <VideoPlayer
