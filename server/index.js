@@ -9,7 +9,7 @@ const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 
 const roomSpace = io.of('/room');
-const lobbySpace = io.of('/lobby');
+// const lobbySpace = io.of('/lobby');
 
 let roomHost;
 
@@ -61,7 +61,7 @@ const giveHostStatus = host => roomSpace.to(host).emit('host');
 roomSpace.on('connection', (socket) => {
   console.log(`connected to ${Object.keys(socket.nsp.sockets).length} socket(s)`);
 
-  if (Object.keys(socket.nsp.sockets).length === 2) {
+  if (Object.keys(socket.nsp.sockets).length === 1) {
     roomHost = socket.id;
     giveHostStatus(roomHost);
   }
@@ -101,8 +101,8 @@ roomSpace.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    if (Object.keys(socket.nsp.sockets).length > 1) {
-      const newHost = Object.keys(socket.nsp.sockets)[1];
+    if (Object.keys(socket.nsp.sockets).length > 0) {
+      const newHost = Object.keys(socket.nsp.sockets)[0];
       console.log(`A user has disconnected from ${roomSpace.name}`);
       return (newHost === roomHost) ? null : giveHostStatus(newHost);
     }
