@@ -117,6 +117,7 @@ app.get('/fetchRooms', (req, res) => {
     .catch(() => res.sendStatus(404));
 });
 
+// Lobby socket events
 lobbySpace.on('connection', (socket) => {
   console.log('connected to lobby');
 
