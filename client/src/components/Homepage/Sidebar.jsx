@@ -1,8 +1,8 @@
 import React from 'react';
 
 const Sidebar = () => (
-  <div>
-    <p>Sidebar</p>
+  <div className="container sidebar">
+    <div>Sidebar</div>
   </div>
 );
 
