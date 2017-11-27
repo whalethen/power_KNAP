@@ -24,18 +24,13 @@ const Playlist = sequelize.define('playlist', {
 const Room = sequelize.define('room', {
   indexKey: Sequelize.INTEGER,
   startTime: Sequelize.DATE,
+  name: Sequelize.STRING,
 });
 
-// Video.sync({ force: true })
+Video.sync({ force: true });
+Room.sync({ force: true });
 
-// Room.sync({ force: true }).then(() => {
-//   return Room.create({
-//     indexKey: 0,
-//     startTime: Date.now(),
-//   });
-// });
-
-const storeVideoInDatabase = (videoData) => {
+const createVideoEntry = (videoData) => {
   const videoEntry = {
     videoName: videoData.title,
     creator: videoData.creator,
@@ -45,19 +40,34 @@ const storeVideoInDatabase = (videoData) => {
   return Video.create(videoEntry); // returns a promise when called
 };
 
-const findVideos = () => Video.findAll();
-const getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
-const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
-const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
-const removeFromPlaylist = title => Video.find({ where: { videoName: title } }).then(video => video.destroy());
-const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
-const setStartTime = () => Room.findById(1).then(room => room.update({ startTime: Date.now() }));
+const createRoomEntry = (roomName) => {
+  const roomEntry = {
+    indexKey: 0,
+    startTime: null,
+    name: roomName,
+  };
+  return Room.create(roomEntry); // returns a promise when called
+};
 
-exports.storeVideoInDatabase = storeVideoInDatabase;
+// Room queries
+const findRooms = () => Room.findAll();
+const getRoomProperties = roomId => Room.findById(roomId).then(room => room.dataValues);
+const setStartTime = roomId => Room.findById(roomId).then(room => room.update({ startTime: Date.now() }));
+const getIndex = roomId => Room.findById(roomId).then(room => room.dataValues.indexKey);
+const resetRoomIndex = roomId => Room.findById(roomId).then(room => room.update({ indexKey: 0 }));
+const incrementIndex = roomId => Room.findById(roomId).then(room => room.increment('indexKey'));
+const removeFromPlaylist = title => Video.find({ where: { videoName: title } }).then(video => video.destroy());
+
+// Video queries
+const findVideos = () => Video.findAll();
+
+exports.createRoomEntry = createRoomEntry;
+exports.createVideoEntry = createVideoEntry;
+exports.findRooms = findRooms;
 exports.findVideos = findVideos;
 exports.getIndex = getIndex;
-exports.getRoomProperties = getRoomProperties;
-exports.incrementIndex = incrementIndex;
-exports.removeFromPlaylist = removeFromPlaylist;
 exports.resetRoomIndex = resetRoomIndex;
+exports.incrementIndex = incrementIndex;
 exports.setStartTime = setStartTime;
+exports.getRoomProperties = getRoomProperties;
+exports.removeFromPlaylist = removeFromPlaylist;
