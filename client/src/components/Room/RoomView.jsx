@@ -17,6 +17,7 @@ class RoomView extends React.Component {
       currentVideo: undefined,
       playlist: [],
       startOptions: null,
+      isHost: false,
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -26,6 +27,8 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     this.renderRoom();
+    roomSocket.on('default', () => this.setState({ currentVideo: undefined }));
+    roomSocket.on('host', () => this.setState({ isHost: true }));
     roomSocket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
     roomSocket.on('playNext', (next) => {
       this.setState({
@@ -35,6 +38,10 @@ class RoomView extends React.Component {
     roomSocket.on('error', err => console.error(err));
   }
 
+  componentWillUnmount() {
+    roomSocket.disconnect();
+  }
+
   onPlayerReady(e) {
     e.target.playVideo();
   }
@@ -42,7 +49,9 @@ class RoomView extends React.Component {
   onPlayerStateChange(e) {
     // when video has ended
     if (e.data === 0) {
-      axios.patch(`/playNext/${this.state.playlist.length - 1}`);
+      if (this.state.isHost) {
+        axios.patch(`/playNext/${this.state.playlist.length - 1}`);
+      }
       this.setState({
         startOptions: { playerVars: { start: 0 } },
       });
@@ -51,6 +60,10 @@ class RoomView extends React.Component {
     if (e.data === -1) {
       e.target.playVideo();
     }
+  }
+
+  handleDelete(videoName) {
+    roomSocket.emit('removeFromPlaylist', videoName);
   }
 
   addToPlaylist(videos) {
@@ -86,10 +99,17 @@ class RoomView extends React.Component {
   }
 
   render() {
+    const playlistComponent = (this.state.isHost) ?
+      (<Playlist
+        playlist={this.state.playlist}
+        removeSelected={this.handleDelete}
+        isHost={this.state.isHost}
+      />) :
+      <Playlist playlist={this.state.playlist} />;
     return (
       <div className="room">
         <div className="container navbar">fam.ly</div>
-        <Playlist playlist={this.state.playlist} />
+        {playlistComponent}
         <VideoPlayer
           currentVideo={this.state.currentVideo}
           opts={this.state.startOptions}
