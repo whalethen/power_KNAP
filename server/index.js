@@ -2,6 +2,11 @@ const http = require('http');
 const express = require('express');
 const youtubeApi = require('./youtubeService');
 const db = require('../database/postgres');
+const passport = require('passport');
+const cors = require('cors');
+const cookieSession = require('cookie-session');
+const authRoutes = require('./auth-routes');
+const passportSetup = require('../passport-setup');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -10,6 +15,17 @@ const io = require('socket.io').listen(server);
 
 const roomSpace = io.of('/room');
 const lobbySpace = io.of('/lobby');
+
+app.use(cookieSession({
+  keys: process.env.COOKIEKEY,
+  maxAge: 24 * 60 * 60 * 1000,
+}));
+
+app.use(cors());
+// app.options('*', cors())
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/auth', authRoutes);
 
 
 server.listen(port, () => console.log(`listening on port ${port}`));

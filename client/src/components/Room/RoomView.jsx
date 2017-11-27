@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import moment from 'moment';
 import axios from 'axios';
+import cookie from 'cookie';
 import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
@@ -16,6 +17,7 @@ class RoomView extends React.Component {
       currentVideo: undefined,
       playlist: [],
       startOptions: null,
+      user: null,
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -24,6 +26,10 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
+    console.log(cookie.parse(document.cookie).user)
+    if (cookie.parse(document.cookie).user) {
+      this.setState({ user: cookie.parse(document.cookie).user }) 
+    }
     this.renderRoom();
     roomSocket.on('retrievePlaylist', videos => this.addToPlaylist(videos));
     roomSocket.on('playNext', (next) => {
@@ -85,9 +91,15 @@ class RoomView extends React.Component {
   }
 
   render() {
+    const view = this.state.user ?
+      <span>Logged in as {this.state.user} <a href="/auth/logout">Logout</a></span> :
+      <span>Login with <a href="/auth/google">Google</a></span>
     return (
       <div className="room">
-        <div className="container navbar">fam.ly</div>
+        <div className="container navbar">
+          fam.ly    
+          {view}
+        </div>
         <Playlist playlist={this.state.playlist} />
         <VideoPlayer
           currentVideo={this.state.currentVideo}
