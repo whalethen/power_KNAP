@@ -123,8 +123,8 @@ class RoomView extends React.Component {
 
   render() {
     const view = this.state.user ?
-      <span>Logged in as {this.state.user} <a href="/auth/logout">Logout</a></span> :
-      <span>Login with <a href="/auth/google">Google</a></span>;
+      <span className="login">Welcome, {this.state.user} <a href="/auth/logout">Logout</a></span> :
+      <span className="login">Login with <a href="/auth/google">Google</a></span>;
 
     const playlistComponent = (this.state.isHost) ?
       (<Playlist
