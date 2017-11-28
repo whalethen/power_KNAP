@@ -14,8 +14,7 @@ class MessageInput extends React.Component {
   setMessage(event) {
     const pressedEnter = event.key === 'Enter';
     if (pressedEnter) {
-      let time = new Date();
-      time = time.toLocaleTimeString();
+      const time = new Date().toLocaleTimeString();
       this.props.sendMessage(time, this.state.message);
       this.clear();
     }

@@ -1,13 +1,13 @@
 # fam.ly
 
-> Pithy project description
+> Social Video Streaming Application
 
 ## Power KNAP
 
-  - Kory Kilpatrick
-  - Phoebe Mei
-  - Nicholas Morrow
-  - Aric Alves
+  - [Kory Kilpatrick](https://github.com/kk1024)
+  - [Phoebe Mei](https://github.com/sorbae)
+  - [Nicholas Morrow](https://github.com/nmorrow11)
+  - [Aric Alves](https://github.com/aricalves)
 
 ## Table of Contents
 
@@ -15,13 +15,13 @@
 1. [Requirements](#requirements)
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
+    1. [Setting up database](#database)
 1. [Roadmap](#roadmap)
 1. [Contributing](#contributing)
 
 ## Usage
 
-> Some usage instructions
+> Duplicate the `default.env` to setup environmental variables and make sure it is added to gitignore!
 
 ## Requirements
 
@@ -49,14 +49,22 @@
 From within the root directory:
 
 ```sh
-npm install -g bower
 npm install
-bower install
 ```
 
-### Roadmap
+### Database
+
+Available GUI: 
+
+- Postgres - Easily start your server with your default database.
+
+- Postico - Allows users to view created databases and tables. Please create a postico username and password in order to run database locally (you will need both in your .env file - refer to the default.env file).
+
+## Roadmap
 
 View the project roadmap [here](https://docs.google.com/document/d/1WI0ECKA-4dYaD25FkTV6qtP-UhtHemi-1yFMJ2BsGXM/edit?usp=sharing)
+
+View our Trello [here](https://trello.com/b/Hm6tsJMM/dj-bunny-hop)
 
 
 ## Contributing

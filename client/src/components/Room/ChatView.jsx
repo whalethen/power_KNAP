@@ -31,13 +31,15 @@ class ChatView extends React.Component {
 
   render() {
     return (
-      <div className="userChat">
+      <div className="container userChat">
         <h3>Chat Box</h3>
-        <div className="messageContainer">
-          <Messages messages={this.state.messages} />
-        </div>
-        <div className="messageInput">
-          <MessageInput sendMessage={this.sendMessage} />
+        <div className="scroll">
+          <div className="messageContainer">
+            <Messages messages={this.state.messages} />
+          </div>
+          <div className="messageInput">
+            <MessageInput sendMessage={this.sendMessage} />
+          </div>
         </div>
       </div>
     );
