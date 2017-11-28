@@ -129,14 +129,12 @@ class RoomView extends React.Component {
       <div className="room">
         <div className="container navbar">fam.ly</div>
         {playlistComponent}
-        <div className="container chat">
-          <ChatView
-            message={this.state.message}
-            date={this.state.dateTime}
-            username={this.state.username}
-            emitMessage={this.emitMessage}
-          />
-        </div>
+        <ChatView
+          message={this.state.message}
+          date={this.state.dateTime}
+          username={this.state.username}
+          emitMessage={this.emitMessage}
+        />
         <VideoPlayer
           currentVideo={this.state.currentVideo}
           opts={this.state.startOptions}

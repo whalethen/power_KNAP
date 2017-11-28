@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 const PlaylistEntry = ({ song, index, isHost, removeSelected }) => {
   if (isHost) {
     return (
-      <div className="playlistEntry">
-        <button id="deleteButton" onClick={() => { removeSelected(song.videoName); }}>
+      <div className="hostPlaylistEntry">
+        <button className="deleteButton" onClick={() => { removeSelected(song.videoName); }}>
           X
         </button>
         <div className="songTitle">{index}. {song.videoName} </div>
