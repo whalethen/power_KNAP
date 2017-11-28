@@ -23,7 +23,7 @@ Social Video Streaming Application
 
 Duplicate the `default.env` to setup environmental variables and make sure it is added to gitignore!
 > Notes on environmental variables:
-- ```DATABASE_URL``` must be in the following format: ```postgress://${USERNAME}:${PASSWORD}@localhost:${PORT}/${DATABASE_NAME}``` (replace all-cap variables)
+- ```DATABASE_URL```: ```postgress://${USERNAME}:${PASSWORD}@localhost:${PORT}/${DATABASE_NAME}```
 - ```LOCAL``` variable can be 0 (false for production development) or 1 (true for local development)
 - Apply for a [Google oAuth key](https://console.developers.google.com) to receive a ```GOOGLECLIENTID``` and ```GOOGLECLIENTSECRET``` key
   - Upon arriving at the linked site, enable APIs and services and search for Google+ API
@@ -35,7 +35,7 @@ References:
 - [oAuth](http://www.passportjs.org/docs/)
 - [ReactRouter](https://github.com/ReactTraining/react-router)
   - React-routing changes are not pushed to the master branch
-  - Refer to the feat/reactRouter branch for previous work done with react router and ONLY react router (_**Other features in the feat/reactRouter branch are bugged!**_)
+  - Refer to the feat/reactRouter branch for previous work done with react router and **_ONLY_** react router (_**Other features in the feat/reactRouter branch are bugged!**_)
 - [CSS Grids](https://gridbyexample.com/patterns/)
 - [CSS Flex-boxes](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes)
 
