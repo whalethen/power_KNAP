@@ -1,6 +1,6 @@
 # fam.ly
 
-> Social Video Streaming Application
+Social Video Streaming Application
 
 ## Power KNAP
 
