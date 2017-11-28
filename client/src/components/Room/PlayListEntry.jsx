@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
 const PlaylistEntry = ({ song, index, isHost, removeSelected }) => {
   if (isHost) {
     return (

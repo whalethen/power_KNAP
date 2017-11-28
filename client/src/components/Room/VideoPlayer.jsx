@@ -28,7 +28,6 @@ const VideoPlayer = ({ currentVideo, opts, onReady, onStateChange }) => {
   );
 };
 
-
 VideoPlayer.propTypes = {
   currentVideo: PropTypes.instanceOf(Object),
   onStateChange: PropTypes.func.isRequired,
