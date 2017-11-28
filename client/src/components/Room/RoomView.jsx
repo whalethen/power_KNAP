@@ -21,7 +21,6 @@ class RoomView extends React.Component {
       isHost: false,
       message: '',
       username: '',
-      date: '',
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -43,7 +42,7 @@ class RoomView extends React.Component {
     roomSocket.on('error', err => console.error(err));
     roomSocket.on('pushingMessage', (message) => {
       this.setState({
-        message: message,
+        message,
       });
     });
     roomSocket.on('id', id => this.setState({ username: id }));
@@ -118,13 +117,16 @@ class RoomView extends React.Component {
   }
 
   render() {
-    const playlistComponent = (this.state.isHost) ?
-      (<Playlist
+    let playlistComponent;
+    if (this.state.isHost) {
+      playlistComponent = (<Playlist
         playlist={this.state.playlist}
         removeSelected={this.handleDelete}
         isHost={this.state.isHost}
-      />) :
-      <Playlist playlist={this.state.playlist} />;
+      />);
+    } else {
+      playlistComponent = <Playlist playlist={this.state.playlist} />;
+    }
     return (
       <div className="room">
         <div className="container navbar">fam.ly</div>

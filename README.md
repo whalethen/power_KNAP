@@ -1,6 +1,6 @@
 # fam.ly
 
-> Pithy project description
+> Social Video Streaming Application
 
 ## Power KNAP
 
@@ -21,7 +21,7 @@
 
 ## Usage
 
-> Some usage instructions
+> Create a `.env` file. Duplicate it from the `default.env` to setup environmental variables.
 
 ## Requirements
 
@@ -51,7 +51,6 @@ From within the root directory:
 ```sh
 npm install -g bower
 npm install
-bower install
 ```
 
 ### Roadmap

@@ -8,15 +8,13 @@ const port = process.env.PORT;
 const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 
+server.listen(port, () => console.log(`listening on port ${port}`));
+app.use(express.static(`${__dirname}./../client`));
 const roomSpace = io.of('/room');
 // const lobbySpace = io.of('/lobby');
 
-let roomHost;
 
-server.listen(port, () => console.log(`listening on port ${port}`));
-
-app.use(express.static(`${__dirname}./../client`));
-
+// Room HTTP Requests
 app.get('/renderRoom', (req, res) => {
   const roomProperties = {};
 
@@ -37,17 +35,18 @@ app.get('/search', (req, res) => {
     .catch(() => res.sendStatus(404));
 });
 
-const sendIndex = ({ indexKey }) => {
-  roomSpace.emit('playNext', indexKey);
-};
-
-const queueNextVideo = (playlistLength, currentIndex) => {
-  if (playlistLength === currentIndex) return db.resetRoomIndex();
-  return db.incrementIndex();
-};
-
 app.patch('/playNext/:length', (req, res) => {
   const roomPlaylistLength = Number(req.params.length);
+
+  const sendIndex = ({ indexKey }) => {
+    roomSpace.emit('playNext', indexKey);
+  };
+
+  const queueNextVideo = (playlistLength, currentIndex) => {
+    if (playlistLength === currentIndex) return db.resetRoomIndex();
+    return db.incrementIndex();
+  };
+
   db.getIndex()
     .then(currentSongIndex => queueNextVideo(roomPlaylistLength, currentSongIndex))
     .then(room => sendIndex(room.dataValues))
@@ -56,6 +55,8 @@ app.patch('/playNext/:length', (req, res) => {
     .catch(err => res.send(err));
 });
 
+// Room Socket Events
+let roomHost;
 const giveHostStatus = host => roomSpace.to(host).emit('host');
 
 roomSpace.on('connection', (socket) => {
@@ -74,7 +75,7 @@ roomSpace.on('connection', (socket) => {
         if (videos.length === 1) db.setStartTime();
       })
       .catch((emptyPlaylist) => {
-        if (Array.isArray(emptyPlaylist)) {
+        if (Array.isArray(emptyPlaylist)) { // Check if the thrown item is an array rather than an Error
           roomSpace.emit('default');
         } else {
           throw emptyPlaylist;
@@ -90,7 +91,7 @@ roomSpace.on('connection', (socket) => {
       url: video.id.videoId,
       description: video.snippet.description,
     };
-    return db.storeVideoInDatabase(videoData)
+    return db.createVideoEntry(videoData)
       .then(() => sendPlaylist());
   });
 
@@ -101,9 +102,9 @@ roomSpace.on('connection', (socket) => {
   });
 
   socket.on('emitMessage', (message) => {
-    message.userName = message.userName.split('#')[1].substring(0, 8);
+    message.userName = message.userName.split('#')[1].substring(0, 8); // Pluck Socket ID
     let sum = 0;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i += 1) {
       sum += message.userName.charCodeAt(i);
     }
     const colors = ['#ffb3ba', '#ffd2b3', '#fff8b3', '#baffb3', '#bae1ff', '#e8baff'];
