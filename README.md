@@ -1,13 +1,13 @@
 # fam.ly
 
-> Pithy project description
+> Social Video Streaming Application
 
 ## Power KNAP
 
-  - Kory Kilpatrick
-  - Phoebe Mei
-  - Nicholas Morrow
-  - Aric Alves
+  - [Kory Kilpatrick](https://github.com/kk1024)
+  - [Phoebe Mei](https://github.com/sorbae)
+  - [Nicholas Morrow](https://github.com/nmorrow11)
+  - [Aric Alves](https://github.com/aricalves)
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@
 
 ## Usage
 
-> Some usage instructions
+> Create a `.env` file. Duplicate it from the `default.env` to setup environmental variables.
 
 ## Requirements
 
@@ -49,14 +49,14 @@
 From within the root directory:
 
 ```sh
-npm install -g bower
 npm install
-bower install
 ```
 
 ### Roadmap
 
 View the project roadmap [here](https://docs.google.com/document/d/1WI0ECKA-4dYaD25FkTV6qtP-UhtHemi-1yFMJ2BsGXM/edit?usp=sharing)
+
+View our Trello [here](https://trello.com/b/Hm6tsJMM/dj-bunny-hop)
 
 
 ## Contributing
