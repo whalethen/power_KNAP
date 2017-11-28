@@ -8,7 +8,6 @@ import Playlist from './Playlist';
 import Search from './Search';
 import ChatView from './ChatView';
 
-//const socket = io.connect('localhost:5000');
 const roomSocket = io('/room');
 
 class RoomView extends React.Component {
