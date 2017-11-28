@@ -80,7 +80,7 @@ Available GUI:
 
 View the project roadmap [here](https://docs.google.com/document/d/1WI0ECKA-4dYaD25FkTV6qtP-UhtHemi-1yFMJ2BsGXM/edit?usp=sharing)
 
-View our Trello [here](https://trello.com/b/Hm6tsJMM/dj-bunny-hop)
+Please refer to our user story based current and desired features on Trello [here](https://trello.com/b/Hm6tsJMM/dj-bunny-hop)
 
 
 ## Contributing
