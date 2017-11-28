@@ -21,7 +21,6 @@ class RoomView extends React.Component {
       isHost: false,
       message: '',
       username: '',
-      user: null,
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -32,7 +31,7 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     if (cookie.parse(document.cookie).user) {
-      this.setState({ user: cookie.parse(document.cookie).user }) 
+      this.setState({ user: cookie.parse(document.cookie).user })
     }
     this.renderRoom();
     roomSocket.on('default', () => this.setState({ currentVideo: undefined }));
@@ -63,12 +62,12 @@ class RoomView extends React.Component {
   onPlayerStateChange(e) {
     // when video has ended
     if (e.data === 0) {
-      if (this.state.isHost) {
-        axios.patch(`/playNext/${this.state.playlist.length - 1}`);
-      }
       this.setState({
         startOptions: { playerVars: { start: 0 } },
       });
+      if (this.state.isHost) {
+        axios.patch(`/playNext/${this.state.playlist.length - 1}`);
+      }
     }
     // when video is unstarted
     if (e.data === -1) {
@@ -105,7 +104,7 @@ class RoomView extends React.Component {
   }
 
   renderRoom() {
-    return axios.get('/renderRoom')
+    return axios.get('/room')
       .then(({ data }) => {
         const currentTime = Date.now();
         const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
@@ -158,4 +157,4 @@ class RoomView extends React.Component {
   }
 }
 
-ReactDOM.render(<RoomView />, document.getElementById('room'));
+export default RoomView;

@@ -24,10 +24,11 @@ const Playlist = sequelize.define('playlist', {
 const Room = sequelize.define('room', {
   indexKey: Sequelize.INTEGER,
   startTime: Sequelize.DATE,
+  name: Sequelize.STRING,
 });
 
-// Video.sync({ force: true })
-// Room.sync({ force: true })
+// Video.sync({ force: true });
+// Room.sync({ force: true });
 
 const createVideoEntry = (videoData) => {
   const videoEntry = {
@@ -39,22 +40,34 @@ const createVideoEntry = (videoData) => {
   return Video.create(videoEntry); // returns a promise when called
 };
 
-// Room Queries
-const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
-const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
-const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
-const getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
-const setStartTime = () => Room.findById(1).then(room => room.update({ startTime: Date.now() }));
+const createRoomEntry = (roomName) => {
+  const roomEntry = {
+    indexKey: 0,
+    startTime: null,
+    name: roomName,
+  };
+  return Room.create(roomEntry); // returns a promise when called
+};
 
-// Video Queries
+// Room queries
+const findRooms = () => Room.findAll();
+const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
+const setStartTime = () => Room.findById(1).then(room => room.update({ startTime: Date.now() }));
+const getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
+const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
+const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
+
+// Video queries
 const findVideos = () => Video.findAll();
 const removeFromPlaylist = title => Video.find({ where: { videoName: title } }).then(video => video.destroy());
 
+exports.createRoomEntry = createRoomEntry;
 exports.createVideoEntry = createVideoEntry;
-exports.getRoomProperties = getRoomProperties;
-exports.incrementIndex = incrementIndex;
-exports.resetRoomIndex = resetRoomIndex;
-exports.getIndex = getIndex;
-exports.setStartTime = setStartTime;
+exports.findRooms = findRooms;
 exports.findVideos = findVideos;
+exports.getIndex = getIndex;
+exports.resetRoomIndex = resetRoomIndex;
+exports.incrementIndex = incrementIndex;
+exports.setStartTime = setStartTime;
+exports.getRoomProperties = getRoomProperties;
 exports.removeFromPlaylist = removeFromPlaylist;

@@ -1,8 +1,8 @@
 import React from 'react';
 
 const Search = () => (
-  <div>
-    <p>Search</p>
+  <div className="container lobby-search">
+    <input type="text" placeholder="Search room"></input>
   </div>
 );
 
