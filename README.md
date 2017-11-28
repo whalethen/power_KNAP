@@ -21,7 +21,23 @@
 
 ## Usage
 
-> Duplicate the `default.env` to setup environmental variables and make sure it is added to gitignore!
+Duplicate the `default.env` to setup environmental variables and make sure it is added to gitignore!
+> Notes on environmental variables:
+- ```DATABASE_URL``` must be in the following format: ```postgress://${USERNAME}:${PASSWORD}@localhost:${PORT}/${DATABASE_NAME}``` (replace the all-caps variables)
+- ```LOCAL``` variable can be 0 (false for production development) or 1 (true for local development)
+- Apply for a [Google oAuth key](https://console.developers.google.com) to receive a ```GOOGLECLIENTID``` and ```GOOGLECLIENTSECRET``` key
+  - Upon arriving at the linked site, enable APIs and services and search for Google+ API
+  - Create credentials and pass in ```http://localhost:${PORT}``` to Authorized JavaScript origins and ```http://localhost:${PORT}/auth/google/redirect``` to Authorized redirect URIs
+- Create a random cookie key (really, what ever string you want) for ```COOKIEKEY```; this is for encryption
+
+References:
+- [websockets](https://socket.io/)
+- [oAuth](http://www.passportjs.org/docs/)
+- [ReactRouter](https://github.com/ReactTraining/react-router)
+  - React-routing changes are not pushed to the master branch
+  - Please refer to the feat/reactRouter branch for reference on previous work done with react router
+- [CSS Grids](https://gridbyexample.com/patterns/)
+- [CSS Flex-boxes](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes)
 
 ## Requirements
 
