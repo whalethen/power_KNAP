@@ -35,7 +35,7 @@ References:
 - [oAuth](http://www.passportjs.org/docs/)
 - [ReactRouter](https://github.com/ReactTraining/react-router)
   - React-routing changes are not pushed to the master branch
-  - Please refer to the feat/reactRouter branch for reference on previous work done with react router
+  - Refer to the feat/reactRouter branch for previous work done with react router and ONLY react router (_**Other features in the feat/reactRouter branch are bugged!**_)
 - [CSS Grids](https://gridbyexample.com/patterns/)
 - [CSS Flex-boxes](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes)
 
