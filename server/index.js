@@ -105,15 +105,6 @@ roomSpace.on('connection', (socket) => {
     return db.createVideoEntry(videoData)
       .then(() => sendPlaylist())
       .catch(err => console.error(err));
-      // .tapCatch(() => console.log('before entry'))
-      // .catch(() => db.createVideoEntry(videoData))
-      // .then(() => sendPlaylist())
-      // .catch(err => console.error(err))
-      // .then(() => {
-      //   db.videoTableSync()
-      //     .then(db.createVideoEntry(videoData))
-      //     .then(() => sendPlaylist());
-      // })
   });
 
   socket.on('removeFromPlaylist', (videoName) => {

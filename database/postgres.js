@@ -33,10 +33,13 @@ const Room = sequelize.define('room', {
   startTime: Sequelize.DATE,
 });
 
-Video.sync()
-Room.sync()
-// { force: true }
-// { force: true }
+const checkIfTablesExists = () => {
+  Video.sync();
+  Room.sync();
+};
+
+checkIfTablesExists();
+
 const createVideoEntry = (videoData) => {
   const videoEntry = {
     videoName: videoData.title,
@@ -47,11 +50,6 @@ const createVideoEntry = (videoData) => {
   return Video.create(videoEntry);
 };
 
-const videoTableSync = (videoData) => {
-  return Video.sync({ force: true })
-    .then(() => Room.sync({ force: true }))
-    .then(() => createVideoEntry(videoData));
-};
 // Room Queries
 const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
 const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
@@ -74,4 +72,3 @@ exports.getIndex = getIndex;
 exports.setStartTime = setStartTime;
 exports.findVideos = findVideos;
 exports.removeFromPlaylist = removeFromPlaylist;
-exports.videoTableSync = videoTableSync;
