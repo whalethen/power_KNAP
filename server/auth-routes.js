@@ -3,7 +3,6 @@ const passport = require('passport');
 
 router.get('/logout', (req, res) => {
   req.logout();
-  console.log('successful logout')
   res.clearCookie("user").redirect('/') 
 });
 
