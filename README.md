@@ -23,7 +23,7 @@
 
 Duplicate the `default.env` to setup environmental variables and make sure it is added to gitignore!
 > Notes on environmental variables:
-- ```DATABASE_URL``` must be in the following format: ```postgress://${USERNAME}:${PASSWORD}@localhost:${PORT}/${DATABASE_NAME}``` (replace the all-caps variables)
+- ```DATABASE_URL``` must be in the following format: ```postgress://${USERNAME}:${PASSWORD}@localhost:${PORT}/${DATABASE_NAME}``` (replace all-cap variables)
 - ```LOCAL``` variable can be 0 (false for production development) or 1 (true for local development)
 - Apply for a [Google oAuth key](https://console.developers.google.com) to receive a ```GOOGLECLIENTID``` and ```GOOGLECLIENTSECRET``` key
   - Upon arriving at the linked site, enable APIs and services and search for Google+ API
