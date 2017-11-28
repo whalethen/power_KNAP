@@ -19,7 +19,7 @@ let roomHost;
 
 app.use(cookieSession({
   keys: process.env.COOKIEKEY,
-  maxAge: 24 * 60 * 60 * 1000,
+  maxAge: 24 * 60 * 60 * 1000, // one day
 }));
 
 app.use(passport.initialize());
