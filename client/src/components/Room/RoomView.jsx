@@ -20,8 +20,9 @@ class RoomView extends React.Component {
       startOptions: null,
       isHost: false,
       message: '',
-      username: '',
-      user: null,
+      username: '', // refers to socketIDs when user is in chat but not logged in
+      user: null, // refers to Google username when logged in in chat
+      // TODO: eliminate the need for two separate username references
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
