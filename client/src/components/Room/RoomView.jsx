@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import moment from 'moment';
 import axios from 'axios';
+import cookie from 'cookie';
 import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
 import ChatView from './ChatView';
 
-//const socket = io.connect('localhost:5000');
 const roomSocket = io('/room');
 
 class RoomView extends React.Component {
@@ -21,6 +21,7 @@ class RoomView extends React.Component {
       isHost: false,
       message: '',
       username: '',
+      user: null,
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -30,6 +31,9 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
+    if (cookie.parse(document.cookie).user) {
+      this.setState({ user: cookie.parse(document.cookie).user }) 
+    }
     this.renderRoom();
     roomSocket.on('default', () => this.setState({ currentVideo: undefined }));
     roomSocket.on('host', () => this.setState({ isHost: true }));
@@ -127,16 +131,15 @@ class RoomView extends React.Component {
     } else {
       playlistComponent = <Playlist playlist={this.state.playlist} />;
     }
+
+    const view = this.state.user ?
+      <span className="login">Welcome, {this.state.user} <a href="/auth/logout">Logout</a></span> :
+      <span className="login">Login with <a href="/auth/google">Google</a></span>;
+
     return (
       <div className="room">
-        <div className="container navbar">fam.ly</div>
+        <div className="container navbar">fam.ly {view}</div>
         {playlistComponent}
-        <ChatView
-          message={this.state.message}
-          date={this.state.dateTime}
-          username={this.state.username}
-          emitMessage={this.emitMessage}
-        />
         <VideoPlayer
           currentVideo={this.state.currentVideo}
           opts={this.state.startOptions}
@@ -144,6 +147,12 @@ class RoomView extends React.Component {
           onStateChange={this.onPlayerStateChange}
         />
         <Search saveToPlaylist={this.saveToPlaylist} />
+        <ChatView
+          message={this.state.message}
+          date={this.state.dateTime}
+          username={this.state.username}
+          emitMessage={this.emitMessage}
+        />
       </div>
     );
   }
