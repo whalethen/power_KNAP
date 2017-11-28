@@ -24,6 +24,7 @@ class ChatView extends React.Component {
       });
     }
   }
+
   sendMessage(time, message) {
     this.props.emitMessage(time, message);
   }
@@ -32,8 +33,12 @@ class ChatView extends React.Component {
     return (
       <div className="userChat">
         <h3>Chat Box</h3>
-        <div className="messageContainer"> <Messages messages={this.state.messages} /></div>
-        <div className="messageInput"><MessageInput sendMessage={this.sendMessage} /></div>
+        <div className="messageContainer">
+          <Messages messages={this.state.messages} />
+        </div>
+        <div className="messageInput">
+          <MessageInput sendMessage={this.sendMessage} />
+        </div>
       </div>
     );
   }

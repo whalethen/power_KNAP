@@ -20,7 +20,6 @@ class RoomView extends React.Component {
       isHost: false,
       message: '',
       username: '',
-      date: '',
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -72,9 +71,9 @@ class RoomView extends React.Component {
     }
   }
 
-  // handleDelete(videoName) {
-  //   roomSocket.emit('removeFromPlaylist', videoName);
-  // }
+  handleDelete(videoName) {
+    roomSocket.emit('removeFromPlaylist', videoName);
+  }
 
   addToPlaylist(videos) {
     if (videos.length === 1) {
@@ -128,14 +127,12 @@ class RoomView extends React.Component {
       <div className="room">
         <div className="container navbar">fam.ly</div>
         {playlistComponent}
-        <div className="container chat">
-          <ChatView
-            message={this.state.message}
-            date={this.state.dateTime}
-            username={this.state.username}
-            emitMessage={this.emitMessage}
-          />
-        </div>
+        <ChatView
+          message={this.state.message}
+          date={this.state.dateTime}
+          username={this.state.username}
+          emitMessage={this.emitMessage}
+        />
         <VideoPlayer
           currentVideo={this.state.currentVideo}
           opts={this.state.startOptions}

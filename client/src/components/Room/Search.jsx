@@ -24,6 +24,7 @@ class Search extends React.Component {
       .then(() => pressedEnter ? this.search.flush() : this.search())
       .catch(err => console.error('Failed to search for query: ', err));
   }
+
   // send query to server via roomSocket connection
   search() {
     axios.get(`/search?query=${this.state.query}`)
