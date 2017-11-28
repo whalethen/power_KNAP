@@ -33,7 +33,7 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     if (cookie.parse(document.cookie).user) {
-      this.setState({ user: cookie.parse(document.cookie).user }) 
+      this.setState({ user: cookie.parse(document.cookie).user })
     }
     this.renderRoom();
     roomSocket.on('default', () => this.setState({ currentVideo: undefined }));
