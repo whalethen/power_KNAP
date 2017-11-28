@@ -2,6 +2,10 @@ const http = require('http');
 const express = require('express');
 const youtubeApi = require('./youtubeService');
 const db = require('../database/postgres');
+const passport = require('passport');
+const cookieSession = require('cookie-session');
+const authRoutes = require('./auth-routes');
+const passportSetup = require('../passport-setup');
 
 const app = express();
 const port = process.env.PORT;
@@ -13,11 +17,18 @@ app.use(express.static(`${__dirname}./../client`));
 const roomSpace = io.of('/room');
 // const lobbySpace = io.of('/lobby');
 
+app.use(cookieSession({
+  keys: process.env.COOKIEKEY,
+  maxAge: 24 * 60 * 60 * 1000, // one day
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/auth', authRoutes);
 
 // Room HTTP Requests
 app.get('/renderRoom', (req, res) => {
   const roomProperties = {};
-
   db.findVideos()
     .then((videos) => { roomProperties.videos = videos; })
     .then(() => db.getRoomProperties())
