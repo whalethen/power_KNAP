@@ -26,7 +26,6 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
-    console.log(cookie.parse(document.cookie).user)
     if (cookie.parse(document.cookie).user) {
       this.setState({ user: cookie.parse(document.cookie).user }) 
     }
@@ -93,12 +92,12 @@ class RoomView extends React.Component {
   render() {
     const view = this.state.user ?
       <span>Logged in as {this.state.user} <a href="/auth/logout">Logout</a></span> :
-      <span>Login with <a href="/auth/google">Google</a></span>
+      <span>Login with <a href="/auth/google">Google</a></span>;
+
     return (
       <div className="room">
         <div className="container navbar">
-          fam.ly    
-          {view}
+          fam.ly {view}
         </div>
         <Playlist playlist={this.state.playlist} />
         <VideoPlayer
