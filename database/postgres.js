@@ -2,7 +2,14 @@ require('dotenv').config();
 const Sequelize = require('sequelize');
 
 let params = {};
-if (!process.env.LOCAL) { params = { dialect: 'postgres', protocol: 'postgres', logging: false, dialectOptions: { ssl: true } }; }
+if (!process.env.LOCAL) {
+  params = {
+    dialect: 'postgres',
+    protocol: 'postgres',
+    logging: false,
+    dialectOptions: { ssl: true },
+  };
+}
 const sequelize = new Sequelize(process.env.DATABASE_URL, params);
 
 sequelize.authenticate()
@@ -26,8 +33,12 @@ const Room = sequelize.define('room', {
   startTime: Sequelize.DATE,
 });
 
-// Video.sync({ force: true })
-// Room.sync({ force: true })
+const checkIfTablesExists = () => {
+  Video.sync();
+  Room.sync();
+};
+
+checkIfTablesExists();
 
 const createVideoEntry = (videoData) => {
   const videoEntry = {
@@ -36,7 +47,7 @@ const createVideoEntry = (videoData) => {
     url: videoData.url,
     description: videoData.description,
   };
-  return Video.create(videoEntry); // returns a promise when called
+  return Video.create(videoEntry);
 };
 
 // Room Queries
@@ -48,7 +59,10 @@ const setStartTime = () => Room.findById(1).then(room => room.update({ startTime
 
 // Video Queries
 const findVideos = () => Video.findAll();
-const removeFromPlaylist = title => Video.find({ where: { videoName: title } }).then(video => video.destroy());
+const removeFromPlaylist = (title) => {
+  return Video.find({ where: { videoName: title } })
+    .then(video => video.destroy());
+};
 
 exports.createVideoEntry = createVideoEntry;
 exports.getRoomProperties = getRoomProperties;

@@ -103,7 +103,8 @@ roomSpace.on('connection', (socket) => {
       description: video.snippet.description,
     };
     return db.createVideoEntry(videoData)
-      .then(() => sendPlaylist());
+      .then(() => sendPlaylist())
+      .catch(err => console.error(err));
   });
 
   socket.on('removeFromPlaylist', (videoName) => {
