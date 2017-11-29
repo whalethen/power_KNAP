@@ -80,7 +80,7 @@ app.patch('/playNext/:length', (req, res) => {
 });
 
 app.patch('/vote', (req, res) => {
-  db.changeVotes(req.body.video, req.body.votes, req.body.action)
+  db.changeVotes(req.body.video, req.body.action)
     .then(() => {
       console.log('hello')
       res.sendStatus(202)})

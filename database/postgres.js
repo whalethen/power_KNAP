@@ -68,23 +68,19 @@ const createRoomEntry = (roomName) => {
   return Room.create(roomEntry); // returns a promise when called
   
 const changeVotes = (video, votes, action) => {
+const changeVotes = (video, action) => {
   const name = video.videoName;
-  let newVotes = votes;
+  let newVotes = video.votes;
   if (action === '+') {
     newVotes += 1;
-    Video.update(
-      { votes: newVotes },
-      { where: { videoName: name } },
-    )
-      .catch(err => console.log(err));
   } else if (action === '-') {
     newVotes -= 1;
-    Video.update(
-      { votes: newVotes },
-      { where: { videoName: name } },
-    )
-      .catch(err => console.log(err));
   }
+  Video.update(
+    { votes: newVotes },
+    { where: { videoName: name } },
+  )
+    .catch(err => console.log(err));
 };
 
 // Room Queries
