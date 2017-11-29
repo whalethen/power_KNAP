@@ -20,6 +20,10 @@ const Video = sequelize.define('video', {
   videoName: Sequelize.STRING,
   creator: Sequelize.STRING,
   url: Sequelize.STRING,
+  votes: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
   description: Sequelize.STRING,
   roomId: Sequelize.STRING,
 });
