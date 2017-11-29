@@ -114,7 +114,7 @@ roomSpace.on('connection', (socket) => {
   });
 
   socket.on('emitMessage', (message) => {
-    if(message.userName.includes('#')) {
+    if (message.userName.includes('#')) {
       message.userName = message.userName.split('#')[1].substring(0, 8); // Pluck Socket ID
     }
     let sum = 0;

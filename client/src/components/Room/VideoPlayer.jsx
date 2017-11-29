@@ -29,7 +29,7 @@ const VideoPlayer = (props) => {
   }
   return (
     <div className="container videoplayer">
-      <img src="https://media.giphy.com/media/l6hwfRFlBsbSM/giphy.gif" alt="pizza boy" />
+      <img className="nolist" src="https://derpicdn.net/img/2017/6/25/1471445/thumb.gif" alt="pizza boy" />
     </div>
   );
 };
