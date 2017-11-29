@@ -8,6 +8,7 @@ const history = require('connect-history-api-fallback');
 const bodyParser = require('body-parser');
 const authRoutes = require('./auth-routes');
 const passportSetup = require('../passport-setup');
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT;
@@ -30,6 +31,12 @@ app.use(cookieSession({
   keys: process.env.COOKIEKEY,
   maxAge: 24 * 60 * 60 * 1000, // one day
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/auth', authRoutes);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Room HTTP Requests
 app.get('/renderRoom/:roomId', (req, res) => {
@@ -70,6 +77,10 @@ app.patch('/playNext/:length', (req, res) => {
     .then(() => db.setStartTime())
     .then(() => res.end())
     .catch(err => res.send(err));
+});
+
+app.patch('/vote', (req, res) => {
+  console.log('this is body', req.body);
 });
 
 // Room Socket Events

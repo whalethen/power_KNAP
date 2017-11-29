@@ -16,8 +16,8 @@ const PlaylistEntry = (props) => {
         <button className="deleteButton" onClick={() => { removeSelected(song.videoName); }}>
           X
         </button>
-        <button onClick={() => vote(song)}>+</button>
-        <button onClick={() => vote(song)}>-</button>
+        <button onClick={() => vote(song, '-')}>-</button>
+        <button onClick={() => vote(song, '+')}>+</button>
         <div className="songTitle">{index}. {song.videoName} </div>
       </div>
     );
