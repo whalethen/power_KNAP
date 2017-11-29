@@ -23,7 +23,11 @@ const VideoPlayer = ({ currentVideo, opts, onReady, onStateChange }) => {
   }
   return (
     <div className="container videoplayer">
+<<<<<<< Updated upstream
       <img src="https://www.reaconverter.com/howto/wp-content/uploads/2015/10/banana.gif" alt="pizza boy" />
+=======
+      <img className="nolist" src="https://derpicdn.net/img/2017/6/25/1471445/thumb.gif" alt="pizza boy" />
+>>>>>>> Stashed changes
     </div>
   );
 };
