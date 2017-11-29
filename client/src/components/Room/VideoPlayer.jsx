@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import YouTube from 'react-youtube';
 
-const VideoPlayer = ({ currentVideo, opts, onReady, onStateChange }) => {
+const VideoPlayer = (props) => {
+  const {
+    currentVideo,
+    opts,
+    onReady,
+    onStateChange,
+  } = props;
   if (currentVideo !== undefined) {
     return (
       <div className="container videoplayer">
@@ -23,7 +29,7 @@ const VideoPlayer = ({ currentVideo, opts, onReady, onStateChange }) => {
   }
   return (
     <div className="container videoplayer">
-      <img src="https://www.reaconverter.com/howto/wp-content/uploads/2015/10/banana.gif" alt="pizza boy" />
+      <img src="https://media.giphy.com/media/l6hwfRFlBsbSM/giphy.gif" alt="pizza boy" />
     </div>
   );
 };
@@ -32,6 +38,7 @@ VideoPlayer.propTypes = {
   currentVideo: PropTypes.instanceOf(Object),
   onStateChange: PropTypes.func.isRequired,
   onReady: PropTypes.func.isRequired,
+  opts: PropTypes.instanceOf(Object),
 };
 
 export default VideoPlayer;
