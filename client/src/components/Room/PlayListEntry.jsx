@@ -8,7 +8,7 @@ const PlaylistEntry = (props) => {
     index,
     isHost,
     removeSelected,
-    vote,
+    voteOnEntry,
   } = props;
   if (isHost) {
     return (
@@ -16,8 +16,9 @@ const PlaylistEntry = (props) => {
         <button className="deleteButton" onClick={() => { removeSelected(song.videoName); }}>
           X
         </button>
-        <button onClick={() => vote(song, '-')}>-</button>
-        <button onClick={() => vote(song, '+')}>+</button>
+        <button onClick={() => voteOnEntry(song, '-')}>-</button>
+        <button onClick={() => voteOnEntry(song, '+')}>+</button>
+        <div>asdfadf {song.votes}</div>
         <div className="songTitle">{index}. {song.videoName} </div>
       </div>
     );

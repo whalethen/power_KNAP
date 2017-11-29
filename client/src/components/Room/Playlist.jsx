@@ -7,7 +7,7 @@ const Playlist = (props) => {
     playlist,
     isHost,
     removeSelected,
-    vote,
+    voteOnEntry,
   } = props;
 
   return (
@@ -21,7 +21,7 @@ const Playlist = (props) => {
             isHost={isHost}
             index={index + 1}
             removeSelected={removeSelected}
-            vote={vote}
+            voteOnEntry={voteOnEntry}
           />))}
       </div>
     </div>
@@ -32,7 +32,7 @@ Playlist.propTypes = {
   playlist: PropTypes.instanceOf(Array).isRequired,
   isHost: PropTypes.bool.isRequired,
   removeSelected: PropTypes.func.isRequired,
-  vote: PropTypes.func.isRequired,
+  voteOnEntry: PropTypes.func.isRequired,
 };
 
 export default Playlist;

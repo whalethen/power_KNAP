@@ -66,6 +66,25 @@ const createRoomEntry = (roomName) => {
     name: roomName,
   };
   return Room.create(roomEntry); // returns a promise when called
+  
+const changeVotes = (video, votes, action) => {
+  const name = video.videoName;
+  let newVotes = votes;
+  if (action === '+') {
+    newVotes += 1;
+    Video.update(
+      { votes: newVotes },
+      { where: { videoName: name } },
+    )
+      .catch(err => console.log(err));
+  } else if (action === '-') {
+    newVotes -= 1;
+    Video.update(
+      { votes: newVotes },
+      { where: { videoName: name } },
+    )
+      .catch(err => console.log(err));
+  }
 };
 
 // Room Queries
@@ -78,11 +97,17 @@ const getIndex = roomId => Room.findById(roomId).then(room => room.dataValues.in
 const setStartTime = roomId => Room.findById(roomId).then(room => room.update({ startTime: Date.now() }));
 
 // Video Queries
+<<<<<<< fbedb0c0a58826e7c3877f1ab86608bddf04f585
 const findVideos = roomId => Video.findAll({ where: { roomId } });
 const removeFromPlaylist = (title, roomId) => {
   return Video.find({ where: { videoName: title, roomId } })
     .then(video => video.destroy());
 };
+=======
+const findVideos = () => Video.findAll();
+const removeFromPlaylist = title => Video.find({ where: { videoName: title } })
+  .then(video => video.destroy());
+>>>>>>> Work on database function to change votes count
 
 exports.findRoomById = findRoomById;
 exports.createRoomEntry = createRoomEntry;
@@ -95,3 +120,4 @@ exports.getIndex = getIndex;
 exports.setStartTime = setStartTime;
 exports.findVideos = findVideos;
 exports.removeFromPlaylist = removeFromPlaylist;
+exports.changeVotes = changeVotes;

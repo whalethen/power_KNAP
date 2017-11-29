@@ -80,7 +80,13 @@ app.patch('/playNext/:length', (req, res) => {
 });
 
 app.patch('/vote', (req, res) => {
-  console.log('this is body', req.body);
+  db.changeVotes(req.body.video, req.body.votes, req.body.action)
+    .then(() => {
+      console.log('hello')
+      res.sendStatus(202)})
+    .catch(() => {
+      console.log('boo')
+      res.sendStatus(404)});
 });
 
 // Room Socket Events

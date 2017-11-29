@@ -32,6 +32,7 @@ class RoomView extends React.Component {
     this.emitMessage = this.emitMessage.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.vote = this.vote.bind(this);
+    this.voteOnEntry = this.voteOnEntry.bind(this);
   }
 
   componentWillMount() {
@@ -114,10 +115,10 @@ class RoomView extends React.Component {
     });
   }
 
-  vote(video, action) {
-    console.log(video);
-    axios.patch('/vote', { video, action })
+  voteOnEntry(video, votes, action) {
+    axios.patch('/vote', { video, votes, action })
       .then(console.log('voted!'));
+    // set state
   }
 
   renderRoom() {
@@ -143,12 +144,12 @@ class RoomView extends React.Component {
         playlist={this.state.playlist}
         removeSelected={this.handleDelete}
         isHost={this.state.isHost}
-        vote={this.vote}
+        voteOnEntry={this.voteOnEntry}
       />);
     } else {
       playlistComponent = (<Playlist
         playlist={this.state.playlist}
-        vote={this.vote}
+        voteOnEntry={this.voteOnEntry}
       />);
     }
 
