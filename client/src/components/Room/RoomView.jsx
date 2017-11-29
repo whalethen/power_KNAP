@@ -31,6 +31,7 @@ class RoomView extends React.Component {
     this.saveToPlaylist = this.saveToPlaylist.bind(this);
     this.emitMessage = this.emitMessage.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.vote = this.vote.bind(this);
   }
 
   componentWillMount() {
@@ -113,6 +114,11 @@ class RoomView extends React.Component {
     });
   }
 
+  vote() {
+    // axios request
+    console.log('hello');
+  }
+
   renderRoom() {
     return axios.get(`/renderRoom/${this.props.match.params.roomId}`)
       .then(({ data }) => {
@@ -136,9 +142,13 @@ class RoomView extends React.Component {
         playlist={this.state.playlist}
         removeSelected={this.handleDelete}
         isHost={this.state.isHost}
+        vote={this.vote}
       />);
     } else {
-      playlistComponent = <Playlist playlist={this.state.playlist} />;
+      playlistComponent = (<Playlist
+        playlist={this.state.playlist}
+        vote={this.vote}
+      />);
     }
 
     const view = this.state.user ?

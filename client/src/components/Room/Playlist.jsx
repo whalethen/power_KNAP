@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PlaylistEntry from './PlayListEntry';
 
-const Playlist = ({ playlist, isHost, removeSelected }) => (
+const Playlist = ({ playlist, isHost, removeSelected, vote }) => (
 
   <div className="container playlist">
     <h3>Playlist</h3>
@@ -21,6 +21,9 @@ const Playlist = ({ playlist, isHost, removeSelected }) => (
 
 Playlist.propTypes = {
   playlist: PropTypes.instanceOf(Array).isRequired,
+  isHost: PropTypes.bool.isRequired,
+  removeSelected: PropTypes.func.isRequired,
+  vote: PropTypes.func.isRequired,
 };
 
 export default Playlist;
