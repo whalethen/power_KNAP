@@ -31,9 +31,13 @@ class RoomView extends React.Component {
     this.emitMessage = this.emitMessage.bind(this);
   }
 
+  componentWillMount() {
+
+  }
+
   componentDidMount() {
     if (cookie.parse(document.cookie).user) {
-      this.setState({ user: cookie.parse(document.cookie).user })
+      this.setState({ user: cookie.parse(document.cookie).user });
     }
     this.renderRoom();
     roomSocket.on('default', () => this.setState({ currentVideo: undefined }));
@@ -98,9 +102,10 @@ class RoomView extends React.Component {
   }
 
   emitMessage(time, message) {
+    const user = this.state.user || this.state.username;
     roomSocket.emit('emitMessage', {
       body: message,
-      userName: this.state.username,
+      userName: user,
       dateTime: time,
     });
   }
