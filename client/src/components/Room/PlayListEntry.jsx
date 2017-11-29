@@ -8,7 +8,7 @@ const PlaylistEntry = (props) => {
     index,
     isHost,
     removeSelected,
-    vote
+    vote,
   } = props;
   if (isHost) {
     return (
@@ -16,8 +16,8 @@ const PlaylistEntry = (props) => {
         <button className="deleteButton" onClick={() => { removeSelected(song.videoName); }}>
           X
         </button>
-        <button>+</button>
-        <button>-</button>
+        <button onClick={() => vote(song)}>+</button>
+        <button onClick={() => vote(song)}>-</button>
         <div className="songTitle">{index}. {song.videoName} </div>
       </div>
     );
@@ -31,6 +31,10 @@ const PlaylistEntry = (props) => {
 
 PlaylistEntry.propTypes = {
   song: PropTypes.instanceOf(Object).isRequired,
+  index: PropTypes.number.isRequired,
+  isHost: PropTypes.bool.isRequired,
+  removeSelected: PropTypes.func.isRequired,
+  vote: PropTypes.func.isRequired,
 };
 
 export default PlaylistEntry;

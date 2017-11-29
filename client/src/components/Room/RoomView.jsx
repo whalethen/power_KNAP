@@ -114,9 +114,9 @@ class RoomView extends React.Component {
     });
   }
 
-  vote() {
+  vote(song) {
     // axios request
-    console.log('hello');
+    console.log(song);
   }
 
   renderRoom() {
