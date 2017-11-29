@@ -9,6 +9,8 @@ const PlaylistEntry = ({ song, index, isHost, removeSelected }) => {
         <button className="deleteButton" onClick={() => { removeSelected(song.videoName); }}>
           X
         </button>
+        <button>+</button>
+        <button>-</button>
         <div className="songTitle">{index}. {song.videoName} </div>
       </div>
     );
