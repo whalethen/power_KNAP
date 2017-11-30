@@ -53,6 +53,19 @@ app.get('/renderRoom/:roomId', (req, res) => {
     .catch(() => res.sendStatus(404));
 });
 
+app.get('/playlist', (req, res) => {
+  const roomProperties = {};
+  db.findVideos()
+    .then((videos) => { roomProperties.videos = videos; })
+    .then(() => db.getRoomProperties())
+    .then(({ indexKey, startTime }) => {
+      roomProperties.index = indexKey;
+      roomProperties.start = startTime;
+    })
+    .then(() => res.json(roomProperties))
+    .catch(() => res.sendStatus(404));
+});
+
 app.get('/search', (req, res) => {
   youtubeApi.grabVideos(req.query.query)
     .then(searchResults => res.json(searchResults))

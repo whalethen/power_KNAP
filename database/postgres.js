@@ -71,7 +71,12 @@ const changeVotes = (video, votes, action) => {
 const changeVotes = (video, action) => {
   const name = video.videoName;
   let newVotes = video.votes;
-  newVotes = action === '+' ? newVotes += 1 : newVotes -= 1;
+  // action === '+' ? newVotes += 1 : newVotes -= 1;
+  if (action === '+') {
+    newVotes += 1;
+  } else if (action === '-') {
+    newVotes -= 1;
+  }
   return Video.update(
     { votes: newVotes },
     { where: { videoName: name } },
