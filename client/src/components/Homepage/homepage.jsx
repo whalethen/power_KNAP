@@ -10,7 +10,7 @@ class Homepage extends React.Component {
   constructor() {
     super();
     this.state = {
-      roomList: ['Room1', 'Room2', 'Room3'],
+      roomList: [],
       roomName: '',
     };
     this.fetchRooms = this.fetchRooms.bind(this);
@@ -21,7 +21,7 @@ class Homepage extends React.Component {
   componentDidMount() {
     this.fetchRooms();
     lobby.on('retrieveRooms', (rooms) => {
-      this.setState({ roomList: rooms });
+      this.setState({ roomList: rooms }, () => console.log(this.state));
     });
   }
 

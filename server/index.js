@@ -151,7 +151,6 @@ app.get('/fetchRooms', (req, res) => {
 lobbySpace.on('connection', (socket) => {
 
   socket.on('createRoom', (roomName) => {
-    console.log(roomName)
     db.createRoomEntry(roomName)
       .then(() => db.findRooms())
       .then(rooms => lobbySpace.emit('retrieveRooms', rooms));
