@@ -34,6 +34,7 @@ class RoomView extends React.Component {
     this.vote = this.vote.bind(this);
     this.voteOnEntry = this.voteOnEntry.bind(this);
     this.getPlaylist = this.getPlaylist.bind(this);
+    this.sortPlaylist = this.sortPlaylist.bind(this);
   }
 
   componentWillMount() {
@@ -125,15 +126,16 @@ class RoomView extends React.Component {
   getPlaylist() {
     return axios.get('/playlist')
       .then(({ data }) => {
+        const sortedList = this.sortPlaylist(data.videos);
         this.setState({
-          playlist: data.videos,
+          playlist: sortedList,
         });
       });
   }
 
-  sortPlaylist() {
-    const list = this.state.playlist;
-    list.sort((a, b) => {
+  sortPlaylist(list) {
+    // const list = this.state.playlist;
+    return list.sort((a, b) => {
       if (b.votes - a.votes === 0) {
         return a.id - b.id;
       }
@@ -146,9 +148,11 @@ class RoomView extends React.Component {
       .then(({ data }) => {
         const currentTime = Date.now();
         const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
+        const sortedList = this.sortPlaylist(data.videos);
+        console.log(sortedList);
         this.setState({
-          playlist: data.videos,
-          currentVideo: data.videos[data.index],
+          playlist: sortedList,
+          currentVideo: sortedList[data.index],
           startOptions: {
             playerVars: { start: Math.ceil(timeLapsed) },
           },

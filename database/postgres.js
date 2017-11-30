@@ -70,17 +70,17 @@ const createRoomEntry = (roomName) => {
 const changeVotes = (video, votes, action) => {
 const changeVotes = (video, action) => {
   const name = video.videoName;
-  let newVotes = video.votes;
-  // action === '+' ? newVotes += 1 : newVotes -= 1;
   if (action === '+') {
-    newVotes += 1;
+    return Video.update(
+      { votes: Sequelize.literal('votes + 1') },
+      { where: { videoName: name } },
+    );
   } else if (action === '-') {
-    newVotes -= 1;
+    return Video.update(
+      { votes: Sequelize.literal('votes - 1') },
+      { where: { videoName: name } },
+    );
   }
-  return Video.update(
-    { votes: newVotes },
-    { where: { videoName: name } },
-  );
 };
 
 // Room Queries
