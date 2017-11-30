@@ -7,8 +7,10 @@ import Room from './Room/RoomView';
 
 const router = (
   <BrowserRouter>
-    {/* <Route path="/" component={Homepage} /> */}
-    <Room />
+    <Switch>
+      <Route exact path="/" component={Homepage} />
+      <Route path="/:roomId" component={Room} />
+    </Switch>
   </BrowserRouter>
 );
 
