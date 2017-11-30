@@ -13,15 +13,28 @@ class ChatView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.message !== '') {
-      this.setState({
-        messages: this.state.messages.concat({
-          message: nextProps.message.body,
-          username: nextProps.message.userName,
-          date: nextProps.message.dateTime,
-          color: nextProps.message.userColor,
-        }),
-      });
+    if (nextProps.message !== null) {
+      if (this.state.messages.length > 0) {
+        if (nextProps.message.dateTime !== this.state.messages[this.state.messages.length - 1].date) {
+          this.setState({
+            messages: this.state.messages.concat({
+              message: nextProps.message.body,
+              username: nextProps.message.userName,
+              date: nextProps.message.dateTime,
+              color: nextProps.message.userColor,
+            }),
+          });
+        }
+      } else {
+        this.setState({
+          messages: this.state.messages.concat({
+            message: nextProps.message.body,
+            username: nextProps.message.userName,
+            date: nextProps.message.dateTime,
+            color: nextProps.message.userColor,
+          }),
+        });
+      }
     }
   }
 
@@ -48,7 +61,7 @@ class ChatView extends React.Component {
 
 ChatView.propTypes = {
   emitMessage: PropTypes.func.isRequired,
-  message: PropTypes.instanceOf(Object).isRequired,
+  message: PropTypes.string.isRequired,
 };
 
 export default ChatView;
