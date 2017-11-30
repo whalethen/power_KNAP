@@ -62,7 +62,7 @@ class RoomView extends React.Component {
       });
     });
     roomSocket.on('id', id => this.setState({ username: id }));
-    // roomSocket.on('vote', () => )
+    // roomSocket.on('vote', setState)
   }
 
   componentWillUnmount() {
@@ -119,9 +119,10 @@ class RoomView extends React.Component {
   }
 
   voteOnEntry(video, action) {
-    axios.patch('/vote', { video, action });
-    // .then(() => this.getPlaylist())
-    // .catch(err => console.log(err));
+    axios.patch('/vote', { video, action })
+    .catch(err => console.log('from patch vote', err))
+    .then(() => this.getPlaylist())
+    .catch(err => console.log(err));
   }
 
   getPlaylist() {

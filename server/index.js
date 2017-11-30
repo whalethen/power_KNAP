@@ -63,7 +63,7 @@ app.get('/playlist', (req, res) => {
       roomProperties.start = startTime;
     })
     .then(() => res.json(roomProperties))
-    .catch(() => res.sendStatus(404));
+    .catch((err) => {console.log(err); res.sendStatus(404)});
 });
 
 app.get('/search', (req, res) => {
@@ -161,7 +161,7 @@ roomSpace.on('connection', (socket) => {
     roomSpace.emit('pushingMessage', message);
   });
 
-  socket.on('vote', )
+  // socket.on('vote', update database)
 
   socket.on('disconnect', () => {
     if (Object.keys(socket.nsp.sockets).length > 0) {
