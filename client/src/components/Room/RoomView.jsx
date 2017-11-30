@@ -62,6 +62,7 @@ class RoomView extends React.Component {
       });
     });
     roomSocket.on('id', id => this.setState({ username: id }));
+    // roomSocket.on('vote', () => )
   }
 
   componentWillUnmount() {
@@ -134,7 +135,6 @@ class RoomView extends React.Component {
   }
 
   sortPlaylist(list) {
-    // const list = this.state.playlist;
     return list.sort((a, b) => {
       if (b.votes - a.votes === 0) {
         return a.id - b.id;
@@ -149,7 +149,6 @@ class RoomView extends React.Component {
         const currentTime = Date.now();
         const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
         const sortedList = this.sortPlaylist(data.videos);
-        console.log(sortedList);
         this.setState({
           playlist: sortedList,
           currentVideo: sortedList[data.index],
