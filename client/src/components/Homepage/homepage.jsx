@@ -1,9 +1,7 @@
 import React from 'react';
-import {Router, Switch, Route, Link, IndexRoute } from 'react-router-dom';
 import io from 'socket.io-client';
 import axios from 'axios';
 import RoomList from './RoomList';
-import Sidebar from './Sidebar';
 import SearchBar from './SearchBar';
 
 const lobby = io('/lobby');
@@ -52,10 +50,11 @@ class Homepage extends React.Component {
           roomName={this.state.roomName}
           captureInput={this.captureInput}
         />
-        {/* <Sidebar /> */}
       </div>
     );
   }
 }
+
+export default Homepage;
 
 // ReactDOM.render(<App />, document.getElementById('homepage'));
