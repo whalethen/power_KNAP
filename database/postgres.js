@@ -67,7 +67,6 @@ const createRoomEntry = (roomName) => {
   };
   return Room.create(roomEntry); // returns a promise when called
   
-const changeVotes = (video, votes, action) => {
 const changeVotes = (video, action) => {
   const name = video.videoName;
   if (action === '+') {
