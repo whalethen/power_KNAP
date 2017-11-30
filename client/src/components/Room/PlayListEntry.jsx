@@ -18,7 +18,7 @@ const PlaylistEntry = (props) => {
         </button>
         <button onClick={() => voteOnEntry(song, '-')}>-</button>
         <button onClick={() => voteOnEntry(song, '+')}>+</button>
-        <div>{song.votes}</div>
+        <span>{song.votes}</span>
         <div className="songTitle">{index}. {song.videoName} </div>
       </div>
     );

@@ -81,7 +81,7 @@ app.patch('/playNext/:length', (req, res) => {
 
 app.patch('/vote', (req, res) => {
   db.changeVotes(req.body.video, req.body.action)
-    .then(() => res.sendStatus(202))
+    .then(() => res.sendStatus(200))
     .catch(() => res.sendStatus(404));
 });
 
