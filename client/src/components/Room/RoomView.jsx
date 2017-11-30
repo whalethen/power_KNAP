@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import moment from 'moment';
 import axios from 'axios';
@@ -36,6 +35,7 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props.match.params)
     if (cookie.parse(document.cookie).user) {
       this.setState({ user: cookie.parse(document.cookie).user });
     }
@@ -164,4 +164,4 @@ class RoomView extends React.Component {
   }
 }
 
-ReactDOM.render(<RoomView />, document.getElementById('room'));
+export default RoomView;
