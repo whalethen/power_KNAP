@@ -5,7 +5,7 @@ import RoomView from '../Room/RoomView'
 
 const RoomListEntry = ({ room }) => (
   <div className="container lobby-room exists">
-    <Link to='{room}'>
+    <Link to={`/${room.id}`}>
       <div>{room.name}</div>
     </Link>
   </div>

@@ -14,6 +14,10 @@ const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 
 server.listen(port, () => console.log(`listening on port ${port}`));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/auth', authRoutes);
 app.use(history());
 app.use(express.static(`${__dirname}./../client`));
 const roomSpace = io.of('/room');
@@ -23,11 +27,6 @@ app.use(cookieSession({
   keys: process.env.COOKIEKEY,
   maxAge: 24 * 60 * 60 * 1000, // one day
 }));
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use('/auth', authRoutes);
-
 
 // Room HTTP Requests
 app.get('/renderRoom', (req, res) => {
@@ -153,6 +152,7 @@ lobbySpace.on('connection', (socket) => {
   socket.on('createRoom', (roomName) => {
     db.createRoomEntry(roomName)
       .then(() => db.findRooms())
+      .tap(rooms => console.log(rooms))
       .then(rooms => lobbySpace.emit('retrieveRooms', rooms));
   });
 });

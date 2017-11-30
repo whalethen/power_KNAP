@@ -1,6 +1,7 @@
 import React from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import RoomList from './RoomList';
 import SearchBar from './SearchBar';
 
@@ -13,7 +14,6 @@ class Homepage extends React.Component {
       roomList: [],
       roomName: '',
     };
-    this.fetchRooms = this.fetchRooms.bind(this);
     this.createRoom = this.createRoom.bind(this);
     this.captureInput = this.captureInput.bind(this);
   }
@@ -21,7 +21,7 @@ class Homepage extends React.Component {
   componentDidMount() {
     this.fetchRooms();
     lobby.on('retrieveRooms', (rooms) => {
-      this.setState({ roomList: rooms }, () => console.log(this.state));
+      this.setState({ roomList: rooms });
     });
   }
 
@@ -42,7 +42,9 @@ class Homepage extends React.Component {
   render() {
     return (
       <div className="container lobby">
-        <h1>Fam.ly</h1>
+        <Link to='/'>
+          <h1>Fam.ly</h1>
+        </Link>
         <SearchBar />
         <RoomList
           rooms={this.state.roomList}

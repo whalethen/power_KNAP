@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import moment from 'moment';
 import axios from 'axios';
 import cookie from 'cookie';
+import { Link } from 'react-router-dom';
 import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
@@ -144,7 +145,11 @@ class RoomView extends React.Component {
 
     return (
       <div className="room">
-        <div className="container navbar">fam.ly {view}</div>
+          <div className="container navbar">
+            <Link to='/'>
+            fam.ly
+            </Link>
+          {view}</div>
         {playlistComponent}
         <VideoPlayer
           currentVideo={this.state.currentVideo}
