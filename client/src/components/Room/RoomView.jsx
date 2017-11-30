@@ -103,6 +103,7 @@ class RoomView extends React.Component {
   }
 
   emitMessage(time, message) {
+    console.log(this.state.user, this.state.username)
     const user = this.state.user || this.state.username;
     roomSocket.emit('emitMessage', {
       body: message,
@@ -112,7 +113,7 @@ class RoomView extends React.Component {
   }
 
   renderRoom() {
-    return axios.get('/renderRoom')
+    return axios.get('/renderRoom', { roomId: this.props.match.params.roomId })
       .then(({ data }) => {
         const currentTime = Date.now();
         const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();

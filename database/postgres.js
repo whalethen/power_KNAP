@@ -34,6 +34,8 @@ const Room = sequelize.define('room', {
   name: Sequelize.STRING,
 });
 
+Room.hasMany(Video, { as: 'Videos' });
+
 const checkIfTablesExists = () => {
   Video.sync();
   Room.sync();
@@ -69,9 +71,9 @@ const getIndex = roomId => Room.findById(roomId).then(room => room.dataValues.in
 const setStartTime = roomId => Room.findById(roomId).then(room => room.update({ startTime: Date.now() }));
 
 // Video Queries
-const findVideos = () => Video.findAll();
-const removeFromPlaylist = (title) => {
-  return Video.find({ where: { videoName: title } })
+const findVideos = roomId => Video.findAll({ where: { roomId } });
+const removeFromPlaylist = (title, roomId) => {
+  return Video.find({ where: { videoName: title, roomId } })
     .then(video => video.destroy());
 };
 

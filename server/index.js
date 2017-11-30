@@ -31,7 +31,8 @@ app.use(cookieSession({
 // Room HTTP Requests
 app.get('/renderRoom', (req, res) => {
   const roomProperties = {};
-  db.findVideos()
+  console.log(req.body)
+  db.findVideos(req.body.roomId)
     .then((videos) => { roomProperties.videos = videos; })
     .then(() => db.getRoomProperties())
     .then(({ indexKey, startTime }) => {
