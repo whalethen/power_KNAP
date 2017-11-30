@@ -118,8 +118,8 @@ class RoomView extends React.Component {
 
   voteOnEntry(video, action) {
     axios.patch('/vote', { video, action })
-      .then(() => this.getPlaylist())
-      .catch(err => console.log(err));
+      // .then(() => this.getPlaylist())
+      // .catch(err => console.log(err));
   }
 
   getPlaylist() {
