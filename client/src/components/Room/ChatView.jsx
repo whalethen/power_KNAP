@@ -65,3 +65,4 @@ ChatView.propTypes = {
 };
 
 export default ChatView;
+
