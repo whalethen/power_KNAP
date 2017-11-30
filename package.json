@@ -18,6 +18,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
+    "connect-history-api-fallback": "^1.5.0",
     "convert-iso8601-duration": "^1.0.1",
     "cookie": "^0.3.1",
     "cookie-session": "^2.0.0-beta.3",
@@ -33,6 +34,8 @@
     "psql": "0.0.1",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "react-youtube": "^7.5.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",

@@ -31,6 +31,7 @@ const Playlist = sequelize.define('playlist', {
 const Room = sequelize.define('room', {
   indexKey: Sequelize.INTEGER,
   startTime: Sequelize.DATE,
+  name: Sequelize.STRING,
 });
 
 const checkIfTablesExists = () => {
@@ -50,12 +51,22 @@ const createVideoEntry = (videoData) => {
   return Video.create(videoEntry);
 };
 
+const createRoomEntry = (roomName) => {
+  const roomEntry = {
+    indexKey: 0,
+    startTime: null,
+    name: roomName,
+  };
+  return Room.create(roomEntry); // returns a promise when called
+};
+
 // Room Queries
-const getRoomProperties = () => Room.findById(1).then(room => room.dataValues);
-const incrementIndex = () => Room.findById(1).then(room => room.increment('indexKey'));
-const resetRoomIndex = () => Room.findById(1).then(room => room.update({ indexKey: 0 }));
-const getIndex = () => Room.findById(1).then(room => room.dataValues.indexKey);
-const setStartTime = () => Room.findById(1).then(room => room.update({ startTime: Date.now() }));
+const findRooms = () => Room.findAll();
+const getRoomProperties = roomId => Room.findById(roomId).then(room => room.dataValues);
+const incrementIndex = roomId => Room.findById(roomId).then(room => room.increment('indexKey'));
+const resetRoomIndex = roomId => Room.findById(roomId).then(room => room.update({ indexKey: 0 }));
+const getIndex = roomId => Room.findById(roomId).then(room => room.dataValues.indexKey);
+const setStartTime = roomId => Room.findById(roomId).then(room => room.update({ startTime: Date.now() }));
 
 // Video Queries
 const findVideos = () => Video.findAll();
@@ -64,6 +75,8 @@ const removeFromPlaylist = (title) => {
     .then(video => video.destroy());
 };
 
+exports.createRoomEntry = createRoomEntry;
+exports.findRooms = findRooms;
 exports.createVideoEntry = createVideoEntry;
 exports.getRoomProperties = getRoomProperties;
 exports.incrementIndex = incrementIndex;

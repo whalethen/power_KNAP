@@ -1,32 +1,62 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Search from './Search.jsx';
-import RoomList from './RoomList.jsx';
-import Sidebar from './Sidebar.jsx';
+import io from 'socket.io-client';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import RoomList from './RoomList';
+import SearchBar from './SearchBar';
 
 const lobby = io('/lobby');
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+class Homepage extends React.Component {
+  constructor() {
+    super();
     this.state = {
-      roomList: ['Room1', 'Room2', 'Room3'],
+      roomList: [],
+      roomName: '',
     };
+    this.createRoom = this.createRoom.bind(this);
+    this.captureInput = this.captureInput.bind(this);
   }
 
   componentDidMount() {
+    this.fetchRooms();
+    lobby.on('retrieveRooms', (rooms) => {
+      this.setState({ roomList: rooms });
+    });
+  }
+
+  fetchRooms() {
+    axios.get('/fetchRooms')
+      .then(({ data }) => this.setState({ roomList: data }));
+  }
+
+  createRoom() {
+    lobby.emit('createRoom', this.state.roomName);
+    // redirect to new room page
+  }
+
+  captureInput(event) {
+    this.setState({ roomName: event.target.value });
   }
 
   render() {
     return (
-      <div>
-        <h1>Fam.ly</h1>
-        <Search />
-        <RoomList rooms={this.state.roomList} />
-        <Sidebar />
+      <div className="container lobby">
+        <Link to='/'>
+          <h1>Fam.ly</h1>
+        </Link>
+        <SearchBar />
+        <RoomList
+          rooms={this.state.roomList}
+          createRoom={this.createRoom}
+          roomName={this.state.roomName}
+          captureInput={this.captureInput}
+        />
       </div>
     );
   }
 }
+
+export default Homepage;
 
 // ReactDOM.render(<App />, document.getElementById('homepage'));

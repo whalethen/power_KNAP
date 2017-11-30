@@ -1,14 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import RoomView from '../Room/RoomView'
 
 const RoomListEntry = ({ room }) => (
-  <div>
-    <p>{room}</p>
+  <div className="container lobby-room exists">
+    <Link to={`/${room.id}`}>
+      <div>{room.name}</div>
+    </Link>
   </div>
 );
 
 RoomListEntry.propTypes = {
-  room: PropTypes.string.isRequired,
+  room: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default RoomListEntry;

@@ -4,6 +4,7 @@ const youtubeApi = require('./youtubeService');
 const db = require('../database/postgres');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
+const history = require('connect-history-api-fallback');
 const authRoutes = require('./auth-routes');
 const passportSetup = require('../passport-setup');
 
@@ -13,18 +14,19 @@ const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 
 server.listen(port, () => console.log(`listening on port ${port}`));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/auth', authRoutes);
+app.use(history());
 app.use(express.static(`${__dirname}./../client`));
 const roomSpace = io.of('/room');
-// const lobbySpace = io.of('/lobby');
+const lobbySpace = io.of('/lobby');
 
 app.use(cookieSession({
   keys: process.env.COOKIEKEY,
   maxAge: 24 * 60 * 60 * 1000, // one day
 }));
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use('/auth', authRoutes);
 
 // Room HTTP Requests
 app.get('/renderRoom', (req, res) => {
@@ -134,5 +136,23 @@ roomSpace.on('connection', (socket) => {
       return (newHost === roomHost) ? null : giveHostStatus(newHost);
     }
     console.log(`${roomSpace.name} is now empty`);
+  });
+});
+
+// Lobby HTTP Requests
+app.get('/fetchRooms', (req, res) => {
+  db.findRooms()
+    .then(rooms => res.json(rooms))
+    .catch(() => res.sendStatus(404));
+});
+
+// Lobby socket events
+lobbySpace.on('connection', (socket) => {
+
+  socket.on('createRoom', (roomName) => {
+    db.createRoomEntry(roomName)
+      .then(() => db.findRooms())
+      .tap(rooms => console.log(rooms))
+      .then(rooms => lobbySpace.emit('retrieveRooms', rooms));
   });
 });
