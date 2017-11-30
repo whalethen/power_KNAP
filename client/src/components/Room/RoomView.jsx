@@ -115,10 +115,10 @@ class RoomView extends React.Component {
     });
   }
 
-  voteOnEntry(video, votes, action) {
-    axios.patch('/vote', { video, votes, action })
-      .then(console.log('voted!'));
-    // set state
+  voteOnEntry(video, action) {
+    axios.patch('/vote', { video, action })
+      .then(() => this.renderRoom())
+      .catch(err => console.log);
   }
 
   renderRoom() {

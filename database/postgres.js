@@ -80,7 +80,6 @@ const changeVotes = (video, action) => {
     { votes: newVotes },
     { where: { videoName: name } },
   )
-    .catch(err => console.log(err));
 };
 
 // Room Queries

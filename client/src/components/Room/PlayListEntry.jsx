@@ -18,7 +18,7 @@ const PlaylistEntry = (props) => {
         </button>
         <button onClick={() => voteOnEntry(song, '-')}>-</button>
         <button onClick={() => voteOnEntry(song, '+')}>+</button>
-        <div>asdfadf {song.votes}</div>
+        <div>{song.votes}</div>
         <div className="songTitle">{index}. {song.videoName} </div>
       </div>
     );
@@ -35,7 +35,7 @@ PlaylistEntry.propTypes = {
   index: PropTypes.number.isRequired,
   isHost: PropTypes.bool.isRequired,
   removeSelected: PropTypes.func.isRequired,
-  vote: PropTypes.func.isRequired,
+  voteOnEntry: PropTypes.func.isRequired,
 };
 
 export default PlaylistEntry;
