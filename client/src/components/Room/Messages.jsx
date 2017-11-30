@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const Messages = ({ messages }) => (
   messages.map((message) => {
-    console.log(messages)
+    // console.log(messages)
     const spanStyle = { color: message.color };
     return (
       <div>
