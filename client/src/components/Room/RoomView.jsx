@@ -121,6 +121,11 @@ class RoomView extends React.Component {
       .catch(err => console.log);
   }
 
+  getPlaylist() {
+    axios.get('/playlist')
+    // set state for playlist
+  }
+
   renderRoom() {
     return axios.get(`/renderRoom/${this.props.match.params.roomId}`)
       .then(({ data }) => {
