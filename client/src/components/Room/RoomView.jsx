@@ -23,12 +23,14 @@ class RoomView extends React.Component {
       username: '', // refers to socketIDs when user is in chat but not logged in
       user: null, // refers to Google username when logged in in chat
       // TODO: eliminate the need for two separate username references
+      roomId: '',
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
     this.addToPlaylist = this.addToPlaylist.bind(this);
     this.saveToPlaylist = this.saveToPlaylist.bind(this);
     this.emitMessage = this.emitMessage.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentWillMount() {
@@ -36,10 +38,10 @@ class RoomView extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.match.params)
     if (cookie.parse(document.cookie).user) {
       this.setState({ user: cookie.parse(document.cookie).user });
     }
+    this.setState({ roomId: this.props.match.params.roomId })
     this.renderRoom();
     roomSocket.on('default', () => this.setState({ currentVideo: undefined }));
     roomSocket.on('host', () => this.setState({ isHost: true }));
@@ -83,7 +85,7 @@ class RoomView extends React.Component {
   }
 
   handleDelete(videoName) {
-    roomSocket.emit('removeFromPlaylist', videoName);
+    roomSocket.emit('removeFromPlaylist', { videoName, roomId: this.state.roomId });
   }
 
   addToPlaylist(videos) {
@@ -99,7 +101,7 @@ class RoomView extends React.Component {
   }
 
   saveToPlaylist(video) {
-    roomSocket.emit('saveToPlaylist', video);
+    roomSocket.emit('saveToPlaylist', { video, roomId: this.state.roomId });
   }
 
   emitMessage(time, message) {
@@ -112,7 +114,7 @@ class RoomView extends React.Component {
   }
 
   renderRoom() {
-    return axios.get('/renderRoom')
+    return axios.get(`/renderRoom/${this.props.match.params.roomId}`)
       .then(({ data }) => {
         const currentTime = Date.now();
         const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
