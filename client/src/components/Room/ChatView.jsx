@@ -10,7 +10,6 @@ class ChatView extends React.Component {
       messages: [],
     };
     this.sendMessage = this.sendMessage.bind(this);
-    // this.typingMessage = this.typingMessage.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,10 +38,6 @@ class ChatView extends React.Component {
     }
   }
 
-  // typingMessage() {
-  //   this.props.broadcastTyping();
-  // }
-
   sendMessage(time, message) {
     this.props.emitMessage(time, message);
   }
@@ -57,7 +52,6 @@ class ChatView extends React.Component {
           </div>
           <div className="messageInput">
             <MessageInput
-              //userTyping={this.props.userTyping}
               sendMessage={this.sendMessage}
               typingMessage={this.props.broadcastTyping}
             />
@@ -69,7 +63,6 @@ class ChatView extends React.Component {
 }
 
 ChatView.propTypes = {
-  //userTyping: PropTypes.string.isRequired,
   emitMessage: PropTypes.func.isRequired,
   message: PropTypes.string.isRequired,
   broadcastTyping: PropTypes.func.isRequired,
