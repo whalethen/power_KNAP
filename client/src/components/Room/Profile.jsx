@@ -6,4 +6,8 @@ const Profile = (props) => {
   )
 }
 
+Profile.propTypes = {
+
+};
+
 export default Profile;
