@@ -20,6 +20,10 @@ const Video = sequelize.define('video', {
   videoName: Sequelize.STRING,
   creator: Sequelize.STRING,
   url: Sequelize.STRING,
+  votes: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
   description: Sequelize.STRING,
   roomId: Sequelize.STRING,
 });
@@ -63,6 +67,21 @@ const createRoomEntry = (roomName) => {
   };
   return Room.create(roomEntry); // returns a promise when called
 };
+  
+const changeVotes = (video, action) => {
+  const name = video.videoName;
+  if (action === '+') {
+    return Video.update(
+      { votes: Sequelize.literal('votes + 1') },
+      { where: { videoName: name } },
+    );
+  } else if (action === '-') {
+    return Video.update(
+      { votes: Sequelize.literal('votes - 1') },
+      { where: { videoName: name } },
+    );
+  }
+};
 
 // Room Queries
 const findRooms = () => Room.findAll();
@@ -91,3 +110,4 @@ exports.getIndex = getIndex;
 exports.setStartTime = setStartTime;
 exports.findVideos = findVideos;
 exports.removeFromPlaylist = removeFromPlaylist;
+exports.changeVotes = changeVotes;

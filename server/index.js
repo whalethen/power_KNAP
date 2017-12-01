@@ -31,8 +31,28 @@ app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000, // one day
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/auth', authRoutes);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Room HTTP Requests
 app.get('/renderRoom/:roomId', (req, res) => {
+  const { params } = req;
+  const roomProperties = {};
+  db.findVideos(params.roomId)
+    .then((videos) => { roomProperties.videos = videos; })
+    .then(() => db.getRoomProperties(Number(params.roomId)))
+    .then(({ indexKey, startTime }) => {
+      roomProperties.index = indexKey;
+      roomProperties.start = startTime;
+    })
+    .then(() => res.json(roomProperties))
+    .catch(() => res.sendStatus(404));
+});
+
+app.get('/playlist/:roomId', (req, res) => {
   const { params } = req;
   const roomProperties = {};
   db.findVideos(params.roomId)
@@ -70,6 +90,12 @@ app.patch('/playNext/:length', (req, res) => {
     .then(() => db.setStartTime())
     .then(() => res.end())
     .catch(err => res.send(err));
+});
+
+app.patch('/vote', (req, res) => {
+  db.changeVotes(req.body.video, req.body.action)
+    .then(() => res.sendStatus(200))
+    .catch(() => res.sendStatus(404));
 });
 
 // Room Socket Events
@@ -135,6 +161,7 @@ roomSpace.on('connection', (socket) => {
     roomSpace.emit('pushingMessage', message);
   });
 
+  // socket.on('vote', update database)
   socket.on('typingMessage', (user) => {
     const userId = user.split('#')[1].substring(0, 8);
     console.log(user);
