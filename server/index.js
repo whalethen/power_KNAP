@@ -35,7 +35,6 @@ app.use(cookieSession({
 app.get('/renderRoom/:roomId', (req, res) => {
   const { params } = req
   const roomProperties = {};
-  console.log('the p[aram', params.roomId)
   db.findVideos(params.roomId)
     .then((videos) => { roomProperties.videos = videos; })
     .then(() => db.getRoomProperties(Number(params.roomId)))
