@@ -60,7 +60,7 @@ class RoomView extends React.Component {
       });
     });
     roomSocket.on('id', id => this.setState({ username: id }));
-    roomSocket.on('typingMessage', user => this.setState({ userTyping: user }, () => console.log(this.state.userTyping)));
+    roomSocket.on('typingMessage', user => this.setState({ userTyping: user }));
   }
 
   componentWillUnmount() {
