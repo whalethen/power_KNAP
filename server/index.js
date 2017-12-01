@@ -8,7 +8,6 @@ const history = require('connect-history-api-fallback');
 const bodyParser = require('body-parser');
 const authRoutes = require('./auth-routes');
 const passportSetup = require('../passport-setup');
-const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT;
@@ -40,7 +39,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Room HTTP Requests
 app.get('/renderRoom/:roomId', (req, res) => {
-  const { params } = req
+  const { params } = req;
   const roomProperties = {};
   db.findVideos(params.roomId)
     .then((videos) => { roomProperties.videos = videos; })
@@ -54,16 +53,17 @@ app.get('/renderRoom/:roomId', (req, res) => {
 });
 
 app.get('/playlist', (req, res) => {
+  const { params } = req;
   const roomProperties = {};
-  db.findVideos()
+  db.findVideos(params.roomId)
     .then((videos) => { roomProperties.videos = videos; })
-    .then(() => db.getRoomProperties())
+    .then(() => db.getRoomProperties(Number(params.roomId)))
     .then(({ indexKey, startTime }) => {
       roomProperties.index = indexKey;
       roomProperties.start = startTime;
     })
     .then(() => res.json(roomProperties))
-    .catch((err) => {console.log(err); res.sendStatus(404)});
+    .catch((err) => res.sendStatus(404));
 });
 
 app.get('/search', (req, res) => {

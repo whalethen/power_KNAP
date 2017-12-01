@@ -31,7 +31,6 @@ class RoomView extends React.Component {
     this.saveToPlaylist = this.saveToPlaylist.bind(this);
     this.emitMessage = this.emitMessage.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.vote = this.vote.bind(this);
     this.voteOnEntry = this.voteOnEntry.bind(this);
     this.getPlaylist = this.getPlaylist.bind(this);
     this.sortPlaylist = this.sortPlaylist.bind(this);
@@ -126,13 +125,14 @@ class RoomView extends React.Component {
   }
 
   getPlaylist() {
-    return axios.get('/playlist')
+    return axios.get(`/playlist/${this.props.match.params.roomId}`)
       .then(({ data }) => {
         const sortedList = this.sortPlaylist(data.videos);
         this.setState({
           playlist: sortedList,
         });
-      });
+      })
+      .catch(err => console.log('Could not rerender playlist', err));
   }
 
   sortPlaylist(list) {
