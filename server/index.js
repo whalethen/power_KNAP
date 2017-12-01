@@ -52,7 +52,7 @@ app.get('/renderRoom/:roomId', (req, res) => {
     .catch(() => res.sendStatus(404));
 });
 
-app.get('/playlist', (req, res) => {
+app.get('/playlist/:roomId', (req, res) => {
   const { params } = req;
   const roomProperties = {};
   db.findVideos(params.roomId)
@@ -63,7 +63,7 @@ app.get('/playlist', (req, res) => {
       roomProperties.start = startTime;
     })
     .then(() => res.json(roomProperties))
-    .catch((err) => res.sendStatus(404));
+    .catch(() => res.sendStatus(404));
 });
 
 app.get('/search', (req, res) => {

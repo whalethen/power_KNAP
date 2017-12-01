@@ -119,7 +119,7 @@ class RoomView extends React.Component {
 
   voteOnEntry(video, action) {
     axios.patch('/vote', { video, action })
-    .catch(err => console.log('from patch vote', err))
+    .catch(err => console.log('error from patch vote', err))
     .then(() => this.getPlaylist())
     .catch(err => console.log(err));
   }
@@ -130,7 +130,7 @@ class RoomView extends React.Component {
         const sortedList = this.sortPlaylist(data.videos);
         this.setState({
           playlist: sortedList,
-        });
+        }, () => console.log(this.state));
       })
       .catch(err => console.log('Could not rerender playlist', err));
   }
