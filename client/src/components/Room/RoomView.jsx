@@ -32,6 +32,9 @@ class RoomView extends React.Component {
     this.saveToPlaylist = this.saveToPlaylist.bind(this);
     this.emitMessage = this.emitMessage.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.voteOnEntry = this.voteOnEntry.bind(this);
+    this.getPlaylist = this.getPlaylist.bind(this);
+    this.sortPlaylist = this.sortPlaylist.bind(this);
     this.broadcastTyping = this.broadcastTyping.bind(this);
   }
 
@@ -127,14 +130,41 @@ class RoomView extends React.Component {
     }, this.state.roomId);
   }
 
+  voteOnEntry(video, action) {
+    axios.patch('/vote', { video, action })
+      .then(() => this.getPlaylist())
+      .catch(err => console.error('Could not update votes', err));
+  }
+
+  getPlaylist() {
+    return axios.get(`/playlist/${this.props.match.params.roomId}`)
+      .then(({ data }) => {
+        const sortedList = this.sortPlaylist(data.videos);
+        this.setState({
+          playlist: sortedList,
+        }, () => console.log(this.state));
+      })
+      .catch(err => console.log('Could not rerender playlist', err));
+  }
+
+  sortPlaylist(list) {
+    return list.sort((a, b) => {
+      if (b.votes - a.votes === 0) {
+        return a.id - b.id;
+      }
+      return b.votes - a.votes;
+    });
+  }
+
   renderRoom() {
     return axios.get(`/renderRoom/${this.props.match.params.roomId}`)
       .then(({ data }) => {
         const currentTime = Date.now();
         const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
+        const sortedList = this.sortPlaylist(data.videos);
         this.setState({
-          playlist: data.videos,
-          currentVideo: data.videos[data.index],
+          playlist: sortedList,
+          currentVideo: sortedList[data.index],
           startOptions: {
             playerVars: { start: Math.ceil(timeLapsed) },
           },
@@ -150,10 +180,13 @@ class RoomView extends React.Component {
         playlist={this.state.playlist}
         removeSelected={this.handleDelete}
         isHost={this.state.isHost}
+        voteOnEntry={this.voteOnEntry}
       />);
     } else {
-      <div>{this.state.playlist}</div>
-      playlistComponent = <Playlist playlist={this.state.playlist} />;
+      playlistComponent = (<Playlist
+        playlist={this.state.playlist}
+        voteOnEntry={this.voteOnEntry}
+      />);
     }
 
     const view = this.state.user ?
