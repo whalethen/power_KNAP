@@ -15,6 +15,7 @@ class RoomView extends React.Component {
   constructor() {
     super();
     this.state = {
+      userTyping: null,
       currentVideo: undefined,
       playlist: [],
       startOptions: null,
@@ -31,6 +32,7 @@ class RoomView extends React.Component {
     this.saveToPlaylist = this.saveToPlaylist.bind(this);
     this.emitMessage = this.emitMessage.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.broadcastTyping = this.broadcastTyping.bind(this);
   }
 
   componentWillMount() {
@@ -58,6 +60,7 @@ class RoomView extends React.Component {
       });
     });
     roomSocket.on('id', id => this.setState({ username: id }));
+    roomSocket.on('typingMessage', user => this.setState({ userTyping: user }));
   }
 
   componentWillUnmount() {
@@ -104,6 +107,11 @@ class RoomView extends React.Component {
     roomSocket.emit('saveToPlaylist', { video, roomId: this.state.roomId });
   }
 
+  broadcastTyping() {
+    const user = this.state.user || this.state.username;
+    roomSocket.emit('typingMessage', user);
+  }
+
   emitMessage(time, message) {
     const user = this.state.user || this.state.username;
     roomSocket.emit('emitMessage', {
@@ -138,6 +146,7 @@ class RoomView extends React.Component {
         isHost={this.state.isHost}
       />);
     } else {
+      <div>{this.state.playlist}</div>
       playlistComponent = <Playlist playlist={this.state.playlist} />;
     }
 
@@ -161,10 +170,12 @@ class RoomView extends React.Component {
         />
         <Search saveToPlaylist={this.saveToPlaylist} />
         <ChatView
+          //userTyping={this.state.userTyping}
           message={this.state.message}
           date={this.state.dateTime}
           username={this.state.username}
           emitMessage={this.emitMessage}
+          broadcastTyping={this.broadcastTyping}
         />
       </div>
     );

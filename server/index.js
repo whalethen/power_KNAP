@@ -135,6 +135,12 @@ roomSpace.on('connection', (socket) => {
     roomSpace.emit('pushingMessage', message);
   });
 
+  socket.on('typingMessage', (user) => {
+    const userId = user.split('#')[1].substring(0, 8);
+    console.log(user);
+    socket.broadcast.emit('typingMessage', `${userId} is typing a message...`);
+  });
+
   socket.on('disconnect', () => {
     if (Object.keys(socket.nsp.sockets).length > 0) {
       const newHost = Object.keys(socket.nsp.sockets)[0];
@@ -154,7 +160,6 @@ app.get('/fetchRooms', (req, res) => {
 
 // Lobby socket events
 lobbySpace.on('connection', (socket) => {
-
   socket.on('createRoom', (roomName) => {
     db.createRoomEntry(roomName)
       .then(() => db.findRooms())

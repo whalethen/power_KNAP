@@ -6,6 +6,7 @@ class MessageInput extends React.Component {
     super(props);
     this.state = {
       message: '',
+      
     };
     this.setMessage = this.setMessage.bind(this);
     this.enterMessage = this.enterMessage.bind(this);
@@ -21,6 +22,8 @@ class MessageInput extends React.Component {
   }
 
   enterMessage(event) {
+    //const userTyping = 'user typing message...';
+    this.props.typingMessage();
     this.setState({
       message: event.target.value,
     });
@@ -38,7 +41,7 @@ class MessageInput extends React.Component {
         className="messageText"
         placeholder="Enter message"
         onKeyUp={this.setMessage}
-        onChange={this.enterMessage}
+        onChange={e => this.enterMessage(e)}
         value={this.state.message}
       />
     );
@@ -47,6 +50,7 @@ class MessageInput extends React.Component {
 
 MessageInput.propTypes = {
   sendMessage: PropTypes.func.isRequired,
+  typingMessage: PropTypes.func.isRequired,
 };
 
 export default MessageInput;

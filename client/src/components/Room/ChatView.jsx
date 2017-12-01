@@ -51,7 +51,10 @@ class ChatView extends React.Component {
             <Messages messages={this.state.messages} />
           </div>
           <div className="messageInput">
-            <MessageInput sendMessage={this.sendMessage} />
+            <MessageInput
+              sendMessage={this.sendMessage}
+              typingMessage={this.props.broadcastTyping}
+            />
           </div>
         </div>
       </div>
@@ -62,6 +65,7 @@ class ChatView extends React.Component {
 ChatView.propTypes = {
   emitMessage: PropTypes.func.isRequired,
   message: PropTypes.string.isRequired,
+  broadcastTyping: PropTypes.func.isRequired,
 };
 
 export default ChatView;
