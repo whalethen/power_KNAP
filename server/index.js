@@ -57,7 +57,7 @@ app.get('/playlist/:roomId', (req, res) => {
   const roomProperties = {};
   db.findVideos(params.roomId)
     .then((videos) => { roomProperties.videos = videos; })
-    .then(() => db.getRoomProperties(Number(params.roomId)))
+    .then(() => db.getRoomProperties(params.roomId))
     .then(({ indexKey, startTime }) => {
       roomProperties.index = indexKey;
       roomProperties.start = startTime;
@@ -162,6 +162,11 @@ roomSpace.on('connection', (socket) => {
   });
 
   // socket.on('vote', update database)
+  socket.on('typingMessage', (user) => {
+    const userId = user.split('#')[1].substring(0, 8);
+    console.log(user);
+    socket.broadcast.emit('typingMessage', `${userId} is typing a message...`);
+  });
 
   socket.on('disconnect', () => {
     if (Object.keys(socket.nsp.sockets).length > 0) {
@@ -182,7 +187,6 @@ app.get('/fetchRooms', (req, res) => {
 
 // Lobby socket events
 lobbySpace.on('connection', (socket) => {
-
   socket.on('createRoom', (roomName) => {
     db.createRoomEntry(roomName)
       .then(() => db.findRooms())
