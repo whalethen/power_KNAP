@@ -33,11 +33,11 @@ app.use(cookieSession({
 
 // Room HTTP Requests
 app.get('/renderRoom/:roomId', (req, res) => {
-  const { params } = req
+  const { params } = req;
   const roomProperties = {};
   db.findVideos(params.roomId)
     .then((videos) => { roomProperties.videos = videos; })
-    .then(() => db.getRoomProperties(Number(params.roomId)))
+    .then(() => db.getRoomProperties(params.roomId))
     .then(({ indexKey, startTime }) => {
       roomProperties.index = indexKey;
       roomProperties.start = startTime;
