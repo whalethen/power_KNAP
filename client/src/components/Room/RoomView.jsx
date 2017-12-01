@@ -85,7 +85,6 @@ class RoomView extends React.Component {
   }
 
   handleDelete(videoName) {
-    console.log(this.state.roomId)
     roomSocket.emit('removeFromPlaylist', { videoName, roomId: this.state.roomId });
   }
 
@@ -106,7 +105,6 @@ class RoomView extends React.Component {
   }
 
   emitMessage(time, message) {
-    console.log(message)
     const user = this.state.user || this.state.username;
     roomSocket.emit('emitMessage', {
       body: message,
@@ -118,7 +116,6 @@ class RoomView extends React.Component {
   renderRoom() {
     return axios.get(`/renderRoom/${this.props.match.params.roomId}`)
       .then(({ data }) => {
-        console.log('renderROom', data)
         const currentTime = Date.now();
         const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
         this.setState({
