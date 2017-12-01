@@ -5,6 +5,7 @@ const db = require('../database/postgres');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const history = require('connect-history-api-fallback');
+const bodyParser = require('body-parser');
 const authRoutes = require('./auth-routes');
 const passportSetup = require('../passport-setup');
 
@@ -19,6 +20,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/auth', authRoutes);
 app.use(history());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}./../client`));
 const roomSpace = io.of('/room');
 const lobbySpace = io.of('/lobby');
@@ -29,12 +32,13 @@ app.use(cookieSession({
 }));
 
 // Room HTTP Requests
-app.get('/renderRoom', (req, res) => {
+app.get('/renderRoom/:roomId', (req, res) => {
+  const { params } = req
   const roomProperties = {};
-  console.log(req.body)
-  db.findVideos(req.body.roomId)
+  console.log('the p[aram', params.roomId)
+  db.findVideos(params.roomId)
     .then((videos) => { roomProperties.videos = videos; })
-    .then(() => db.getRoomProperties())
+    .then(() => db.getRoomProperties(Number(params.roomId)))
     .then(({ indexKey, startTime }) => {
       roomProperties.index = indexKey;
       roomProperties.start = startTime;
@@ -81,8 +85,8 @@ roomSpace.on('connection', (socket) => {
     giveHostStatus(roomHost);
   }
 
-  const sendPlaylist = () => (
-    db.findVideos()
+  const sendPlaylist = (roomId) => {
+    return db.findVideos(roomId)
       .then((videos) => {
         roomSpace.emit('retrievePlaylist', videos);
         if (videos.length === 0) throw videos;
@@ -96,22 +100,24 @@ roomSpace.on('connection', (socket) => {
         }
       })
       .catch(err => roomSpace.emit('error', err))
-  );
+  };
 
-  socket.on('saveToPlaylist', (video) => {
+  socket.on('saveToPlaylist', ({ video, roomId }) => {
     const videoData = {
       title: video.snippet.title,
       creator: video.snippet.channelTitle,
       url: video.id.videoId,
       description: video.snippet.description,
+      videoId: video.videoId,
+      roomId,
     };
     return db.createVideoEntry(videoData)
       .then(() => sendPlaylist())
       .catch(err => console.error(err));
   });
 
-  socket.on('removeFromPlaylist', (videoName) => {
-    db.removeFromPlaylist(videoName)
+  socket.on('removeFromPlaylist', ({ videoName, roomId }) => {
+    db.removeFromPlaylist(videoName, roomId)
       .then(() => sendPlaylist())
       .catch(err => roomSpace.emit('error', err));
   });
