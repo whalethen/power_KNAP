@@ -32,9 +32,6 @@ class RoomView extends React.Component {
     this.saveToPlaylist = this.saveToPlaylist.bind(this);
     this.emitMessage = this.emitMessage.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.voteOnEntry = this.voteOnEntry.bind(this);
-    this.getPlaylist = this.getPlaylist.bind(this);
-    this.sortPlaylist = this.sortPlaylist.bind(this);
     this.broadcastTyping = this.broadcastTyping.bind(this);
   }
 
@@ -63,8 +60,7 @@ class RoomView extends React.Component {
       });
     });
     roomSocket.on('id', id => this.setState({ username: id }));
-    // roomSocket.on('vote', setState)
-    roomSocket.on('typingMessage', user => this.setState({ userTyping: user }));
+    roomSocket.on('typingMessage', (user, roomId) => this.setState({ userTyping: user , roomId: roomId}), () => console.log(this.state.userTyping));
   }
 
   componentWillUnmount() {
@@ -113,7 +109,8 @@ class RoomView extends React.Component {
 
   broadcastTyping() {
     const user = this.state.user || this.state.username;
-    roomSocket.emit('typingMessage', user);
+    const roomId = this.state.roomId;
+    roomSocket.emit('typingMessage', user, roomId);
   }
 
   emitMessage(time, message) {
@@ -125,41 +122,14 @@ class RoomView extends React.Component {
     });
   }
 
-  voteOnEntry(video, action) {
-    axios.patch('/vote', { video, action })
-      .then(() => this.getPlaylist())
-      .catch(err => console.error('Could not update votes', err));
-  }
-
-  getPlaylist() {
-    return axios.get(`/playlist/${this.props.match.params.roomId}`)
-      .then(({ data }) => {
-        const sortedList = this.sortPlaylist(data.videos);
-        this.setState({
-          playlist: sortedList,
-        }, () => console.log(this.state));
-      })
-      .catch(err => console.log('Could not rerender playlist', err));
-  }
-
-  sortPlaylist(list) {
-    return list.sort((a, b) => {
-      if (b.votes - a.votes === 0) {
-        return a.id - b.id;
-      }
-      return b.votes - a.votes;
-    });
-  }
-
   renderRoom() {
     return axios.get(`/renderRoom/${this.props.match.params.roomId}`)
       .then(({ data }) => {
         const currentTime = Date.now();
         const timeLapsed = moment.duration(moment(currentTime).diff(data.start)).asSeconds();
-        const sortedList = this.sortPlaylist(data.videos);
         this.setState({
-          playlist: sortedList,
-          currentVideo: sortedList[data.index],
+          playlist: data.videos,
+          currentVideo: data.videos[data.index],
           startOptions: {
             playerVars: { start: Math.ceil(timeLapsed) },
           },
@@ -175,13 +145,10 @@ class RoomView extends React.Component {
         playlist={this.state.playlist}
         removeSelected={this.handleDelete}
         isHost={this.state.isHost}
-        voteOnEntry={this.voteOnEntry}
       />);
     } else {
-      playlistComponent = (<Playlist
-        playlist={this.state.playlist}
-        voteOnEntry={this.voteOnEntry}
-      />);
+      <div>{this.state.playlist}</div>
+      playlistComponent = <Playlist playlist={this.state.playlist} />;
     }
 
     const view = this.state.user ?
@@ -204,12 +171,13 @@ class RoomView extends React.Component {
         />
         <Search saveToPlaylist={this.saveToPlaylist} />
         <ChatView
-          //userTyping={this.state.userTyping}
+          // userTyping={this.state.userTyping}
           message={this.state.message}
           date={this.state.dateTime}
           username={this.state.username}
           emitMessage={this.emitMessage}
           broadcastTyping={this.broadcastTyping}
+          typing={this.state.userTyping}
         />
       </div>
     );

@@ -6,7 +6,7 @@ class MessageInput extends React.Component {
     super(props);
     this.state = {
       message: '',
-      
+
     };
     this.setMessage = this.setMessage.bind(this);
     this.enterMessage = this.enterMessage.bind(this);
@@ -18,6 +18,9 @@ class MessageInput extends React.Component {
       const time = new Date().toLocaleTimeString();
       this.props.sendMessage(time, this.state.message);
       this.clear();
+      // this.setState({
+      //   typing = null;
+      // })
     }
   }
 
@@ -36,14 +39,17 @@ class MessageInput extends React.Component {
   }
   render() {
     return (
-      <input
-        type="text"
-        className="messageText"
-        placeholder="Enter message"
-        onKeyUp={this.setMessage}
-        onChange={e => this.enterMessage(e)}
-        value={this.state.message}
-      />
+      <div>
+        <div >{this.props.typing}</div>
+        <input
+          type="text"
+          className="messageText"
+          placeholder="Enter message"
+          onKeyUp={this.setMessage}
+          onChange={e => this.enterMessage(e)}
+          value={this.state.message}
+        />
+      </div>
     );
   }
 }
@@ -51,6 +57,7 @@ class MessageInput extends React.Component {
 MessageInput.propTypes = {
   sendMessage: PropTypes.func.isRequired,
   typingMessage: PropTypes.func.isRequired,
+  typing: PropTypes.string.isRequired,
 };
 
 export default MessageInput;
