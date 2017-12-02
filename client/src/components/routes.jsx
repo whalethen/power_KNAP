@@ -10,8 +10,8 @@ const router = (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={Homepage} />
-      <Route path="/:roomId" component={Room} />
       <Route path="/profile" component={Profile} />
+      <Route path="/:roomId" component={Room} />
     </Switch>
   </BrowserRouter>
 );

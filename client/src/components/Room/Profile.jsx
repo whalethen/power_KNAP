@@ -1,13 +1,11 @@
 import React from 'react';
 
-const Profile = (props) => {
-  return (
-      <div>Hello</div>
-  )
-}
+const Profile = props => (
+  <div>Hello</div>
+);
 
-Profile.propTypes = {
+// Profile.propTypes = {
 
-};
+// };
 
 export default Profile;
