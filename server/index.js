@@ -169,9 +169,7 @@ roomSpace.on('connection', (socket) => {
   // socket.on('vote', update database)
   socket.on('typingMessage', (user, roomId) => {
     const userId = user.split('#')[1].substring(0, 8);
-    console.log(user);
-    console.log('++++++++++++++++++', roomId);
-    socket.broadcast.emit('typingMessage', `${userId} is typing a message...`);
+    socket.broadcast.to(roomId).emit('typingMessage', `${userId} is typing a message...`);
   });
 
   socket.on('disconnect', () => {

@@ -15,7 +15,7 @@ class RoomView extends React.Component {
   constructor() {
     super();
     this.state = {
-      userTyping: null,
+      userTyping: '',
       currentVideo: undefined,
       playlist: [],
       startOptions: null,
@@ -61,7 +61,11 @@ class RoomView extends React.Component {
     });
     roomSocket.emit('room', this.props.match.params.roomId);
     roomSocket.on('id', id => this.setState({ username: id }));
-    roomSocket.on('typingMessage', (user, roomId) => this.setState({ userTyping: user , roomId: roomId}), () => console.log(this.state.userTyping));
+    roomSocket.on('typingMessage', (message) => {
+      this.setState({
+        userTyping: message,
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -172,7 +176,6 @@ class RoomView extends React.Component {
         />
         <Search saveToPlaylist={this.saveToPlaylist} />
         <ChatView
-          // userTyping={this.state.userTyping}
           message={this.state.message}
           date={this.state.dateTime}
           username={this.state.username}
