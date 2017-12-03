@@ -59,6 +59,7 @@ class RoomView extends React.Component {
         message,
       });
     });
+    roomSocket.emit('room', this.props.match.params.roomId);
     roomSocket.on('id', id => this.setState({ username: id }));
     roomSocket.on('typingMessage', (user, roomId) => this.setState({ userTyping: user , roomId: roomId}), () => console.log(this.state.userTyping));
   }
@@ -119,7 +120,7 @@ class RoomView extends React.Component {
       body: message,
       userName: user,
       dateTime: time,
-    });
+    }, this.state.roomId);
   }
 
   renderRoom() {

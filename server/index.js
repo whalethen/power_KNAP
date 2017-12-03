@@ -124,8 +124,12 @@ roomSpace.on('connection', (socket) => {
           throw emptyPlaylist;
         }
       })
-      .catch(err => roomSpace.emit('error', err))
+      .catch(err => roomSpace.emit('error', err));
   };
+
+  socket.on('room', (roomId) => {
+    socket.join(roomId);
+  });
 
   socket.on('saveToPlaylist', ({ video, roomId }) => {
     const videoData = {
@@ -147,7 +151,7 @@ roomSpace.on('connection', (socket) => {
       .catch(err => roomSpace.emit('error', err));
   });
 
-  socket.on('emitMessage', (message) => {
+  socket.on('emitMessage', (message, roomId) => {
     if (message.userName.includes('#')) {
       message.userName = message.userName.split('#')[1].substring(0, 8); // Pluck Socket ID
     }
@@ -159,7 +163,7 @@ roomSpace.on('connection', (socket) => {
     const userColor = colors[(sum % colors.length)];
     message.userColor = userColor;
 
-    roomSpace.emit('pushingMessage', message);
+    roomSpace.to(roomId).emit('pushingMessage', message);
   });
 
   // socket.on('vote', update database)
