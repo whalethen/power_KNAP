@@ -27,6 +27,8 @@ class RoomView extends React.Component {
       // TODO: eliminate the need for two separate username references
       roomId: '',
       userPhoto: '',
+      userTagline: '',
+      userAbout: '',
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -47,8 +49,7 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     if (cookie.parse(document.cookie).user) {
-      this.setState({ user: cookie.parse(document.cookie).user });
-      this.getUserInfo(cookie.parse(document.cookie).user);
+      this.setState({ user: cookie.parse(document.cookie).user }, () => this.getUserInfo(this.state.user));
     }
     this.setState({ roomId: this.props.match.params.roomId })
     this.renderRoom();
@@ -162,11 +163,11 @@ class RoomView extends React.Component {
 
   getUserInfo(user) {
     return axios.get(`/users/?user=${user}`)
-      .then((data) => {
+      .then((results) => {
         this.setState({
-          userPhoto: data.googlePhoto,
-          userTagline: data.googleTagline,
-          userAbout: data.googleAbout,
+          userPhoto: results.data.googlePhoto,
+          userTagline: results.data.googleTagline,
+          userAbout: results.data.googleAbout,
         });
       })
       .catch(err => console.error('Failed to get user', err));
@@ -206,7 +207,7 @@ class RoomView extends React.Component {
     }
 
     const view = this.state.user ?
-      <span className="login">Welcome, {this.state.user} <Link to={{ pathname: '/profile', state: { user: this.state.user}}}>Profile</Link> <a href="/auth/logout">Logout</a></span> :
+      <span className="login">Welcome, {this.state.user} <Link to={{ pathname: '/profile', state: { user: `${this.state.user}*${this.state.userPhoto}*${this.state.userTagline}*${this.state.userAbout}` }}}>Profile</Link> <a href="/auth/logout">Logout</a></span> :
       <span className="login">Login with <a href="/auth/google">Google</a></span>;
 
     return (
