@@ -8,6 +8,7 @@ import VideoPlayer from './VideoPlayer';
 import Playlist from './Playlist';
 import Search from './Search';
 import ChatView from './ChatView';
+import Profile from './Profile';
 
 const roomSocket = io('/room');
 
@@ -25,6 +26,9 @@ class RoomView extends React.Component {
       user: null, // refers to Google username when logged in in chat
       // TODO: eliminate the need for two separate username references
       roomId: '',
+      userPhoto: '',
+      userTagline: '',
+      userAbout: '',
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -36,6 +40,7 @@ class RoomView extends React.Component {
     this.getPlaylist = this.getPlaylist.bind(this);
     this.sortPlaylist = this.sortPlaylist.bind(this);
     this.broadcastTyping = this.broadcastTyping.bind(this);
+    this.getUserInfo = this.getUserInfo.bind(this);
   }
 
   componentWillMount() {
@@ -44,7 +49,7 @@ class RoomView extends React.Component {
 
   componentDidMount() {
     if (cookie.parse(document.cookie).user) {
-      this.setState({ user: cookie.parse(document.cookie).user });
+      this.setState({ user: cookie.parse(document.cookie).user }, () => this.getUserInfo(this.state.user));
     }
     this.setState({ roomId: this.props.match.params.roomId })
     this.renderRoom();
@@ -142,7 +147,7 @@ class RoomView extends React.Component {
         const sortedList = this.sortPlaylist(data.videos);
         this.setState({
           playlist: sortedList,
-        }, () => console.log(this.state));
+        });
       })
       .catch(err => console.log('Could not rerender playlist', err));
   }
@@ -156,6 +161,18 @@ class RoomView extends React.Component {
     });
   }
 
+  getUserInfo(user) {
+    return axios.get(`/users/?user=${user}`)
+      .then((results) => {
+        this.setState({
+          userPhoto: results.data.googlePhoto,
+          userTagline: results.data.googleTagline,
+          userAbout: results.data.googleAbout,
+        });
+      })
+      .catch(err => console.error('Failed to get user', err));
+  }
+ 
   renderRoom() {
     return axios.get(`/renderRoom/${this.props.match.params.roomId}`)
       .then(({ data }) => {
@@ -189,8 +206,10 @@ class RoomView extends React.Component {
       />);
     }
 
+    const userInfo = `${this.state.user}*${this.state.userPhoto}*${this.state.userTagline}*${this.state.userAbout}`;
+
     const view = this.state.user ?
-      <span className="login">Welcome, {this.state.user} <a href="/auth/logout">Logout</a></span> :
+      <span className="login">Welcome, {this.state.user} <Link to={{ pathname: '/profile', state: { user: userInfo } }}>Profile</Link> <a href="/auth/logout">Logout</a></span> :
       <span className="login">Login with <a href="/auth/google">Google</a></span>;
 
     return (

@@ -98,6 +98,13 @@ app.patch('/vote', (req, res) => {
     .catch(() => res.sendStatus(404));
 });
 
+app.get('/users', (req, res) => {
+  db.findUser(req.query.user)
+    .then((data) => {
+      res.send(data[0].dataValues);
+    });
+});
+
 // Room Socket Events
 let roomHost;
 const giveHostStatus = host => roomSpace.to(host).emit('host');
