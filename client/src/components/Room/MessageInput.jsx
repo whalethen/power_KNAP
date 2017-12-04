@@ -39,8 +39,10 @@ class MessageInput extends React.Component {
   }
   render() {
     return (
-      <div>
-        <div >{this.props.typing}</div>
+      <div className="messageInput">
+        <div
+          className="userTyping"
+        >{this.props.typing}</div>
         <input
           type="text"
           className="messageText"

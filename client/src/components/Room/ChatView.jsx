@@ -55,15 +55,12 @@ class ChatView extends React.Component {
           <div className="messageContainer">
             <Messages messages={this.state.messages} />
           </div>
-          <div className="messageInput">
-            <MessageInput
-              // userTyping={this.props.userTyping}
-              sendMessage={this.sendMessage}
-              typingMessage={this.props.broadcastTyping}
-              typing={this.props.typing}
-            />
-          </div>
         </div>
+        <MessageInput
+          sendMessage={this.sendMessage}
+          typingMessage={this.props.broadcastTyping}
+          typing={this.props.typing}
+        />
       </div>
     );
   }

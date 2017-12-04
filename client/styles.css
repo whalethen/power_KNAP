@@ -241,17 +241,20 @@ body {
   font-weight: 700;
 }
 
+.messageInput {
+  margin-top: auto;
+}
+.userTyping {
+}
 .messageText {
   display: block;
   padding: 5px;
-  width: 17%;
-  margin: 0 auto;
+  width: 100%;
+  margin-top: 7px;
   border-radius: 15px;
   border: 0.3px;
   opacity: 0.8;
   transition: opacity 0.4s;
-  position: absolute;
-  bottom: 20px;
 }
 
 .messageText:hover {
