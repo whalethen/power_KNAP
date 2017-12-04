@@ -26,6 +26,7 @@ class RoomView extends React.Component {
       user: null, // refers to Google username when logged in in chat
       // TODO: eliminate the need for two separate username references
       roomId: '',
+      userPhoto: '',
     };
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -37,6 +38,7 @@ class RoomView extends React.Component {
     this.getPlaylist = this.getPlaylist.bind(this);
     this.sortPlaylist = this.sortPlaylist.bind(this);
     this.broadcastTyping = this.broadcastTyping.bind(this);
+    this.getUserInfo = this.getUserInfo.bind(this);
   }
 
   componentWillMount() {
@@ -46,6 +48,7 @@ class RoomView extends React.Component {
   componentDidMount() {
     if (cookie.parse(document.cookie).user) {
       this.setState({ user: cookie.parse(document.cookie).user });
+      this.getUserInfo(cookie.parse(document.cookie).user);
     }
     this.setState({ roomId: this.props.match.params.roomId })
     this.renderRoom();
@@ -143,7 +146,7 @@ class RoomView extends React.Component {
         const sortedList = this.sortPlaylist(data.videos);
         this.setState({
           playlist: sortedList,
-        }, () => console.log(this.state));
+        });
       })
       .catch(err => console.log('Could not rerender playlist', err));
   }
@@ -157,6 +160,18 @@ class RoomView extends React.Component {
     });
   }
 
+  getUserInfo(user) {
+    return axios.get(`/users/?user=${user}`)
+      .then((data) => {
+        this.setState({
+          userPhoto: data.googlePhoto,
+          userTagline: data.googleTagline,
+          userAbout: data.googleAbout,
+        });
+      })
+      .catch(err => console.error('Failed to get user', err));
+  }
+ 
   renderRoom() {
     return axios.get(`/renderRoom/${this.props.match.params.roomId}`)
       .then(({ data }) => {
