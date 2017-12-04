@@ -264,3 +264,7 @@ body {
 .login {
   float: right;
 }
+
+.profile {
+  background-color: black;
+}
