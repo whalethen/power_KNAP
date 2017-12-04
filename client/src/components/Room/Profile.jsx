@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const Profile = (props) => {
   const { user } = props.location.state;
@@ -14,11 +15,17 @@ const Profile = (props) => {
 
   return (
     <div className="profile">
+      <div className="container navbar">
+        <Link to='/'>
+          fam.ly
+        </Link>
+      </div>
+      <a href="/auth/logout">Logout</a>
       <h1>Profile</h1>
-      <div>{name}</div>
+      <h3>{name}</h3>
       <img src={photo} alt={name} />
-      <div>Tagline: {tagline}</div>
-      <div>About Me: {about}</div>
+      <div>{tagline}</div>
+      <div>{about}</div>
     </div>
   );
 };
