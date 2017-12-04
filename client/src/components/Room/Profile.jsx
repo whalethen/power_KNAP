@@ -6,16 +6,19 @@ const Profile = (props) => {
   const userInfo = user.split('*');
   const name = userInfo[0];
   const photo = userInfo[1];
-  const tagline = userInfo[2];
-  const about = userInfo[3];
-  console.log(photo)
+  let tagline = userInfo[2];
+  let about = userInfo[3];
+
+  if (tagline === 'null') tagline = '';
+  if (about === 'null') about = '';
+
   return (
     <div className="profile">
       <h1>Profile</h1>
       <div>{name}</div>
       <img src={photo} alt={name} />
-      <div>{tagline}</div>
-      <div>{about}</div>
+      <div>Tagline: {tagline}</div>
+      <div>About Me: {about}</div>
     </div>
   );
 };
