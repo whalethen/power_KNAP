@@ -67,18 +67,18 @@ const createRoomEntry = (roomName) => {
   };
   return Room.create(roomEntry); // returns a promise when called
 };
-  
+
 const changeVotes = (video, action) => {
   const name = video.videoName;
   if (action === '+') {
     return Video.update(
       { votes: Sequelize.literal('votes + 1') },
-      { where: { videoName: name } },
+      { where: { videoName: name } } // eslint-disable-line comma-dangle
     );
   } else if (action === '-') {
     return Video.update(
       { votes: Sequelize.literal('votes - 1') },
-      { where: { videoName: name } },
+      { where: { videoName: name } } // eslint-disable-line comma-dangle
     );
   }
 };
