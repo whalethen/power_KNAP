@@ -98,6 +98,13 @@ app.patch('/vote', (req, res) => {
     .catch(() => res.sendStatus(404));
 });
 
+app.get('/users', (req, res) => {
+  db.findUser(req.query.user)
+    .then((data) => {
+      res.send(data[0].dataValues);
+    });
+});
+
 // Room Socket Events
 let roomHost;
 const giveHostStatus = host => roomSpace.to(host).emit('host');
@@ -110,8 +117,7 @@ roomSpace.on('connection', (socket) => {
     giveHostStatus(roomHost);
   }
 
-  const sendPlaylist = (roomId) => {
-    return db.findVideos(roomId)
+  const sendPlaylist = (roomId) => db.findVideos(roomId)
       .then((videos) => {
         roomSpace.emit('retrievePlaylist', videos);
         if (videos.length === 0) throw videos;
@@ -125,7 +131,7 @@ roomSpace.on('connection', (socket) => {
         }
       })
       .catch(err => roomSpace.emit('error', err));
-  };
+  });
 
   socket.on('room', (roomId) => {
     socket.join(roomId);
