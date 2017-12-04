@@ -46,6 +46,11 @@ body {
   color: #bbbec3;
 }
 
+/***** Profile *****/
+.profile {
+  color: black;
+}
+
 /***** Navbar *****/
 .navbar {
   grid-area: navbar;
@@ -263,8 +268,4 @@ body {
 
 .login {
   float: right;
-}
-
-.profile {
-  background-color: black;
 }

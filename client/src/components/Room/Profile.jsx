@@ -19,8 +19,8 @@ const Profile = (props) => {
         <Link to='/'>
           fam.ly
         </Link>
+        <span><a href="/auth/logout">Logout</a></span>
       </div>
-      <a href="/auth/logout">Logout</a>
       <h1>Profile</h1>
       <h3>{name}</h3>
       <img src={photo} alt={name} />
