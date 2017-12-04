@@ -191,7 +191,7 @@ class RoomView extends React.Component {
     }
 
     const view = this.state.user ?
-      <span className="login">Welcome, {this.state.user} <Link to='/profile'>Profile</Link> <a href="/auth/logout">Logout</a></span> :
+      <span className="login">Welcome, {this.state.user} <Link to={{ pathname: '/profile', state: { user: this.state.user}}}>Profile</Link> <a href="/auth/logout">Logout</a></span> :
       <span className="login">Login with <a href="/auth/google">Google</a></span>;
 
     return (
