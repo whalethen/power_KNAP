@@ -39,11 +39,20 @@ const Room = sequelize.define('room', {
   name: Sequelize.STRING,
 });
 
+const Users = sequelize.define('users', {
+  googleId: Sequelize.STRING,
+  googleName: Sequelize.STRING,
+  googlePhoto: Sequelize.STRING,
+  googleTagline: Sequelize.STRING,
+  googleAbout: Sequelize.STRING,
+});
+
 // Room.hasMany(Video, { as: 'Videos' });
 
 const checkIfTablesExists = () => {
   Video.sync();
   Room.sync();
+  Users.sync();
 };
 
 checkIfTablesExists();
@@ -83,6 +92,19 @@ const changeVotes = (video, action) => {
   }
 };
 
+const findUser = user => Users.findAll({ where: { googleName: user } });
+
+const saveUser = profile => (
+  Users.create({
+    googleId: profile.id,
+    googleName: profile.displayName,
+    googlePhoto: profile.photos[0].value,
+    googleTagline: profile.tagline,
+    googleAbout: profile.aboutMe,
+  })
+    .catch(err => console.error(err))
+)
+
 // Room Queries
 const findRooms = () => Room.findAll();
 const findRoomById = roomId => Room.findById(roomId);
@@ -111,3 +133,6 @@ exports.setStartTime = setStartTime;
 exports.findVideos = findVideos;
 exports.removeFromPlaylist = removeFromPlaylist;
 exports.changeVotes = changeVotes;
+exports.Users = Users;
+exports.findUser = findUser;
+exports.saveUser = saveUser;
