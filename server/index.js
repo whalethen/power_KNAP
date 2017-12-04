@@ -117,7 +117,8 @@ roomSpace.on('connection', (socket) => {
     giveHostStatus(roomHost);
   }
 
-  const sendPlaylist = (roomId) => db.findVideos(roomId)
+  const sendPlaylist = (roomId) => {
+    return db.findVideos(roomId)
       .then((videos) => {
         roomSpace.emit('retrievePlaylist', videos);
         if (videos.length === 0) throw videos;
@@ -131,7 +132,7 @@ roomSpace.on('connection', (socket) => {
         }
       })
       .catch(err => roomSpace.emit('error', err));
-  });
+  };
 
   socket.on('room', (roomId) => {
     socket.join(roomId);
